@@ -25,17 +25,10 @@
 		"url": "https://github.com/zerobytes/react-web-dynamic-tools/issues"
 	},
 	"moduleNameMapper": {
-		"\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy",
-		"^@/(.*)$": "<rootDir>/$1",
-		"\\.(css|less)$": "identity-obj-proxy/",
-		"^Actions(.*)$": "<rootDir>/src/actions/$1",
 		"^Components(.*)$": "<rootDir>/src/components$1",
-		"^Assets(.*)$": "<rootDir>/src/assets/$1",
 		"^Util(.*)$": "<rootDir>/src/util/$1",
-		"^Routes(.*)$": "<rootDir>/src/routes/$1",
 		"^Constants(.*)$": "<rootDir>/src/constants/$1",
-		"^Helpers(.*)$": "<rootDir>/src/helpers/$1",
-		"^Api(.*)$": "<rootDir>/src/api/$1"
+		"^Helpers(.*)$": "<rootDir>/src/helpers/$1"
 	},
 	"homepage": "https://github.com/zerobytes/react-web-dynamic-tools#readme",
 	"devDependencies": {
@@ -44,6 +37,7 @@
 		"prop-types": "^15.7.2",
 		"react": "^16.12.0",
 		"react-intl": "^3.9.1",
-		"react-router-dom": "^5.1.2"
+		"react-router-dom": "^5.1.2",
+		"seed-object-model": "git+https://github.com/zerobytes/seed-object-model.git"
 	}
 }

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import SaveButton from 'Components/Button/SaveButton';
-import CancelButton from 'Components/Button/CancelButton';
 import PropTypes from 'prop-types';
+//TODO: resolve firebase here
 import firebase from '../../firebase';
-import store from '../../store';
 import {
 	ExpansionPanel,
 	ExpansionPanelDetails,
@@ -19,7 +17,7 @@ import {
 import IntlMessages from 'Util/IntlMessages';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { FieldTypes, FieldType, ComplexTypes } from 'tingua-models';
+import { FieldTypes, FieldType, ComplexTypes } from 'seed-object-model';
 import { createConfiguredListItem } from './_functions';
 import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
 

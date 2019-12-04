@@ -22,8 +22,9 @@ import {
 	Paper
 } from '@material-ui/core';
 import IntlMessages from 'Util/IntlMessages';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'tingua-models';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'seed-object-model';
 import { createConfiguredListItem } from './_functions';
+//TODO: resolve firebase here
 import firebase from '../../firebase';
 import store from '../../store';
 

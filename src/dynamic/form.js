@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import SaveButton from 'Components/Button/SaveButton';
 import CancelButton from 'Components/Button/CancelButton';
 import PropTypes from 'prop-types';
+//TODO: resolve firebase here
 import firebase from '../../firebase';
-import store from '../../store';
 import {
 	ExpansionPanel,
 	ExpansionPanelActions,
@@ -18,21 +18,13 @@ import {
 	Typography,
 	Card,
 	CardContent,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemSecondaryAction,
-	InputAdornment,
-	Paper
+	List
 } from '@material-ui/core';
 import IntlMessages from 'Util/IntlMessages';
 import BottomButtons from 'Components/form/BottomButtons';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
 
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'tingua-models';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'seed-object-model';
 import { createConfiguredListItem, createIdOfComponent } from './_functions';
 let validateTimeout;
 
