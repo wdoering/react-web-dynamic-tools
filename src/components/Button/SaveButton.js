@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
-import IntlMessages from 'Util/IntlMessages';
+// TODO: check whether moduleNameMapper works out of webpack:
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../../util/IntlMessages';
 
 /**
  * A pattern-follower save-button. Required handler (onClick)

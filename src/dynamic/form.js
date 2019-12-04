@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import SaveButton from 'Components/Button/SaveButton';
-import CancelButton from 'Components/Button/CancelButton';
+// TODO: check whether can be referenced by moduleNameMapper
+// import { SaveButton, CancelButton } from 'Components/Button';
+import { SaveButton, CancelButton } from '../components/Button';
 import PropTypes from 'prop-types';
 //TODO: resolve firebase here
-import firebase from '../../firebase';
+// import firebase from '../../firebase';
 import {
 	ExpansionPanel,
 	ExpansionPanelActions,
@@ -20,8 +21,12 @@ import {
 	CardContent,
 	List
 } from '@material-ui/core';
-import IntlMessages from 'Util/IntlMessages';
-import BottomButtons from 'Components/form/BottomButtons';
+// TODO: check whether can be referenced by moduleNameMapper
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../util/IntlMessages';
+// TODO: check whether can be referenced by moduleNameMapper
+// import { BottomButtons } from 'Components/form';
+import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'seed-object-model';
@@ -85,7 +90,7 @@ const createShapedAsComponent = (model, property, Type, values, handleChange) =>
  * @param {string} property
  * @param {FieldType|any} Type
  */
-const createArrayOfComponent = (model, property, values, Type, handleChange) => {
+const createArrayOfComponent = (model, property, values, Type, firebase, handleChange) => {
 	let defaultCurrentDialogValue = {};
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
@@ -133,7 +138,7 @@ const createArrayOfComponent = (model, property, values, Type, handleChange) => 
 				break;
 		}
 	} else if (isIdOfModelBase) {
-		inputs = createIdOfComponent(model, property, values, Type, (p, uid, item) => {
+		inputs = createIdOfComponent(model, property, values, Type, firebase, (p, uid, item) => {
 			setCurrentDialogValue(item);
 		});
 	} else if (typeof Type === 'string') {
@@ -238,11 +243,13 @@ const createArrayOfComponent = (model, property, values, Type, handleChange) => 
  * Creates all the fields based on the parameters passed and the field Type configuration for each one of them
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
- * @param {object} param0.values Variable containing the values of all fields
+ * @param {object} param0.baseIntl Translate base id
  * @param {object} param0.errors Variable containing the error list
+ * @param {object} param0.values Variable containing the values of all fields
+ * @param {object} param0.firebase Firebase instance for servicing purposes
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createFields = ({ model, baseIntl, errors, values, handleChange }) => {
+const createFields = ({ model, baseIntl, errors, values, firebase, handleChange }) => {
 	let fields = [];
 
 	Object.keys(model.$fieldConfig).map((property, i) => {
@@ -253,6 +260,7 @@ const createFields = ({ model, baseIntl, errors, values, handleChange }) => {
 				label: `${baseIntl}.${property}`,
 				errors,
 				values,
+				firebase,
 				handleChange
 			})
 		);
@@ -272,9 +280,10 @@ const createFields = ({ model, baseIntl, errors, values, handleChange }) => {
  * @param {string} param0.property Property from the model, destined to this field
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.errors Variable containing the error list
+ * @param {object} param0.firebase Firebase instance for service purposes
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createField = ({ model, property, label, values, errors, handleChange }) => {
+const createField = ({ model, property, label, values, errors, firebase, handleChange }) => {
 	const field = model.$fieldConfig[property];
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -299,6 +308,7 @@ const createField = ({ model, property, label, values, errors, handleChange }) =
 								property,
 								values,
 								field.type.Type,
+								firebase,
 								(property, id) => {
 									handleChange(property, id);
 								}
@@ -314,6 +324,7 @@ const createField = ({ model, property, label, values, errors, handleChange }) =
 					property,
 					values,
 					field.type.Type,
+					firebase,
 					(property, fullArray) => {
 						handleChange(property, fullArray);
 					}
@@ -373,7 +384,7 @@ const createField = ({ model, property, label, values, errors, handleChange }) =
  *
  * @param {object} param0
  */
-const DefaultForm = ({ model, handleSave, id }) => {
+const DynamicForm = ({ model, handleSave, id, firebase }) => {
 	const [values, setValues] = useState(model);
 	const [errors, setErrors] = useState({});
 
@@ -437,6 +448,7 @@ const DefaultForm = ({ model, handleSave, id }) => {
 		baseIntl: `${model.getModelName()}.form`,
 		errors,
 		values,
+		firebase,
 		handleChange
 	});
 	return (
@@ -452,9 +464,11 @@ const DefaultForm = ({ model, handleSave, id }) => {
 	);
 };
 
-DefaultForm.propTypes = {
-	model: PropTypes.object.isRequired
-	// handleSave: PropTypes.func.isRequired
+DynamicForm.propTypes = {
+	model: PropTypes.object.isRequired,
+	handleSave: PropTypes.func,
+	id: PropTypes.string,
+	firebase: PropTypes.object.isRequired
 };
 
-export default DefaultForm;
+export default DynamicForm;

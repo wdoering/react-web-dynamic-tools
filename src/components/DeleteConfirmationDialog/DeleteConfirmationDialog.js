@@ -8,7 +8,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import IntlMessages from 'Util/IntlMessages';
+// TODO: check whether moduleNameMapper works out of webpack:
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../../util/IntlMessages';
 
 class DeleteConfirmationDialog extends Component {
 	state = {

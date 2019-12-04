@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 //TODO: resolve firebase here
-import firebase from '../../firebase';
+// import firebase from '../../firebase';
 import {
 	ExpansionPanel,
 	ExpansionPanelDetails,
@@ -14,12 +14,16 @@ import {
 	Button,
 	FormLabel
 } from '@material-ui/core';
-import IntlMessages from 'Util/IntlMessages';
+// TODO: check whether can be referenced by moduleNameMapper
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../util/IntlMessages';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes } from 'seed-object-model';
 import { createConfiguredListItem } from './_functions';
-import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
+// TODO: check use of moduleNameMapper
+// import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
+import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 
 let searchIdOfTimeout;
 /**
@@ -30,7 +34,7 @@ let searchIdOfTimeout;
  * @param {ModelBase} Type
  * @param {function} handleChange
  */
-const createIdOfComponent = (model, property, values, Type) => {
+const createIdOfComponent = (model, property, values, Type, firebase) => {
 	const config = model.$fieldConfig[property];
 	if (!config.listItemProperties) {
 		return (
@@ -91,7 +95,7 @@ const createShapedAsComponent = (model, property, Type, values) => {
  * @param {string} property
  * @param {FieldType|any} Type
  */
-const createArrayOfComponent = (model, property, values, Type, handleChange) => {
+const createArrayOfComponent = (model, property, values, Type) => {
 	const [list, setList] = useState(values[property] || []);
 	if (!list.length && values[property].length) {
 		setList(values[property]);
@@ -133,7 +137,7 @@ const createArrayOfComponent = (model, property, values, Type, handleChange) => 
  * @param {object} param0.errors Variable containing the error list
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createFields = ({ model, baseIntl, values }) => {
+const createFields = ({ model, baseIntl, values, firebase }) => {
 	let fields = [];
 
 	Object.keys(model.$fieldConfig).map((property, i) => {
@@ -142,7 +146,8 @@ const createFields = ({ model, baseIntl, values }) => {
 				property,
 				model,
 				label: `${baseIntl}.${property}`,
-				values
+				values,
+				firebase
 			})
 		);
 		if (model.$fieldConfig[property].style && model.$fieldConfig[property].style.break) {
@@ -159,11 +164,11 @@ const createFields = ({ model, baseIntl, values }) => {
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
  * @param {string} param0.property Property from the model, destined to this field
+ * @param {object} param0.label Variable containing the label text
  * @param {object} param0.values Variable containing the values of all fields
- * @param {object} param0.errors Variable containing the error list
- * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
+ * @param {object} param0.firebase Firebase instance for servicing purposes
  */
-const createField = ({ model, property, label, values }) => {
+const createField = ({ model, property, label, values, firebase }) => {
 	const field = model.$fieldConfig[property];
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -180,7 +185,13 @@ const createField = ({ model, property, label, values }) => {
 				component = (
 					<Card className="mb-15" style={{ overflow: 'visible' }}>
 						<CardContent>
-							{createIdOfComponent(model, property, values, field.type.Type)}
+							{createIdOfComponent(
+								model,
+								property,
+								values,
+								field.type.Type,
+								firebase
+							)}
 						</CardContent>
 					</Card>
 				);
@@ -239,14 +250,15 @@ const createField = ({ model, property, label, values }) => {
  *
  * @param {object} param0
  */
-const DefaultForm = ({ model, id, baseRoute }) => {
+const DynamicView = ({ model, id, baseRoute, firebase }) => {
 	const [values, setValues] = useState(model);
 	const history = useHistory();
 	const deleteConfirmationDialogRef = React.createRef();
 	let fields = createFields({
 		model,
 		baseIntl: `${model.getModelName()}.form`,
-		values
+		values,
+		firebase
 	});
 	useEffect(() => {
 		if (id) {
@@ -307,9 +319,11 @@ const DefaultForm = ({ model, id, baseRoute }) => {
 	);
 };
 
-DefaultForm.propTypes = {
-	model: PropTypes.object.isRequired
-	// handleSave: PropTypes.func.isRequired
+DynamicView.propTypes = {
+	model: PropTypes.object.isRequired,
+	id: PropTypes.string,
+	baseRoute: PropTypes.string,
+	firebase: PropTypes.object.isRequired
 };
 
-export default DefaultForm;
+export default DynamicView;

@@ -14,7 +14,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { injectIntl } from 'react-intl';
-import IntlMessages from 'Util/IntlMessages';
+// TODO: check whether moduleNameMapper works out of webpack:
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../../util/IntlMessages';
 
 /**
  * TODO: comment/describe

@@ -1,32 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-	ExpansionPanel,
-	ExpansionPanelActions,
-	ExpansionPanelDetails,
-	ExpansionPanelSummary,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
-	Button,
-	TextField,
-	Typography,
-	Card,
-	CardContent,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemSecondaryAction,
-	InputAdornment,
-	Paper
-} from '@material-ui/core';
-import IntlMessages from 'Util/IntlMessages';
+import PropTypes from 'prop-types';
+import { TextField, Card, CardContent, List } from '@material-ui/core';
+// TODO: check whether can be referenced by moduleNameMapper
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../util/IntlMessages';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'seed-object-model';
 import { createConfiguredListItem } from './_functions';
-//TODO: resolve firebase here
-import firebase from '../../firebase';
-import store from '../../store';
+//TODO: resolve firebase & store here
+// import firebase from '../../firebase';
+// import store from '../../store';
 
 const createArrayOfComponent = (model, property, Type, handleChange) => {
 	const [items, setItems] = useState([]);
@@ -181,7 +164,8 @@ const search = (oService, filters) => {
 	}, 300);
 };
 let oService;
-const DynamicList = ({ reduxList, model, configuration, baseRoute }) => {
+
+const DynamicList = ({ reduxList, model, configuration, baseRoute, firebase, store }) => {
 	const history = useHistory();
 	useEffect(() => {
 		oService = model.getService(firebase, store);
@@ -218,6 +202,15 @@ const DynamicList = ({ reduxList, model, configuration, baseRoute }) => {
 			</Card>
 		</div>
 	);
+};
+
+DynamicList.propTypes = {
+	reduxList: PropTypes.any,
+	model: PropTypes.object,
+	configuration: PropTypes.object,
+	baseRoute: PropTypes.string,
+	firebase: PropTypes.object.isRequired,
+	store: PropTypes.any.isRequired
 };
 
 export default DynamicList;

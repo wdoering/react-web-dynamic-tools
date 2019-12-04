@@ -1,7 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import IntlMessages from 'Util/IntlMessages';
+// TODO: check whether moduleNameMapper works out of webpack:
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../../util/IntlMessages';
 
 /**
  * A pattern-follower **cancel-button**
