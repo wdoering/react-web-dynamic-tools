@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //TODO: resolve firebase here
-import firebase from '../../firebase';
+// import firebase from '../../firebase';
 import {
 	TextField,
 	Typography,
@@ -113,7 +113,7 @@ let searchIdOfTimeout;
  * @param {ModelBase} Type
  * @param {function} handleChange
  */
-const createIdOfComponent = (model, property, values, Type, handleChange) => {
+const createIdOfComponent = (model, property, values, Type, firebase, handleChange) => {
 	const config = model.$fieldConfig[property];
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
