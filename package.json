@@ -19,7 +19,11 @@
 		"list",
 		"view"
 	],
-	"author": "bruno.teixeira.silva@gmail.com ft. guilherme.ferreira@zerobyte.app",
+	"author": "Zerobyte",
+	"contributors": [
+		"guilherme.ferreira@zerobyte.app",
+		"bruno.teixeira.silva@gmail.com"
+	],
 	"license": "ISC",
 	"bugs": {
 		"url": "https://github.com/zerobytes/react-web-dynamic-tools/issues"
@@ -31,7 +35,7 @@
 		"^Helpers(.*)$": "<rootDir>/src/helpers/$1"
 	},
 	"homepage": "https://github.com/zerobytes/react-web-dynamic-tools#readme",
-	"devDependencies": {
+	"dependencies": {
 		"@material-ui/core": "^4.7.1",
 		"@material-ui/icons": "^4.5.1",
 		"prop-types": "^15.7.2",
