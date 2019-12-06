@@ -14,7 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { injectIntl } from 'react-intl';
 // TODO: check whether moduleNameMapper works out of webpack:
 // import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../../util/IntlMessages';
+import IntlMessages from '../util/IntlMessages';
 
 /**
  * TODO: comment/describe
