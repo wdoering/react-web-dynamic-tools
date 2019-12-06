@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 // import { SaveButton, CancelButton } from 'Components/Button';
 import { SaveButton, CancelButton } from '../components/Button';
 import PropTypes from 'prop-types';
-//TODO: resolve firebase here
-// import firebase from '../../firebase';
 import {
 	ExpansionPanel,
 	ExpansionPanelActions,
@@ -29,8 +27,9 @@ import IntlMessages from '../util/IntlMessages';
 import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'seed-object-model';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'object-model-js';
 import { createConfiguredListItem, createIdOfComponent } from './_functions';
+
 let validateTimeout;
 
 /**

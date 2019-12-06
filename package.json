@@ -1,6 +1,6 @@
 {
-	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.0.3",
+	"name": "@zerobyte/react-web-dynamic-tools",
+	"version": "0.0.5",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "index.js",
 	"scripts": {
@@ -28,12 +28,6 @@
 	"bugs": {
 		"url": "https://github.com/zerobytes/react-web-dynamic-tools/issues"
 	},
-	"moduleNameMapper": {
-		"^Components(.*)$": "<rootDir>/src/components$1",
-		"^Util(.*)$": "<rootDir>/src/util/$1",
-		"^Constants(.*)$": "<rootDir>/src/constants/$1",
-		"^Helpers(.*)$": "<rootDir>/src/helpers/$1"
-	},
 	"homepage": "https://github.com/zerobytes/react-web-dynamic-tools#readme",
 	"dependencies": {
 		"@material-ui/core": "^4.7.1",
@@ -42,6 +36,7 @@
 		"react": "^16.12.0",
 		"react-intl": "^3.9.1",
 		"react-router-dom": "^5.1.2",
-		"seed-object-model": "git+https://github.com/zerobytes/seed-object-model.git"
+		"@zerobyte/object-model-js": "git+https://github.com/zerobytes/object-model-js.git",
+		"@zerobyte/seed-object-model": "git+https://github.com/zerobytes/seed-object-model.git"
 	}
 }

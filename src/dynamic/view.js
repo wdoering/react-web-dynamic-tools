@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-//TODO: resolve firebase here
-// import firebase from '../../firebase';
 import {
 	ExpansionPanel,
 	ExpansionPanelDetails,
@@ -19,7 +17,7 @@ import {
 import IntlMessages from '../util/IntlMessages';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { FieldTypes, FieldType, ComplexTypes } from 'seed-object-model';
+import { FieldTypes, FieldType, ComplexTypes } from 'object-model-js';
 import { createConfiguredListItem } from './_functions';
 // TODO: check use of moduleNameMapper
 // import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
