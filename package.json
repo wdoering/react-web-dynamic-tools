@@ -37,7 +37,7 @@
 		"@material-ui/core": "^4.7.1",
 		"@material-ui/icons": "^4.5.1",
 		"@zerobytes/object-model-js": "0.0.7",
-		"@zerobytes/seed-object-model": "^0.2.4",
+		"@zerobytes/seed-object-model": "^0.2.7",
 		"prop-types": "^15.7.2",
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
