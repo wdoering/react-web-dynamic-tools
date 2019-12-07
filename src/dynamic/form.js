@@ -27,7 +27,7 @@ import IntlMessages from '../util/IntlMessages';
 import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem, createIdOfComponent } from './_functions';
 
 let validateTimeout;
