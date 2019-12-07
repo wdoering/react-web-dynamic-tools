@@ -12,9 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { injectIntl } from 'react-intl';
-// TODO: check whether moduleNameMapper works out of webpack:
-// import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../util/IntlMessages';
+import Translate from '../util/Translate';
 
 /**
  * TODO: comment/describe
@@ -109,9 +107,11 @@ let searchIdOfTimeout;
  * @param {string} property
  * @param {object} values
  * @param {ModelBase} Type
+ * @param {object} firebase
+ * @param {Function} i18n Translation source
  * @param {function} handleChange
  */
-const createIdOfComponent = (model, property, values, Type, firebase, handleChange) => {
+const createIdOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
 	const config = model.$fieldConfig[property];
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
@@ -142,7 +142,7 @@ const createIdOfComponent = (model, property, values, Type, firebase, handleChan
 	return (
 		<div style={{ position: 'relative' }}>
 			<Typography variant="h5">
-				<IntlMessages id={`${model.getModelName()}.form.${property}`} />
+				<Translate i18n={i18n} id={`${model.getModelName()}.form.${property}`} />
 			</Typography>
 			<div style={{ flex: 1 }} className="mt-10">
 				<TextField

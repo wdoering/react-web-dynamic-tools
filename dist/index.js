@@ -16,6 +16,26 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle$1 from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 
+var validateName = function validateName(name) {
+  var nameRegex = /^[a-zA-Z]+$/;
+  return nameRegex.test(name);
+};
+var validateEmail = function validateEmail(email) {
+  var regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regEmail.test(email);
+};
+var validatePassword = function validatePassword(password) {
+  var pwdRegex = /^.{6,}$/;
+  return !pwdRegex.test(password);
+};
+
+var validations = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	validateName: validateName,
+	validateEmail: validateEmail,
+	validatePassword: validatePassword
+});
+
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
@@ -148,6 +168,42 @@ function _setPrototypeOf(o, p) {
   };
 
   return _setPrototypeOf(o, p);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
 }
 
 function _assertThisInitialized(self) {
@@ -301,6 +357,21 @@ BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
 
+var Translate = function Translate(_ref) {
+  var i18n = _ref.i18n,
+      id = _ref.id,
+      other = _objectWithoutProperties(_ref, ["i18n", "id"]);
+
+  return typeof i18n === 'function' ? i18n(id, other) : React.cloneElement(i18n, _objectSpread2({
+    id: id
+  }, other));
+};
+
+Translate.propTypes = {
+  i18n: PropTypes.oneOfType([PropTypes.i18n, PropTypes.textId]),
+  id: PropTypes.string
+};
+
 /**
  * TODO: comment/describe
  */
@@ -390,10 +461,12 @@ var searchIdOfTimeout;
  * @param {string} property
  * @param {object} values
  * @param {ModelBase} Type
+ * @param {object} firebase
+ * @param {Function} i18n Translation source
  * @param {function} handleChange
  */
 
-var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, handleChange) {
+var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var config = model.$fieldConfig[property];
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
   var oService = new Type().getService(firebase);
@@ -437,7 +510,8 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     }
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
+  }, React.createElement(Translate, {
+    i18n: i18n,
     id: "".concat(model.getModelName(), ".form.").concat(property)
   })), React.createElement("div", {
     style: {
@@ -505,10 +579,11 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
 
 var validateTimeout;
 /**
- *
+ * @param {Function} i18n Translation source
+ * @param {Function} handleChange Change data function
  */
 
-var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, _handleChange) {
+var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, i18n, _handleChange) {
   var newModel = {};
   Object.keys(Type).map(function (key) {
     if (key == '$fieldConfig') return;
@@ -539,6 +614,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
     baseIntl: "".concat(model.getModelName(), ".form.").concat(property),
     errors: errors,
     values: values,
+    i18n: i18n,
     handleChange: function handleChange(prop, value) {
       var v = _objectSpread2({}, values, _defineProperty({}, prop, value));
 
@@ -551,7 +627,8 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
     className: " mb-15"
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
+  }, React.createElement(Translate, {
+    i18n: i18n,
     id: "".concat(model.getModelName(), ".form.").concat(property)
   })), React.createElement("div", {
     style: {
@@ -564,10 +641,11 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
  * @param {ModelBase} model
  * @param {string} property
  * @param {FieldType|any} Type
+ * @param {Function} i18n Translation source
  */
 
 
-var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, handleChange) {
+var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var defaultCurrentDialogValue = {};
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
@@ -622,20 +700,21 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   if (Type instanceof FieldType) {
     switch (Type.complexType) {
       case ComplexTypes.ShapedAs:
-        inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, function (p, fullObject) {
+        inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
           setCurrentDialogValue(fullObject);
         });
         break;
     }
   } else if (isIdOfModelBase) {
-    inputs = createIdOfComponent(model, property, values, Type, firebase, function (p, uid, item) {
+    inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
       setCurrentDialogValue(item);
     });
   } else if (typeof Type === 'string') {
     switch (Type) {
       case FieldTypes.String:
         inputs = React.createElement(TextField, {
-          label: React.createElement(IntlMessages, {
+          label: React.createElement(Translate, {
+            i18n: i18n,
             id: "".concat(model.getModelName(), ".form.").concat(property)
           }),
           onChange: function onChange(e) {
@@ -647,7 +726,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Date:
         inputs = React.createElement(TextField, {
           type: "date",
-          label: React.createElement(IntlMessages, {
+          label: React.createElement(Translate, {
+            i18n: i18n,
             id: "".concat(model.getModelName(), ".form.").concat(property)
           }),
           onChange: function onChange(e) {
@@ -659,7 +739,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Datetime:
         inputs = React.createElement(TextField, {
           type: "datetime",
-          label: React.createElement(IntlMessages, {
+          label: React.createElement(Translate, {
+            i18n: i18n,
             id: "".concat(model.getModelName(), ".form.").concat(property)
           }),
           onChange: function onChange(e) {
@@ -679,7 +760,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
+  }, React.createElement(Translate, {
+    i18n: i18n,
     id: "".concat(model.getModelName(), ".form.").concat(property)
   }), " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
     style: {
@@ -691,7 +773,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       return setOpen(true);
     },
     color: 'primary'
-  }, React.createElement(IntlMessages, {
+  }, React.createElement(Translate, {
+    i18n: i18n,
     id: "button.add"
   }))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog, {
     open: open,
@@ -740,6 +823,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.firebase Firebase instance for servicing purposes
+ * @param {Function} param0.i18n Translation source
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
 
@@ -750,6 +834,7 @@ var createFields = function createFields(_ref) {
       errors = _ref.errors,
       values = _ref.values,
       firebase = _ref.firebase,
+      i18n = _ref.i18n,
       handleChange = _ref.handleChange;
   var fields = [];
   Object.keys(model.$fieldConfig).map(function (property, i) {
@@ -760,6 +845,7 @@ var createFields = function createFields(_ref) {
       errors: errors,
       values: values,
       firebase: firebase,
+      i18n: i18n,
       handleChange: handleChange
     }));
 
@@ -783,6 +869,7 @@ var createFields = function createFields(_ref) {
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.firebase Firebase instance for service purposes
+ * @param {Function} param0.i18n Translation source for i18n purposes
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
 
@@ -794,6 +881,7 @@ var createField = function createField(_ref2) {
       values = _ref2.values,
       errors = _ref2.errors,
       firebase = _ref2.firebase,
+      i18n = _ref2.i18n,
       handleChange = _ref2.handleChange;
   var field = model.$fieldConfig[property];
 
@@ -825,14 +913,14 @@ var createField = function createField(_ref2) {
           style: {
             overflow: 'visible'
           }
-        }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, function (property, id) {
+        }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, id) {
           handleChange(property, id);
         })));
         break;
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent(model, property, values, field.type.Type, firebase, function (property, fullArray) {
+        component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });
         break;
@@ -846,7 +934,7 @@ var createField = function createField(_ref2) {
 
         component = React.createElement(Card, {
           className: "mb-15"
-        }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], function (property, fullObject) {
+        }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], i18n, function (property, fullObject) {
           delete fullObject.$fieldConfig;
           handleChange(property, fullObject);
         })));
@@ -857,14 +945,16 @@ var createField = function createField(_ref2) {
       case FieldTypes.String:
         component = React.createElement(TextField, _extends({}, field.props, {
           style: field.style.field,
-          label: React.createElement(IntlMessages, {
+          label: React.createElement(Translate, {
+            i18n: i18n,
             id: label
           }),
           value: values[property],
           onChange: function onChange(e) {
             return handleChange(property, e.target.value);
           },
-          helperText: error ? React.createElement(IntlMessages, {
+          helperText: error ? React.createElement(Translate, {
+            i18n: i18n,
             id: "form.error.".concat(error)
           }) : ' '
         }));
@@ -887,7 +977,8 @@ var DynamicForm = function DynamicForm(_ref3) {
   var model = _ref3.model,
       handleSave = _ref3.handleSave,
       id = _ref3.id,
-      firebase = _ref3.firebase;
+      firebase = _ref3.firebase,
+      i18n = _ref3.i18n;
 
   var _useState9 = useState(model),
       _useState10 = _slicedToArray(_useState9, 2),
@@ -958,6 +1049,7 @@ var DynamicForm = function DynamicForm(_ref3) {
     errors: errors,
     values: values,
     firebase: firebase,
+    i18n: i18n,
     handleChange: handleChange
   });
   return React.createElement("form", {
@@ -966,7 +1058,8 @@ var DynamicForm = function DynamicForm(_ref3) {
   }, React.createElement(Typography, {
     variant: "h4",
     className: "mb-15"
-  }, React.createElement(IntlMessages, {
+  }, React.createElement(Translate, {
+    i18n: i18n,
     id: "".concat(model.getModelName(), ".form.$title")
   })), React.createElement("div", {
     className: "field-group"
@@ -981,6 +1074,7 @@ DynamicForm.propTypes = {
   model: PropTypes.object.isRequired,
   handleSave: PropTypes.func,
   id: PropTypes.string,
+  i18n: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   firebase: PropTypes.object.isRequired
 };
 
@@ -1580,4 +1674,4 @@ DynamicView.propTypes = {
   firebase: PropTypes.object.isRequired
 };
 
-export { DynamicForm, DynamicList, DynamicView };
+export { DynamicForm, DynamicList, DynamicView, validations };
