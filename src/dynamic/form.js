@@ -501,7 +501,7 @@ DynamicForm.propTypes = {
 	model: PropTypes.object.isRequired,
 	handleSave: PropTypes.func,
 	id: PropTypes.string,
-	i18n: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+	i18n: PropTypes.oneOf([PropTypes.node, PropTypes.func]),
 	firebase: PropTypes.object.isRequired
 };
 

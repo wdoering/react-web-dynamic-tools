@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Translate = ({ i18n, id, ...other }) => {
-	return typeof i18n === 'function'
-		? i18n(id, other)
-		: React.cloneElement(i18n, { id, ...other });
+	return i18n instanceof React.Component
+		? React.cloneElement(i18n, { id, ...other })
+		: i18n(id, other);
 };
 
 Translate.propTypes = {
-	i18n: PropTypes.oneOfType([PropTypes.i18n, PropTypes.textId]),
+	i18n: PropTypes.oneOf([PropTypes.i18n, PropTypes.textId]),
 	id: PropTypes.string
 };
 
