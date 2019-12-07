@@ -9,7 +9,6 @@ import { FieldType, ComplexTypes, FieldTypes, ModelBase } from '@zerobytes/objec
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import { FieldType as FieldType$1, ComplexTypes as ComplexTypes$1, FieldTypes as FieldTypes$1, ModelBase as ModelBase$1 } from 'object-model-js';
 import Dialog$1 from '@material-ui/core/Dialog';
 import DialogActions$1 from '@material-ui/core/DialogActions';
 import DialogContent$1 from '@material-ui/core/DialogContent';
@@ -992,11 +991,11 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
       setItems = _useState2[1];
 
   var component = '';
-  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase$1;
+  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
-  if (isIdOfModelBase) ; else if (Type instanceof FieldType$1) ; else {
+  if (isIdOfModelBase) ; else if (Type instanceof FieldType) ; else {
     switch (Type) {
-      case FieldTypes$1.String:
+      case FieldTypes.String:
         component = React.createElement(TextField, {
           label: React.createElement(IntlMessages, {
             id: "".concat(model.getModelName(), ".form.").concat(property)
@@ -1074,23 +1073,23 @@ var createFilters = function createFilters(model, updateFilters) {
     var label = "".concat(model.getModelName(), ".form.").concat(property);
     var component = null;
 
-    if (fieldConfig.type instanceof FieldType$1) {
+    if (fieldConfig.type instanceof FieldType) {
       switch (fieldConfig.type.complexType) {
-        case ComplexTypes$1.IdOf:
+        case ComplexTypes.IdOf:
           break;
 
-        case ComplexTypes$1.ArrayOf:
+        case ComplexTypes.ArrayOf:
           component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, handleChange);
           break;
 
-        case ComplexTypes$1.ShapedAs:
+        case ComplexTypes.ShapedAs:
           break;
       }
     } else {
       switch (fieldConfig.type) {
-        case FieldTypes$1.String:
-        case FieldTypes$1.Integer:
-        case FieldTypes$1.Float:
+        case FieldTypes.String:
+        case FieldTypes.Integer:
+        case FieldTypes.Float:
           component = React.createElement(TextField, {
             style: model.$fieldConfig.style.field,
             label: React.createElement(IntlMessages, {
@@ -1431,11 +1430,11 @@ var createField$1 = function createField(_ref2) {
   var breakField = false;
   field.props = field.props || {};
 
-  if (field.type instanceof FieldType$1) {
+  if (field.type instanceof FieldType) {
     breakField = true;
 
     switch (field.type.complexType) {
-      case ComplexTypes$1.IdOf:
+      case ComplexTypes.IdOf:
         breakField = true;
         component = React.createElement(Card, {
           className: "mb-15",
@@ -1445,12 +1444,12 @@ var createField$1 = function createField(_ref2) {
         }, React.createElement(CardContent, null, createIdOfComponent$1(model, property, values, field.type.Type, firebase)));
         break;
 
-      case ComplexTypes$1.ArrayOf:
+      case ComplexTypes.ArrayOf:
         breakField = true;
         component = createArrayOfComponent$2(model, property, values, field.type.Type);
         break;
 
-      case ComplexTypes$1.ShapedAs:
+      case ComplexTypes.ShapedAs:
         breakField = true;
 
         if (!model[property]) {
@@ -1464,7 +1463,7 @@ var createField$1 = function createField(_ref2) {
     }
   } else {
     switch (field.type) {
-      case FieldTypes$1.String:
+      case FieldTypes.String:
         component = React.createElement("div", null, React.createElement(FormLabel, null, React.createElement(IntlMessages, {
           id: label
         })), React.createElement("div", {
