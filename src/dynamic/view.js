@@ -17,7 +17,7 @@ import {
 import IntlMessages from '../util/IntlMessages';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { FieldTypes, FieldType, ComplexTypes } from 'object-model-js';
+import { FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 // TODO: check use of moduleNameMapper
 // import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';

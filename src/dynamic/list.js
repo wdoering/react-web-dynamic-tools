@@ -5,7 +5,7 @@ import { TextField, Card, CardContent, List } from '@material-ui/core';
 // TODO: check whether can be referenced by moduleNameMapper
 // import IntlMessages from 'Util/IntlMessages';
 import IntlMessages from '../util/IntlMessages';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from 'object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 
 const createArrayOfComponent = (model, property, Type, handleChange) => {
