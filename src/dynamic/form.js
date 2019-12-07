@@ -20,21 +20,22 @@ import {
 	List
 } from '@material-ui/core';
 // TODO: check whether can be referenced by moduleNameMapper
+// import IntlMessages from 'Util/IntlMessages';
+import IntlMessages from '../util/IntlMessages';
+// TODO: check whether can be referenced by moduleNameMapper
 // import { BottomButtons } from 'Components/form';
 import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem, createIdOfComponent } from './_functions';
-import Translate from '../util/Translate';
 
 let validateTimeout;
 
 /**
- * @param {Function} i18n Translation source
- * @param {Function} handleChange Change data function
+ *
  */
-const createShapedAsComponent = (model, property, Type, values, i18n, handleChange) => {
+const createShapedAsComponent = (model, property, Type, values, handleChange) => {
 	const newModel = {};
 	Object.keys(Type).map((key) => {
 		if (key == '$fieldConfig') return;
@@ -64,7 +65,6 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 		baseIntl: `${model.getModelName()}.form.${property}`,
 		errors,
 		values,
-		i18n,
 		handleChange: (prop, value) => {
 			let v = {
 				...values,
@@ -77,7 +77,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 	return (
 		<div className=" mb-15">
 			<Typography variant="h5">
-				<Translate i18n={i18n} id={`${model.getModelName()}.form.${property}`} />
+				<IntlMessages id={`${model.getModelName()}.form.${property}`} />
 			</Typography>
 			<div style={{ flex: 1 }}>{fields}</div>
 		</div>
@@ -88,9 +88,8 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
  * @param {ModelBase} model
  * @param {string} property
  * @param {FieldType|any} Type
- * @param {Function} i18n Translation source
  */
-const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
+const createArrayOfComponent = (model, property, values, Type, firebase, handleChange) => {
 	let defaultCurrentDialogValue = {};
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
@@ -131,7 +130,6 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 					property,
 					new Type.Type(),
 					currentDialogValue,
-					i18n,
 					(p, fullObject) => {
 						setCurrentDialogValue(fullObject);
 					}
@@ -139,28 +137,15 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				break;
 		}
 	} else if (isIdOfModelBase) {
-		inputs = createIdOfComponent(
-			model,
-			property,
-			values,
-			Type,
-			firebase,
-			i18n,
-			(p, uid, item) => {
-				setCurrentDialogValue(item);
-			}
-		);
+		inputs = createIdOfComponent(model, property, values, Type, firebase, (p, uid, item) => {
+			setCurrentDialogValue(item);
+		});
 	} else if (typeof Type === 'string') {
 		switch (Type) {
 			case FieldTypes.String:
 				inputs = (
 					<TextField
-						label={
-							<Translate
-								i18n={i18n}
-								id={`${model.getModelName()}.form.${property}`}
-							/>
-						}
+						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.value);
 						}}
@@ -172,12 +157,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				inputs = (
 					<TextField
 						type="date"
-						label={
-							<Translate
-								i18n={i18n}
-								id={`${model.getModelName()}.form.${property}`}
-							/>
-						}
+						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -189,12 +169,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				inputs = (
 					<TextField
 						type="datetime"
-						label={
-							<Translate
-								i18n={i18n}
-								id={`${model.getModelName()}.form.${property}`}
-							/>
-						}
+						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -209,13 +184,13 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						<Translate i18n={i18n} id={`${model.getModelName()}.form.${property}`} /> (
+						<IntlMessages id={`${model.getModelName()}.form.${property}`} /> (
 						{list.length})
 					</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
 					<Button variant={'contained'} onClick={() => setOpen(true)} color={'primary'}>
-						<Translate i18n={i18n} id="button.add" />
+						<IntlMessages id="button.add" />
 					</Button>
 				</ExpansionPanelActions>
 				<ExpansionPanelDetails>
@@ -271,10 +246,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.firebase Firebase instance for servicing purposes
- * @param {Function} param0.i18n Translation source
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleChange }) => {
+const createFields = ({ model, baseIntl, errors, values, firebase, handleChange }) => {
 	let fields = [];
 
 	Object.keys(model.$fieldConfig).map((property, i) => {
@@ -286,7 +260,6 @@ const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleC
 				errors,
 				values,
 				firebase,
-				i18n,
 				handleChange
 			})
 		);
@@ -307,10 +280,9 @@ const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleC
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.firebase Firebase instance for service purposes
- * @param {Function} param0.i18n Translation source for i18n purposes
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createField = ({ model, property, label, values, errors, firebase, i18n, handleChange }) => {
+const createField = ({ model, property, label, values, errors, firebase, handleChange }) => {
 	const field = model.$fieldConfig[property];
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -336,7 +308,6 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 								values,
 								field.type.Type,
 								firebase,
-								i18n,
 								(property, id) => {
 									handleChange(property, id);
 								}
@@ -353,7 +324,6 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 					values,
 					field.type.Type,
 					firebase,
-					i18n,
 					(property, fullArray) => {
 						handleChange(property, fullArray);
 					}
@@ -373,7 +343,6 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 								property,
 								new field.type.Type(),
 								values[property],
-								i18n,
 								(property, fullObject) => {
 									delete fullObject.$fieldConfig;
 									handleChange(property, fullObject);
@@ -391,12 +360,10 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 					<TextField
 						{...field.props}
 						style={field.style.field}
-						label={<Translate i18n={i18n} id={label} />}
+						label={<IntlMessages id={label} />}
 						value={values[property]}
 						onChange={(e) => handleChange(property, e.target.value)}
-						helperText={
-							error ? <Translate i18n={i18n} id={`form.error.${error}`} /> : ' '
-						}
+						helperText={error ? <IntlMessages id={`form.error.${error}`} /> : ' '}
 					/>
 				);
 		}
@@ -416,7 +383,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
  *
  * @param {object} param0
  */
-const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
+const DynamicForm = ({ model, handleSave, id, firebase }) => {
 	const [values, setValues] = useState(model);
 	const [errors, setErrors] = useState({});
 
@@ -481,13 +448,12 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 		errors,
 		values,
 		firebase,
-		i18n,
 		handleChange
 	});
 	return (
 		<form noValidate autoComplete="off">
 			<Typography variant="h4" className="mb-15">
-				<Translate i18n={i18n} id={`${model.getModelName()}.form.$title`} />
+				<IntlMessages id={`${model.getModelName()}.form.$title`} />
 			</Typography>
 			<div className="field-group">{fields}</div>
 			<div>
@@ -501,7 +467,6 @@ DynamicForm.propTypes = {
 	model: PropTypes.object.isRequired,
 	handleSave: PropTypes.func,
 	id: PropTypes.string,
-	i18n: PropTypes.oneOf([PropTypes.node, PropTypes.func]),
 	firebase: PropTypes.object.isRequired
 };
 
