@@ -431,7 +431,7 @@ const DynamicForm = ({ model, handleSave, id, firebase }) => {
 	 */
 	const save = () => {
 		model.$fill(values);
-		let validation = model.validate();
+		let validation = model.$validate();
 		setErrors(validation);
 		if (!Object.keys(validation).length) {
 			if (handleSave) {
