@@ -130,6 +130,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 					property,
 					new Type.Type(),
 					currentDialogValue,
+					i18n,
 					(p, fullObject) => {
 						setCurrentDialogValue(fullObject);
 					}
@@ -137,9 +138,17 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				break;
 		}
 	} else if (isIdOfModelBase) {
-		inputs = createIdOfComponent(model, property, values, Type, firebase, (p, uid, item) => {
-			setCurrentDialogValue(item);
-		});
+		inputs = createIdOfComponent(
+			model,
+			property,
+			values,
+			Type,
+			firebase,
+			i18n,
+			(p, uid, item) => {
+				setCurrentDialogValue(item);
+			}
+		);
 	} else if (typeof Type === 'string') {
 		switch (Type) {
 			case FieldTypes.String:
