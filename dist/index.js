@@ -636,7 +636,8 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
 
 
 var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
-  var defaultCurrentDialogValue = {};
+  var defaultCurrentDialogValue = {},
+      i18nPropertyLabel = i18n("".concat(model.getModelName(), ".form.").concat(property));
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
     defaultCurrentDialogValue = '';
@@ -703,7 +704,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     switch (Type) {
       case FieldTypes.String:
         inputs = React.createElement(TextField, {
-          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
+          label: i18nPropertyLabel,
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.value);
           }
@@ -713,7 +714,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Date:
         inputs = React.createElement(TextField, {
           type: "date",
-          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
+          label: i18nPropertyLabel,
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.valueAsDate);
           }
@@ -723,7 +724,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Datetime:
         inputs = React.createElement(TextField, {
           type: "datetime",
-          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
+          label: i18nPropertyLabel,
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.valueAsDate);
           }
@@ -741,7 +742,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
+  }, i18nPropertyLabel, " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }
@@ -763,7 +764,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         overflow: isIdOfModelBase ? 'visible' : ''
       }
     }
-  }, React.createElement(DialogTitle, null, "Use Google's location service?"), React.createElement(DialogContent, {
+  }, React.createElement(DialogTitle, null, i18n('')), React.createElement(DialogContent, {
     style: {
       height: isIdOfModelBase ? 300 : '',
       overflow: isIdOfModelBase ? 'visible' : ''
