@@ -1,14 +1,14 @@
-import React, { useState, useEffect, Component } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button, Typography, ListItem, ListItemSecondaryAction, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog, DialogTitle, DialogContent, DialogActions, FormLabel } from '@material-ui/core';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import { Button, ListItem, ListItemSecondaryAction, Typography, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog, DialogTitle, DialogContent, DialogActions, FormLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldType, ComplexTypes, FieldTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import Dialog$1 from '@material-ui/core/Dialog';
 import DialogActions$1 from '@material-ui/core/DialogActions';
 import DialogContent$1 from '@material-ui/core/DialogContent';
@@ -170,42 +170,6 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -265,60 +229,53 @@ function _nonIterableRest() {
 }
 
 /**
- * Language Provider Helper Component
- * Used to Display Localised Strings
- */
-
-var InjectMassage = function InjectMassage(props) {
-  return React.createElement(FormattedMessage, props);
-};
-
-var IntlMessages = injectIntl(InjectMassage, {
-  withRef: false
-});
-
-/**
  * A pattern-follower **cancel-button**
+ *
+ * @param {function} param0.onClick
+ * @param {function} param0.i18n
  */
 
 var CancelButton = function CancelButton(_ref) {
-  var onClick = _ref.onClick;
+  var onClick = _ref.onClick,
+      i18n = _ref.i18n;
   var history = useHistory();
   return React.createElement(Button, {
     variant: "outlined",
     color: "secondary",
-    children: React.createElement(IntlMessages, {
-      id: "button.cancel"
-    }),
+    children: i18n('button.cancel'),
     onClick: onClick || function () {
       return history.goBack();
-    } //TODO: Architecture - Components/form/CancelButton - Insert confirmation message
-    // onClick={() => (confirm(<IntlMessages id="button.cancel" />) ? history.goBack() : null)}
-
+    }
   });
+};
+
+CancelButton.propTypes = {
+  onClick: PropTypes.func,
+  i18n: PropTypes.func.isRequired
 };
 
 /**
  * A pattern-follower save-button. Required handler (onClick)
  *
- * @property {func} onClick
+ * @param {function} param0.onClick
+ * @param {function} param0.i18n
  */
 
 var SaveButton = function SaveButton(_ref) {
-  var onClick = _ref.onClick;
+  var onClick = _ref.onClick,
+      i18n = _ref.i18n;
   return React.createElement(Button, {
     variant: "contained",
     color: "primary" // type="submit"
     ,
-    children: React.createElement(IntlMessages, {
-      id: "button.save"
-    }),
+    children: i18n('button.save'),
     onClick: onClick
   });
 };
 
 SaveButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  i18n: PropTypes.func.isRequired
 };
 
 var useStyles = makeStyles(function (theme) {
@@ -357,28 +314,16 @@ BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
 
-var Translate = function Translate(_ref) {
-  var i18n = _ref.i18n,
-      id = _ref.id,
-      other = _objectWithoutProperties(_ref, ["i18n", "id"]);
-
-  return i18n instanceof React.Component ? React.cloneElement(i18n, _objectSpread2({
-    id: id
-  }, other)) : i18n(id, other);
-};
-
-Translate.propTypes = {
-  i18n: PropTypes.oneOf([PropTypes.i18n, PropTypes.textId]),
-  id: PropTypes.string
-};
-
 /**
  * TODO: comment/describe
  */
 
-var Dateinfo = injectIntl(function (_ref) {
+var DateDetail = function DateDetail(_ref) {
   var item = _ref.item,
-      intl = _ref.intl;
+      _ref$locale = _ref.locale,
+      locale = _ref$locale === void 0 ? 'pt-br' : _ref$locale;
+  var dateString = item.toLocaleDateString(locale),
+      timeString = item.toLocaleTimeString(locale);
   return React.createElement("div", {
     key: 0,
     style: {
@@ -389,13 +334,14 @@ var Dateinfo = injectIntl(function (_ref) {
       color: '#111',
       fontWeight: '700'
     }
-  }, intl.formatDate(item)));
-});
+  }, dateString + (!timeString || " ".concat(timeString))));
+};
 /**
  * TODO: comment/describe
  *
  * @param {*} param0
  */
+
 
 var createConfiguredListItem = function createConfiguredListItem(_ref2) {
   var item = _ref2.item,
@@ -432,7 +378,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
       }
     }, item)));
   } else if (item instanceof Date) {
-    fields.push(React.createElement(Dateinfo, {
+    fields.push(React.createElement(DateDetail, {
       item: item
     }));
   }
@@ -462,7 +408,7 @@ var searchIdOfTimeout;
  * @param {object} values
  * @param {ModelBase} Type
  * @param {object} firebase
- * @param {Function} i18n Translation source
+ * @param {function} i18n Translation base function. Has to receive an ID
  * @param {function} handleChange
  */
 
@@ -510,10 +456,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     }
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(Translate, {
-    i18n: i18n,
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  })), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
       flex: 1
     },
@@ -579,12 +522,17 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
 
 var validateTimeout;
 /**
- *
+ * @param {property} model the model reference
+ * @param {property} property the current property name
+ * @param {object} Type the field type for usage on construction
+ * @param {array} values values set for the field for rendering
+ * @param {function} handleChange Firebase instance for service purposes
+ * @param {function} i18n Translation base function. Has to receive an ID
  */
 
-var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, _handleChange) {
+var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, i18n, _handleChange) {
   var newModel = {};
-  Object.keys(Type).map(function (key) {
+  Object.keys(Type).forEach(function (key, index) {
     if (key == '$fieldConfig') return;
     newModel[key] = '';
   });
@@ -625,9 +573,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
     className: " mb-15"
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  })), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
       flex: 1
     }
@@ -635,13 +581,14 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
 };
 /**
  *
+ * @param {object} model
  * @param {ModelBase} model
  * @param {string} property
  * @param {FieldType|any} Type
  */
 
 
-var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, handleChange) {
+var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var defaultCurrentDialogValue = {};
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
@@ -709,9 +656,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     switch (Type) {
       case FieldTypes.String:
         inputs = React.createElement(TextField, {
-          label: React.createElement(IntlMessages, {
-            id: "".concat(model.getModelName(), ".form.").concat(property)
-          }),
+          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.value);
           }
@@ -721,9 +666,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Date:
         inputs = React.createElement(TextField, {
           type: "date",
-          label: React.createElement(IntlMessages, {
-            id: "".concat(model.getModelName(), ".form.").concat(property)
-          }),
+          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.valueAsDate);
           }
@@ -733,9 +676,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.Datetime:
         inputs = React.createElement(TextField, {
           type: "datetime",
-          label: React.createElement(IntlMessages, {
-            id: "".concat(model.getModelName(), ".form.").concat(property)
-          }),
+          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
           onChange: function onChange(e) {
             setCurrentDialogValue(e.target.valueAsDate);
           }
@@ -753,9 +694,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  }), " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }
@@ -765,9 +704,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       return setOpen(true);
     },
     color: 'primary'
-  }, React.createElement(IntlMessages, {
-    id: "button.add"
-  }))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog, {
+  }, i18n('button.add'))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog, {
     open: open,
     onClose: function onClose() {
       return setOpen(false);
@@ -814,6 +751,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.firebase Firebase instance for servicing purposes
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
 
@@ -824,6 +762,7 @@ var createFields = function createFields(_ref) {
       errors = _ref.errors,
       values = _ref.values,
       firebase = _ref.firebase,
+      i18n = _ref.i18n,
       handleChange = _ref.handleChange;
   var fields = [];
   Object.keys(model.$fieldConfig).map(function (property, i) {
@@ -834,6 +773,7 @@ var createFields = function createFields(_ref) {
       errors: errors,
       values: values,
       firebase: firebase,
+      i18n: i18n,
       handleChange: handleChange
     }));
 
@@ -857,6 +797,7 @@ var createFields = function createFields(_ref) {
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.firebase Firebase instance for service purposes
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
 
@@ -868,6 +809,7 @@ var createField = function createField(_ref2) {
       values = _ref2.values,
       errors = _ref2.errors,
       firebase = _ref2.firebase,
+      i18n = _ref2.i18n,
       handleChange = _ref2.handleChange;
   var field = model.$fieldConfig[property];
 
@@ -899,7 +841,7 @@ var createField = function createField(_ref2) {
           style: {
             overflow: 'visible'
           }
-        }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, function (property, id) {
+        }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, id) {
           handleChange(property, id);
         })));
         break;
@@ -931,16 +873,12 @@ var createField = function createField(_ref2) {
       case FieldTypes.String:
         component = React.createElement(TextField, _extends({}, field.props, {
           style: field.style.field,
-          label: React.createElement(IntlMessages, {
-            id: label
-          }),
+          label: i18n(label),
           value: values[property],
           onChange: function onChange(e) {
             return handleChange(property, e.target.value);
           },
-          helperText: error ? React.createElement(IntlMessages, {
-            id: "form.error.".concat(error)
-          }) : ' '
+          helperText: error ? i18n("form.error.".concat(error)) : ' '
         }));
     }
   }
@@ -954,6 +892,12 @@ var createField = function createField(_ref2) {
 /**
  *
  * @param {object} param0
+ * @param {function} param0.model model instance for reference purposes
+ * @param {function} param0.handleSave saving function to be invoked
+ * @param {string} param0.id register/item ID
+ * @param {object} param0.firebase firebase API instance
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
+ *
  */
 
 
@@ -961,7 +905,8 @@ var DynamicForm = function DynamicForm(_ref3) {
   var model = _ref3.model,
       handleSave = _ref3.handleSave,
       id = _ref3.id,
-      firebase = _ref3.firebase;
+      firebase = _ref3.firebase,
+      i18n = _ref3.i18n;
 
   var _useState9 = useState(model),
       _useState10 = _slicedToArray(_useState9, 2),
@@ -1032,6 +977,7 @@ var DynamicForm = function DynamicForm(_ref3) {
     errors: errors,
     values: values,
     firebase: firebase,
+    i18n: i18n,
     handleChange: handleChange
   });
   return React.createElement("form", {
@@ -1040,9 +986,7 @@ var DynamicForm = function DynamicForm(_ref3) {
   }, React.createElement(Typography, {
     variant: "h4",
     className: "mb-15"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.$title")
-  })), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.$title"))), React.createElement("div", {
     className: "field-group"
   }, fields), React.createElement("div", null, React.createElement(BottomButtons, {
     buttons: [React.createElement(SaveButton, {
@@ -1055,8 +999,22 @@ DynamicForm.propTypes = {
   model: PropTypes.object.isRequired,
   handleSave: PropTypes.func,
   id: PropTypes.string,
-  firebase: PropTypes.object.isRequired
+  firebase: PropTypes.object.isRequired,
+  i18n: PropTypes.func.isRequired
 };
+
+/**
+ * Language Provider Helper Component
+ * Used to Display Localised Strings
+ */
+
+var InjectMassage = function InjectMassage(props) {
+  return React.createElement(FormattedMessage, props);
+};
+
+var IntlMessages = injectIntl(InjectMassage, {
+  withRef: false
+});
 
 var createArrayOfComponent$1 = function createArrayOfComponent(model, property, Type, handleChange) {
   var _useState = useState([]),
@@ -1243,10 +1201,14 @@ DynamicList.propTypes = {
   store: PropTypes.any.isRequired
 };
 
+/**
+ * Delete Confirmation Dialog
+ */
+
 var DeleteConfirmationDialog =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(DeleteConfirmationDialog, _Component);
+function (_React$Component) {
+  _inherits(DeleteConfirmationDialog, _React$Component);
 
   function DeleteConfirmationDialog() {
     var _getPrototypeOf2;
@@ -1292,7 +1254,8 @@ function (_Component) {
       var _this$props = this.props,
           title = _this$props.title,
           message = _this$props.message,
-          onConfirm = _this$props.onConfirm;
+          onConfirm = _this$props.onConfirm,
+          i18n = _this$props.i18n;
       return React.createElement(Dialog$1, {
         open: this.state.open,
         onClose: function onClose() {
@@ -1309,20 +1272,20 @@ function (_Component) {
           return _this2.close();
         },
         className: "btn-danger text-white"
-      }, React.createElement(IntlMessages, {
-        id: "button.cancel"
-      })), React.createElement(Button$1, {
+      }, i18n('button.cancel')), React.createElement(Button$1, {
         onClick: onConfirm,
         className: "btn-primary text-white",
         autoFocus: true
-      }, React.createElement(IntlMessages, {
-        id: "button.yes"
-      }))));
+      }, i18n('button.yes'))));
     }
   }]);
 
   return DeleteConfirmationDialog;
-}(Component);
+}(React.Component);
+
+DeleteConfirmationDialog.propTypes = {
+  i18n: PropTypes.func.isRequired
+};
 
 var searchIdOfTimeout$1;
 /**

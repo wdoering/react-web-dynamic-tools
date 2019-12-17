@@ -19,11 +19,7 @@ import {
 	CardContent,
 	List
 } from '@material-ui/core';
-// TODO: check whether can be referenced by moduleNameMapper
-// import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../util/IntlMessages';
-// TODO: check whether can be referenced by moduleNameMapper
-// import { BottomButtons } from 'Components/form';
+
 import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -33,11 +29,16 @@ import { createConfiguredListItem, createIdOfComponent } from './_functions';
 let validateTimeout;
 
 /**
- *
+ * @param {property} model the model reference
+ * @param {property} property the current property name
+ * @param {object} Type the field type for usage on construction
+ * @param {array} values values set for the field for rendering
+ * @param {function} handleChange Firebase instance for service purposes
+ * @param {function} i18n Translation base function. Has to receive an ID
  */
-const createShapedAsComponent = (model, property, Type, values, handleChange) => {
+const createShapedAsComponent = (model, property, Type, values, i18n, handleChange) => {
 	const newModel = {};
-	Object.keys(Type).map((key) => {
+	Object.keys(Type).forEach((key, index) => {
 		if (key == '$fieldConfig') return;
 		newModel[key] = '';
 	});
@@ -76,20 +77,19 @@ const createShapedAsComponent = (model, property, Type, values, handleChange) =>
 	});
 	return (
 		<div className=" mb-15">
-			<Typography variant="h5">
-				<IntlMessages id={`${model.getModelName()}.form.${property}`} />
-			</Typography>
+			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
 			<div style={{ flex: 1 }}>{fields}</div>
 		</div>
 	);
 };
 /**
  *
+ * @param {object} model
  * @param {ModelBase} model
  * @param {string} property
  * @param {FieldType|any} Type
  */
-const createArrayOfComponent = (model, property, values, Type, firebase, handleChange) => {
+const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
 	let defaultCurrentDialogValue = {};
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
@@ -145,7 +145,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, handleC
 			case FieldTypes.String:
 				inputs = (
 					<TextField
-						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
+						label={i18n(`${model.getModelName()}.form.${property}`)}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.value);
 						}}
@@ -157,7 +157,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, handleC
 				inputs = (
 					<TextField
 						type="date"
-						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
+						label={i18n(`${model.getModelName()}.form.${property}`)}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -169,7 +169,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, handleC
 				inputs = (
 					<TextField
 						type="datetime"
-						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
+						label={i18n(`${model.getModelName()}.form.${property}`)}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -184,13 +184,12 @@ const createArrayOfComponent = (model, property, values, Type, firebase, handleC
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						<IntlMessages id={`${model.getModelName()}.form.${property}`} /> (
-						{list.length})
+						{i18n(`${model.getModelName()}.form.${property}`)} ({list.length})
 					</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
 					<Button variant={'contained'} onClick={() => setOpen(true)} color={'primary'}>
-						<IntlMessages id="button.add" />
+						{i18n('button.add')}
 					</Button>
 				</ExpansionPanelActions>
 				<ExpansionPanelDetails>
@@ -246,9 +245,10 @@ const createArrayOfComponent = (model, property, values, Type, firebase, handleC
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.firebase Firebase instance for servicing purposes
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createFields = ({ model, baseIntl, errors, values, firebase, handleChange }) => {
+const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleChange }) => {
 	let fields = [];
 
 	Object.keys(model.$fieldConfig).map((property, i) => {
@@ -260,6 +260,7 @@ const createFields = ({ model, baseIntl, errors, values, firebase, handleChange 
 				errors,
 				values,
 				firebase,
+				i18n,
 				handleChange
 			})
 		);
@@ -280,9 +281,10 @@ const createFields = ({ model, baseIntl, errors, values, firebase, handleChange 
  * @param {object} param0.values Variable containing the values of all fields
  * @param {object} param0.errors Variable containing the error list
  * @param {object} param0.firebase Firebase instance for service purposes
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createField = ({ model, property, label, values, errors, firebase, handleChange }) => {
+const createField = ({ model, property, label, values, errors, firebase, i18n, handleChange }) => {
 	const field = model.$fieldConfig[property];
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -308,6 +310,7 @@ const createField = ({ model, property, label, values, errors, firebase, handleC
 								values,
 								field.type.Type,
 								firebase,
+								i18n,
 								(property, id) => {
 									handleChange(property, id);
 								}
@@ -360,10 +363,10 @@ const createField = ({ model, property, label, values, errors, firebase, handleC
 					<TextField
 						{...field.props}
 						style={field.style.field}
-						label={<IntlMessages id={label} />}
+						label={i18n(label)}
 						value={values[property]}
 						onChange={(e) => handleChange(property, e.target.value)}
-						helperText={error ? <IntlMessages id={`form.error.${error}`} /> : ' '}
+						helperText={error ? i18n(`form.error.${error}`) : ' '}
 					/>
 				);
 		}
@@ -382,8 +385,14 @@ const createField = ({ model, property, label, values, errors, firebase, handleC
 /**
  *
  * @param {object} param0
+ * @param {function} param0.model model instance for reference purposes
+ * @param {function} param0.handleSave saving function to be invoked
+ * @param {string} param0.id register/item ID
+ * @param {object} param0.firebase firebase API instance
+ * @param {function} param0.i18n Translation base function. Has to receive an ID
+ *
  */
-const DynamicForm = ({ model, handleSave, id, firebase }) => {
+const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 	const [values, setValues] = useState(model);
 	const [errors, setErrors] = useState({});
 
@@ -448,12 +457,13 @@ const DynamicForm = ({ model, handleSave, id, firebase }) => {
 		errors,
 		values,
 		firebase,
+		i18n,
 		handleChange
 	});
 	return (
 		<form noValidate autoComplete="off">
 			<Typography variant="h4" className="mb-15">
-				<IntlMessages id={`${model.getModelName()}.form.$title`} />
+				{i18n(`${model.getModelName()}.form.$title`)}
 			</Typography>
 			<div className="field-group">{fields}</div>
 			<div>
@@ -467,7 +477,8 @@ DynamicForm.propTypes = {
 	model: PropTypes.object.isRequired,
 	handleSave: PropTypes.func,
 	id: PropTypes.string,
-	firebase: PropTypes.object.isRequired
+	firebase: PropTypes.object.isRequired,
+	i18n: PropTypes.func.isRequired
 };
 
 export default DynamicForm;

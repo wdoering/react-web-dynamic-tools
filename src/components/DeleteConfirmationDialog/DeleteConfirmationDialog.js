@@ -1,18 +1,16 @@
-/**
- * Delete Confirmation Dialog
- */
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-// TODO: check whether moduleNameMapper works out of webpack:
-// import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../../util/IntlMessages';
 
-class DeleteConfirmationDialog extends Component {
+/**
+ * Delete Confirmation Dialog
+ */
+class DeleteConfirmationDialog extends React.Component {
 	state = {
 		open: false
 	};
@@ -28,7 +26,8 @@ class DeleteConfirmationDialog extends Component {
 	}
 
 	render() {
-		const { title, message, onConfirm } = this.props;
+		const { title, message, onConfirm, i18n } = this.props;
+
 		return (
 			<Dialog
 				open={this.state.open}
@@ -42,15 +41,19 @@ class DeleteConfirmationDialog extends Component {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={() => this.close()} className="btn-danger text-white">
-						<IntlMessages id="button.cancel" />
+						{i18n('button.cancel')}
 					</Button>
 					<Button onClick={onConfirm} className="btn-primary text-white" autoFocus>
-						<IntlMessages id="button.yes" />
+						{i18n('button.yes')}
 					</Button>
 				</DialogActions>
 			</Dialog>
 		);
 	}
 }
+
+DeleteConfirmationDialog.propTypes = {
+	i18n: PropTypes.func.isRequired
+};
 
 export default DeleteConfirmationDialog;

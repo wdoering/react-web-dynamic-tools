@@ -11,13 +11,14 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import { injectIntl } from 'react-intl';
-import Translate from '../util/Translate';
 
 /**
  * TODO: comment/describe
  */
-const Dateinfo = injectIntl(({ item, intl }) => {
+const DateDetail = ({ item, locale = 'pt-br' }) => {
+	const dateString = item.toLocaleDateString(locale),
+		timeString = item.toLocaleTimeString(locale);
+
 	return (
 		<div key={0} style={{ flexBasis: '100%' }}>
 			<Typography
@@ -26,11 +27,11 @@ const Dateinfo = injectIntl(({ item, intl }) => {
 					fontWeight: '700'
 				}}
 			>
-				{intl.formatDate(item)}
+				{dateString + (!timeString || ` ${timeString}`)}
 			</Typography>
 		</div>
 	);
-});
+};
 
 /**
  * TODO: comment/describe
@@ -69,7 +70,7 @@ const createConfiguredListItem = ({ item, listItemProperties, key, onClick, remo
 			</div>
 		);
 	} else if (item instanceof Date) {
-		fields.push(<Dateinfo item={item} />);
+		fields.push(<DateDetail item={item} />);
 	}
 
 	return (
@@ -108,7 +109,7 @@ let searchIdOfTimeout;
  * @param {object} values
  * @param {ModelBase} Type
  * @param {object} firebase
- * @param {Function} i18n Translation source
+ * @param {function} i18n Translation base function. Has to receive an ID
  * @param {function} handleChange
  */
 const createIdOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
@@ -141,9 +142,7 @@ const createIdOfComponent = (model, property, values, Type, firebase, i18n, hand
 	};
 	return (
 		<div style={{ position: 'relative' }}>
-			<Typography variant="h5">
-				<Translate i18n={i18n} id={`${model.getModelName()}.form.${property}`} />
-			</Typography>
+			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
 			<div style={{ flex: 1 }} className="mt-10">
 				<TextField
 					variant="outlined"
