@@ -526,8 +526,8 @@ var validateTimeout;
  * @param {property} property the current property name
  * @param {object} Type the field type for usage on construction
  * @param {array} values values set for the field for rendering
- * @param {function} handleChange Firebase instance for service purposes
  * @param {function} i18n Translation base function. Has to receive an ID
+ * @param {function} handleChange Firebase instance for service purposes
  */
 
 var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, i18n, _handleChange) {
@@ -561,6 +561,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
     baseIntl: "".concat(model.getModelName(), ".form.").concat(property),
     errors: errors,
     values: values,
+    i18n: i18n,
     handleChange: function handleChange(prop, value) {
       var v = _objectSpread2({}, values, _defineProperty({}, prop, value));
 
@@ -643,13 +644,13 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   if (Type instanceof FieldType) {
     switch (Type.complexType) {
       case ComplexTypes.ShapedAs:
-        inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, function (p, fullObject) {
+        inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
           setCurrentDialogValue(fullObject);
         });
         break;
     }
   } else if (isIdOfModelBase) {
-    inputs = createIdOfComponent(model, property, values, Type, firebase, function (p, uid, item) {
+    inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
       setCurrentDialogValue(item);
     });
   } else if (typeof Type === 'string') {
@@ -765,7 +766,7 @@ var createFields = function createFields(_ref) {
       i18n = _ref.i18n,
       handleChange = _ref.handleChange;
   var fields = [];
-  Object.keys(model.$fieldConfig).map(function (property, i) {
+  Object.keys(model.$fieldConfig).forEach(function (property, i) {
     fields.push(createField({
       property: property,
       model: model,
@@ -848,7 +849,7 @@ var createField = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent(model, property, values, field.type.Type, firebase, function (property, fullArray) {
+        component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });
         break;
@@ -862,7 +863,7 @@ var createField = function createField(_ref2) {
 
         component = React.createElement(Card, {
           className: "mb-15"
-        }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], function (property, fullObject) {
+        }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], i18n, function (property, fullObject) {
           delete fullObject.$fieldConfig;
           handleChange(property, fullObject);
         })));

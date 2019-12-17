@@ -33,8 +33,8 @@ let validateTimeout;
  * @param {property} property the current property name
  * @param {object} Type the field type for usage on construction
  * @param {array} values values set for the field for rendering
- * @param {function} handleChange Firebase instance for service purposes
  * @param {function} i18n Translation base function. Has to receive an ID
+ * @param {function} handleChange Firebase instance for service purposes
  */
 const createShapedAsComponent = (model, property, Type, values, i18n, handleChange) => {
 	const newModel = {};
@@ -261,7 +261,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleChange }) => {
 	let fields = [];
 
-	Object.keys(model.$fieldConfig).map((property, i) => {
+	Object.keys(model.$fieldConfig).forEach((property, i) => {
 		fields.push(
 			createField({
 				property,
