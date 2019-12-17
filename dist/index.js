@@ -620,7 +620,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
     className: " mb-15"
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property, ".add"))), React.createElement("div", {
     style: {
       flex: 1
     }
