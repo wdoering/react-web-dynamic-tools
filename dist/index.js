@@ -170,6 +170,42 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -237,21 +273,26 @@ function _nonIterableRest() {
 
 var CancelButton = function CancelButton(_ref) {
   var onClick = _ref.onClick,
-      i18n = _ref.i18n;
+      i18n = _ref.i18n,
+      _ref$color = _ref.color,
+      color = _ref$color === void 0 ? 'secondary' : _ref$color,
+      other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
+
   var history = useHistory();
-  return React.createElement(Button, {
+  return React.createElement(Button, _extends({
     variant: "outlined",
-    color: "secondary",
+    color: color,
     children: i18n('button.cancel'),
     onClick: onClick || function () {
       return history.goBack();
     }
-  });
+  }, other));
 };
 
 CancelButton.propTypes = {
   onClick: PropTypes.func,
-  i18n: PropTypes.func.isRequired
+  i18n: PropTypes.func.isRequired,
+  color: PropTypes.string
 };
 
 /**
@@ -263,19 +304,24 @@ CancelButton.propTypes = {
 
 var SaveButton = function SaveButton(_ref) {
   var onClick = _ref.onClick,
-      i18n = _ref.i18n;
-  return React.createElement(Button, {
+      i18n = _ref.i18n,
+      _ref$color = _ref.color,
+      color = _ref$color === void 0 ? 'primary' : _ref$color,
+      other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
+
+  return React.createElement(Button, _extends({
     variant: "contained",
-    color: "primary" // type="submit"
+    color: color // type="submit"
     ,
     children: i18n('button.save'),
     onClick: onClick
-  });
+  }, other));
 };
 
 SaveButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-  i18n: PropTypes.func.isRequired
+  i18n: PropTypes.func.isRequired,
+  color: PropTypes.string
 };
 
 var useStyles = makeStyles(function (theme) {
@@ -724,13 +770,15 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     }
   }, inputs), React.createElement(DialogActions, null, React.createElement(SaveButton, {
     onClick: save,
-    color: "primary"
+    color: "primary",
+    i18n: i18n
   }), React.createElement(CancelButton, {
     onClick: function onClick() {
       return setOpen(false);
     },
     color: "primary",
-    autoFocus: true
+    autoFocus: true,
+    i18n: i18n
   }))), React.createElement("div", {
     style: {
       flex: 1
@@ -991,8 +1039,11 @@ var DynamicForm = function DynamicForm(_ref3) {
     className: "field-group"
   }, fields), React.createElement("div", null, React.createElement(BottomButtons, {
     buttons: [React.createElement(SaveButton, {
-      onClick: save
-    }), React.createElement(CancelButton, null)]
+      onClick: save,
+      i18n: i18n
+    }), React.createElement(CancelButton, {
+      i18n: i18n
+    })]
   })));
 };
 

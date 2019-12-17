@@ -220,11 +220,12 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 							{inputs}
 						</DialogContent>
 						<DialogActions>
-							<SaveButton onClick={save} color="primary" />
+							<SaveButton onClick={save} color="primary" i18n={i18n} />
 							<CancelButton
 								onClick={() => setOpen(false)}
 								color="primary"
 								autoFocus
+								i18n={i18n}
 							/>
 						</DialogActions>
 					</Dialog>
@@ -479,7 +480,12 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 			</Typography>
 			<div className="field-group">{fields}</div>
 			<div>
-				<BottomButtons buttons={[<SaveButton onClick={save} />, <CancelButton />]} />
+				<BottomButtons
+					buttons={[
+						<SaveButton onClick={save} i18n={i18n} />,
+						<CancelButton i18n={i18n} />
+					]}
+				/>
 			</div>
 		</form>
 	);
