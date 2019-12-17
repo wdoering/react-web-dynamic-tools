@@ -66,6 +66,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 		baseIntl: `${model.getModelName()}.form.${property}`,
 		errors,
 		values,
+		i18n,
 		handleChange: (prop, value) => {
 			let v = {
 				...values,
@@ -336,6 +337,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 					values,
 					field.type.Type,
 					firebase,
+					i18n,
 					(property, fullArray) => {
 						handleChange(property, fullArray);
 					}
@@ -355,6 +357,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 								property,
 								new field.type.Type(),
 								values[property],
+								i18n,
 								(property, fullObject) => {
 									delete fullObject.$fieldConfig;
 									handleChange(property, fullObject);
