@@ -91,10 +91,13 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
  * @param {FieldType|any} Type
  */
 const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
-	let defaultCurrentDialogValue = {};
+	let defaultCurrentDialogValue = {},
+		i18nPropertyLabel = i18n(`${model.getModelName()}.form.${property}`);
+
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
 	}
+
 	const [list, setList] = useState(values[property] || []);
 	const [open, setOpen] = useState(false);
 	const [currentDialogValue, setCurrentDialogValue] = useState(defaultCurrentDialogValue);
@@ -155,7 +158,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			case FieldTypes.String:
 				inputs = (
 					<TextField
-						label={i18n(`${model.getModelName()}.form.${property}`)}
+						label={i18nPropertyLabel}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.value);
 						}}
@@ -167,7 +170,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				inputs = (
 					<TextField
 						type="date"
-						label={i18n(`${model.getModelName()}.form.${property}`)}
+						label={i18nPropertyLabel}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -179,7 +182,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				inputs = (
 					<TextField
 						type="datetime"
-						label={i18n(`${model.getModelName()}.form.${property}`)}
+						label={i18nPropertyLabel}
 						onChange={(e) => {
 							setCurrentDialogValue(e.target.valueAsDate);
 						}}
@@ -194,7 +197,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						{i18n(`${model.getModelName()}.form.${property}`)} ({list.length})
+						{i18nPropertyLabel} ({list.length})
 					</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
@@ -210,7 +213,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						aria-describedby="alert-dialog-description"
 						style={{ root: { overflow: isIdOfModelBase ? 'visible' : '' } }}
 					>
-						<DialogTitle>{"Use Google's location service?"}</DialogTitle>
+						<DialogTitle>{i18n('')}</DialogTitle>
 						<DialogContent
 							style={{
 								height: isIdOfModelBase ? 300 : '',
