@@ -764,7 +764,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         overflow: isIdOfModelBase ? 'visible' : ''
       }
     }
-  }, React.createElement(DialogTitle, null, i18n('')), React.createElement(DialogContent, {
+  }, React.createElement(DialogTitle, null, i18nPropertyLabel), React.createElement(DialogContent, {
     style: {
       height: isIdOfModelBase ? 300 : '',
       overflow: isIdOfModelBase ? 'visible' : ''

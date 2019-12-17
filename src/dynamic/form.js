@@ -213,7 +213,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						aria-describedby="alert-dialog-description"
 						style={{ root: { overflow: isIdOfModelBase ? 'visible' : '' } }}
 					>
-						<DialogTitle>{i18n('')}</DialogTitle>
+						<DialogTitle>{i18nPropertyLabel}</DialogTitle>
 						<DialogContent
 							style={{
 								height: isIdOfModelBase ? 300 : '',
