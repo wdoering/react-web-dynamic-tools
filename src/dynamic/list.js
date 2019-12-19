@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { TextField, Card, CardContent, List } from '@material-ui/core';
-// TODO: check whether can be referenced by moduleNameMapper
-// import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../util/IntlMessages';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 
-const createArrayOfComponent = (model, property, Type, handleChange) => {
+/**
+ * Will create a displayable list of components
+ *
+ * @param {*} model
+ * @param {*} property
+ * @param {*} Type
+ * @param {function} i18n
+ * @param {function} handleChange
+ */
+const createArrayOfComponent = (model, property, Type, i18n, handleChange) => {
 	const [items, setItems] = useState([]);
 	let component = '';
 
@@ -21,7 +27,7 @@ const createArrayOfComponent = (model, property, Type, handleChange) => {
 			case FieldTypes.String:
 				component = (
 					<TextField
-						label={<IntlMessages id={`${model.getModelName()}.form.${property}`} />}
+						label={i18n(`${model.getModelName()}.form.${property}`)}
 						onChange={(e) => {
 							let v = !e.target.value ? [] : e.target.value.split(';');
 							setItems(v.filter((s) => !!s));
@@ -62,7 +68,13 @@ const createArrayOfComponent = (model, property, Type, handleChange) => {
 	);
 };
 
-const createFilters = (model, updateFilters) => {
+/**
+ *
+ * @param {object} model
+ * @param {function} i18n
+ * @param {function} updateFilters
+ */
+const createFilters = (model, i18n, updateFilters) => {
 	const newModel = {};
 	Object.keys(model).map((key) => {
 		if (key == '$fieldConfig') return;
@@ -118,6 +130,7 @@ const createFilters = (model, updateFilters) => {
 						model,
 						property,
 						fieldConfig.type.Type,
+						i18n,
 						handleChange
 					);
 					break;
@@ -132,7 +145,7 @@ const createFilters = (model, updateFilters) => {
 					component = (
 						<TextField
 							style={model.$fieldConfig.style.field}
-							label={<IntlMessages id={label} />}
+							label={i18n(label)}
 							value={values[property]}
 							onChange={(e) => handleChange(property, e.target.value)}
 						/>
@@ -162,7 +175,7 @@ const search = (oService, filters) => {
 };
 let oService;
 
-const DynamicList = ({ reduxList, model, configuration, baseRoute, firebase, store }) => {
+const DynamicList = ({ reduxList, model, configuration, baseRoute, i18n, firebase, store }) => {
 	const history = useHistory();
 	useEffect(() => {
 		oService = model.getService(firebase, store);
@@ -174,7 +187,7 @@ const DynamicList = ({ reduxList, model, configuration, baseRoute, firebase, sto
 			<Card className="mb-15">
 				<CardContent>
 					<div className="field-group">
-						{createFilters(model, (f) => {
+						{createFilters(model, i18n, (f) => {
 							search(oService, f);
 						})}
 					</div>
@@ -206,6 +219,7 @@ DynamicList.propTypes = {
 	model: PropTypes.object,
 	configuration: PropTypes.object,
 	baseRoute: PropTypes.string,
+	i18n: PropTypes.function.isRequired,
 	firebase: PropTypes.object.isRequired,
 	store: PropTypes.any.isRequired
 };

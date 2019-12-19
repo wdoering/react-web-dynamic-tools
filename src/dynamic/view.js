@@ -12,32 +12,29 @@ import {
 	Button,
 	FormLabel
 } from '@material-ui/core';
-// TODO: check whether can be referenced by moduleNameMapper
-// import IntlMessages from 'Util/IntlMessages';
-import IntlMessages from '../util/IntlMessages';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import { FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
-// TODO: check use of moduleNameMapper
-// import DeleteConfirmationDialog from 'Components/DeleteConfirmationDialog/DeleteConfirmationDialog';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 
 let searchIdOfTimeout;
+
 /**
+ * Will create an ID of component pattern
  *
- * @param {ModelBase} model
- * @param {string} property
- * @param {object} values
- * @param {ModelBase} Type
- * @param {function} handleChange
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {object} values Values for a sequence selector
+ * @param {ModelBase} Type Model type literally
+ * @param {function} i18n Translation source function
+ * @param {function} handleChange Event handler for changes
  */
-const createIdOfComponent = (model, property, values, Type, firebase) => {
+const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
 	const config = model.$fieldConfig[property];
 	if (!config.listItemProperties) {
 		return (
-			<div>
-				NEED_TO_CONFIGURE_FIELD:{property} | FieldType:IdOf{`<${Type.name}>`}
+			<div style={{ fontWeight: 'bold', color: 'red' }}>
+				NEED_TO_CONFIGURE_FIELD: {property} | FieldType:IdOf{`<${Type.name}>`}
 			</div>
 		);
 	}
@@ -55,9 +52,7 @@ const createIdOfComponent = (model, property, values, Type, firebase) => {
 
 	return (
 		<div style={{ position: 'relative' }}>
-			<Typography variant="h5">
-				<IntlMessages id={`${model.getModelName()}.form.${property}`} />
-			</Typography>
+			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
 			<div className="mt-10">
 				{!!selected &&
 					createConfiguredListItem({
@@ -69,31 +64,40 @@ const createIdOfComponent = (model, property, values, Type, firebase) => {
 		</div>
 	);
 };
+
 /**
+ * Will create a shaped object display pattern
  *
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {ModelBase} Type Model type literally
+ * @param {object} values Values for a sequence selector
+ * @param {function} i18n Translation source function
  */
-const createShapedAsComponent = (model, property, Type, values) => {
+const createShapedAsComponent = (model, property, Type, values, i18n) => {
 	let fields = createFields({
 		model: Type,
 		baseIntl: `${model.getModelName()}.form.${property}`,
-		values
+		values,
+		i18n
 	});
 	return (
 		<div className=" mb-15">
-			<Typography variant="h5">
-				<IntlMessages id={`${model.getModelName()}.form.${property}`} />
-			</Typography>
+			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
 			<div style={{ flex: 1 }}>{fields}</div>
 		</div>
 	);
 };
+
 /**
+ * Creates an array of items display pattern
  *
- * @param {ModelBase} model
- * @param {string} property
- * @param {FieldType|any} Type
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {ModelBase} Type Model type literally
+ * @param {function} i18n Translation source function
  */
-const createArrayOfComponent = (model, property, values, Type) => {
+const createArrayOfComponent = (model, property, values, Type, i18n) => {
 	const [list, setList] = useState(values[property] || []);
 	if (!list.length && values[property].length) {
 		setList(values[property]);
@@ -104,8 +108,7 @@ const createArrayOfComponent = (model, property, values, Type) => {
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						<IntlMessages id={`${model.getModelName()}.form.${property}`} /> (
-						{list.length})
+						{i18n(`${model.getModelName()}.form.${property}`)} ({list.length})
 					</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>
@@ -131,11 +134,12 @@ const createArrayOfComponent = (model, property, values, Type) => {
  * Creates all the fields based on the parameters passed and the field Type configuration for each one of them
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
+ * @param {object} param0.baseIntl Variable containing the the labelling pattern
  * @param {object} param0.values Variable containing the values of all fields
- * @param {object} param0.errors Variable containing the error list
+ * @param {function} param0.i18n Translation source function
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
-const createFields = ({ model, baseIntl, values, firebase }) => {
+const createFields = ({ model, baseIntl, values, i18n, firebase }) => {
 	let fields = [];
 
 	Object.keys(model.$fieldConfig).map((property, i) => {
@@ -145,6 +149,7 @@ const createFields = ({ model, baseIntl, values, firebase }) => {
 				model,
 				label: `${baseIntl}.${property}`,
 				values,
+				i18n,
 				firebase
 			})
 		);
@@ -159,14 +164,16 @@ const createFields = ({ model, baseIntl, values, firebase }) => {
 
 /**
  * Creates a field based on the parameters passed and the field Type configuration
+ *
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
  * @param {string} param0.property Property from the model, destined to this field
  * @param {object} param0.label Variable containing the label text
  * @param {object} param0.values Variable containing the values of all fields
+ * @param {function} param0.i18n Translation source function
  * @param {object} param0.firebase Firebase instance for servicing purposes
  */
-const createField = ({ model, property, label, values, firebase }) => {
+const createField = ({ model, property, label, values, i18n, firebase }) => {
 	const field = model.$fieldConfig[property];
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -188,6 +195,7 @@ const createField = ({ model, property, label, values, firebase }) => {
 								property,
 								values,
 								field.type.Type,
+								i18n,
 								firebase
 							)}
 						</CardContent>
@@ -196,7 +204,7 @@ const createField = ({ model, property, label, values, firebase }) => {
 				break;
 			case ComplexTypes.ArrayOf:
 				breakField = true;
-				component = createArrayOfComponent(model, property, values, field.type.Type);
+				component = createArrayOfComponent(model, property, values, field.type.Type, i18n);
 				break;
 			case ComplexTypes.ShapedAs:
 				breakField = true;
@@ -211,7 +219,8 @@ const createField = ({ model, property, label, values, firebase }) => {
 								model,
 								property,
 								new field.type.Type(),
-								values[property]
+								values[property],
+								i18n
 							)}
 						</CardContent>
 					</Card>
@@ -223,9 +232,7 @@ const createField = ({ model, property, label, values, firebase }) => {
 			case FieldTypes.String:
 				component = (
 					<div>
-						<FormLabel>
-							<IntlMessages id={label} />
-						</FormLabel>
+						<FormLabel>{i18n(label)}</FormLabel>
 						<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
 							{values[property]}
 						</div>
@@ -245,10 +252,17 @@ const createField = ({ model, property, label, values, firebase }) => {
 };
 
 /**
+ * Will render a view, based on configuration from "model", translation souce (i18n),
+ * firebase connection api, a possible ID and base-routing.
  *
  * @param {object} param0
+ * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
+ * @param {string} param0.id A compulsory object ID, from where to extract display info
+ * @param {string} param0.baseRoute Variable containing the base origin of route
+ * @param {function} param0.i18n Translation source function
+ * @param {object} param0.firebase Firebase instance for servicing purposes
  */
-const DynamicView = ({ model, id, baseRoute, firebase }) => {
+const DynamicView = ({ model, id, baseRoute, i18n, firebase }) => {
 	const [values, setValues] = useState(model);
 	const history = useHistory();
 	const deleteConfirmationDialogRef = React.createRef();
@@ -256,6 +270,7 @@ const DynamicView = ({ model, id, baseRoute, firebase }) => {
 		model,
 		baseIntl: `${model.getModelName()}.form`,
 		values,
+		i18n,
 		firebase
 	});
 	useEffect(() => {
@@ -285,7 +300,7 @@ const DynamicView = ({ model, id, baseRoute, firebase }) => {
 					alignContent: 'center'
 				}}
 			>
-				<IntlMessages id={`${model.getModelName()}.form.$title`} />
+				{i18n(`${model.getModelName()}.form.$title`)} />
 				<div style={{ flex: 1 }}></div>
 				<Button
 					variant="contained"
@@ -295,7 +310,7 @@ const DynamicView = ({ model, id, baseRoute, firebase }) => {
 						history.push(`${baseRoute}/form/${values.uid}`);
 					}}
 				>
-					<IntlMessages id="button.edit" />
+					{i18n('button.edit')}
 				</Button>
 				<Button
 					variant="contained"
@@ -304,13 +319,14 @@ const DynamicView = ({ model, id, baseRoute, firebase }) => {
 						deleteConfirmationDialogRef.current.open();
 					}}
 				>
-					<IntlMessages id="button.delete" />
+					{i18n('button.delete')}
 				</Button>
 			</Typography>
 			<DeleteConfirmationDialog
 				ref={deleteConfirmationDialogRef}
-				title={<IntlMessages id="dynamic.form.deleteConfirmation" />}
+				title={i18n('dynamic.form.deleteConfirmation')}
 				onConfirm={() => remove()}
+				i18n={i18n}
 			/>
 			<div className="field-group">{fields}</div>
 		</form>
@@ -321,6 +337,7 @@ DynamicView.propTypes = {
 	model: PropTypes.object.isRequired,
 	id: PropTypes.string,
 	baseRoute: PropTypes.string,
+	i18n: PropTypes.func.isRequired,
 	firebase: PropTypes.object.isRequired
 };
 

@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, ListItem, ListItemSecondaryAction, Typography, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog, DialogTitle, DialogContent, DialogActions, FormLabel } from '@material-ui/core';
+import { Button, ListItem, ListItemSecondaryAction, Typography, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldType, ComplexTypes, FieldTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import Dialog$1 from '@material-ui/core/Dialog';
-import DialogActions$1 from '@material-ui/core/DialogActions';
-import DialogContent$1 from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle$1 from '@material-ui/core/DialogTitle';
-import Button$1 from '@material-ui/core/Button';
 
 var validateName = function validateName(name) {
   var nameRegex = /^[a-zA-Z]+$/;
@@ -322,6 +321,92 @@ SaveButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   i18n: PropTypes.func.isRequired,
   color: PropTypes.string
+};
+
+/**
+ * Delete Confirmation Dialog
+ */
+
+var DeleteConfirmationDialog =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(DeleteConfirmationDialog, _React$Component);
+
+  function DeleteConfirmationDialog() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, DeleteConfirmationDialog);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(DeleteConfirmationDialog)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      open: false
+    });
+
+    return _this;
+  }
+
+  _createClass(DeleteConfirmationDialog, [{
+    key: "open",
+    // open dialog
+    value: function open() {
+      this.setState({
+        open: true
+      });
+    } // close dialog
+
+  }, {
+    key: "close",
+    value: function close() {
+      this.setState({
+        open: false
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$props = this.props,
+          title = _this$props.title,
+          message = _this$props.message,
+          onConfirm = _this$props.onConfirm,
+          i18n = _this$props.i18n;
+      return React.createElement(Dialog, {
+        open: this.state.open,
+        onClose: function onClose() {
+          return _this2.close();
+        },
+        "aria-labelledby": "alert-dialog-title",
+        "aria-describedby": "alert-dialog-description"
+      }, React.createElement(DialogTitle, {
+        id: "alert-dialog-title"
+      }, title), React.createElement(DialogContent, null, React.createElement(DialogContentText, {
+        id: "alert-dialog-description"
+      }, message)), React.createElement(DialogActions, null, React.createElement(Button$1, {
+        onClick: function onClick() {
+          return _this2.close();
+        },
+        className: "btn-danger text-white"
+      }, i18n('button.cancel')), React.createElement(Button$1, {
+        onClick: onConfirm,
+        className: "btn-primary text-white",
+        autoFocus: true
+      }, i18n('button.yes'))));
+    }
+  }]);
+
+  return DeleteConfirmationDialog;
+}(React.Component);
+
+DeleteConfirmationDialog.propTypes = {
+  i18n: PropTypes.func.isRequired
 };
 
 var useStyles = makeStyles(function (theme) {
@@ -752,7 +837,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       return setOpen(true);
     },
     color: 'primary'
-  }, i18n('button.add'))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog, {
+  }, i18n('button.add'))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog$1, {
     open: open,
     onClose: function onClose() {
       return setOpen(false);
@@ -764,12 +849,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         overflow: isIdOfModelBase ? 'visible' : ''
       }
     }
-  }, React.createElement(DialogTitle, null, i18nPropertyLabel), React.createElement(DialogContent, {
+  }, React.createElement(DialogTitle$1, null, i18nPropertyLabel), React.createElement(DialogContent$1, {
     style: {
       height: isIdOfModelBase ? 300 : '',
       overflow: isIdOfModelBase ? 'visible' : ''
     }
-  }, inputs), React.createElement(DialogActions, null, React.createElement(SaveButton, {
+  }, inputs), React.createElement(DialogActions$1, null, React.createElement(SaveButton, {
     onClick: save,
     color: "primary",
     i18n: i18n
@@ -1057,19 +1142,16 @@ DynamicForm.propTypes = {
 };
 
 /**
- * Language Provider Helper Component
- * Used to Display Localised Strings
+ * Will create a displayable list of components
+ *
+ * @param {*} model
+ * @param {*} property
+ * @param {*} Type
+ * @param {function} i18n
+ * @param {function} handleChange
  */
 
-var InjectMassage = function InjectMassage(props) {
-  return React.createElement(FormattedMessage, props);
-};
-
-var IntlMessages = injectIntl(InjectMassage, {
-  withRef: false
-});
-
-var createArrayOfComponent$1 = function createArrayOfComponent(model, property, Type, handleChange) {
+var createArrayOfComponent$1 = function createArrayOfComponent(model, property, Type, i18n, handleChange) {
   var _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       items = _useState2[0],
@@ -1082,9 +1164,7 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
     switch (Type) {
       case FieldTypes.String:
         component = React.createElement(TextField, {
-          label: React.createElement(IntlMessages, {
-            id: "".concat(model.getModelName(), ".form.").concat(property)
-          }),
+          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
           onChange: function onChange(e) {
             var v = !e.target.value ? [] : e.target.value.split(';');
             setItems(v.filter(function (s) {
@@ -1107,8 +1187,15 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
 
   return React.createElement("div", null, React.createElement("div", null, component));
 };
+/**
+ *
+ * @param {object} model
+ * @param {function} i18n
+ * @param {function} updateFilters
+ */
 
-var createFilters = function createFilters(model, updateFilters) {
+
+var createFilters = function createFilters(model, i18n, updateFilters) {
   var newModel = {};
   Object.keys(model).map(function (key) {
     if (key == '$fieldConfig') return;
@@ -1164,7 +1251,7 @@ var createFilters = function createFilters(model, updateFilters) {
           break;
 
         case ComplexTypes.ArrayOf:
-          component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, handleChange);
+          component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, i18n, handleChange);
           break;
 
         case ComplexTypes.ShapedAs:
@@ -1177,9 +1264,7 @@ var createFilters = function createFilters(model, updateFilters) {
         case FieldTypes.Float:
           component = React.createElement(TextField, {
             style: model.$fieldConfig.style.field,
-            label: React.createElement(IntlMessages, {
-              id: label
-            }),
+            label: i18n(label),
             value: values[property],
             onChange: function onChange(e) {
               return handleChange(property, e.target.value);
@@ -1218,6 +1303,7 @@ var DynamicList = function DynamicList(_ref) {
       model = _ref.model,
       configuration = _ref.configuration,
       baseRoute = _ref.baseRoute,
+      i18n = _ref.i18n,
       firebase = _ref.firebase,
       store = _ref.store;
   var history = useHistory();
@@ -1229,7 +1315,7 @@ var DynamicList = function DynamicList(_ref) {
     className: "mb-15"
   }, React.createElement(CardContent, null, React.createElement("div", {
     className: "field-group"
-  }, createFilters(model, function (f) {
+  }, createFilters(model, i18n, function (f) {
     search(oService, f);
   })))), React.createElement(Card, {
     className: "mb-15"
@@ -1250,111 +1336,33 @@ DynamicList.propTypes = {
   model: PropTypes.object,
   configuration: PropTypes.object,
   baseRoute: PropTypes.string,
+  i18n: PropTypes.function.isRequired,
   firebase: PropTypes.object.isRequired,
   store: PropTypes.any.isRequired
 };
 
-/**
- * Delete Confirmation Dialog
- */
-
-var DeleteConfirmationDialog =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(DeleteConfirmationDialog, _React$Component);
-
-  function DeleteConfirmationDialog() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    _classCallCheck(this, DeleteConfirmationDialog);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(DeleteConfirmationDialog)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      open: false
-    });
-
-    return _this;
-  }
-
-  _createClass(DeleteConfirmationDialog, [{
-    key: "open",
-    // open dialog
-    value: function open() {
-      this.setState({
-        open: true
-      });
-    } // close dialog
-
-  }, {
-    key: "close",
-    value: function close() {
-      this.setState({
-        open: false
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var _this$props = this.props,
-          title = _this$props.title,
-          message = _this$props.message,
-          onConfirm = _this$props.onConfirm,
-          i18n = _this$props.i18n;
-      return React.createElement(Dialog$1, {
-        open: this.state.open,
-        onClose: function onClose() {
-          return _this2.close();
-        },
-        "aria-labelledby": "alert-dialog-title",
-        "aria-describedby": "alert-dialog-description"
-      }, React.createElement(DialogTitle$1, {
-        id: "alert-dialog-title"
-      }, title), React.createElement(DialogContent$1, null, React.createElement(DialogContentText, {
-        id: "alert-dialog-description"
-      }, message)), React.createElement(DialogActions$1, null, React.createElement(Button$1, {
-        onClick: function onClick() {
-          return _this2.close();
-        },
-        className: "btn-danger text-white"
-      }, i18n('button.cancel')), React.createElement(Button$1, {
-        onClick: onConfirm,
-        className: "btn-primary text-white",
-        autoFocus: true
-      }, i18n('button.yes'))));
-    }
-  }]);
-
-  return DeleteConfirmationDialog;
-}(React.Component);
-
-DeleteConfirmationDialog.propTypes = {
-  i18n: PropTypes.func.isRequired
-};
-
 var searchIdOfTimeout$1;
 /**
+ * Will create an ID of component pattern
  *
- * @param {ModelBase} model
- * @param {string} property
- * @param {object} values
- * @param {ModelBase} Type
- * @param {function} handleChange
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {object} values Values for a sequence selector
+ * @param {ModelBase} Type Model type literally
+ * @param {function} i18n Translation source function
+ * @param {function} handleChange Event handler for changes
  */
 
-var createIdOfComponent$1 = function createIdOfComponent(model, property, values, Type, firebase) {
+var createIdOfComponent$1 = function createIdOfComponent(model, property, values, Type, i18n, firebase) {
   var config = model.$fieldConfig[property];
 
   if (!config.listItemProperties) {
-    return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+    return React.createElement("div", {
+      style: {
+        fontWeight: 'bold',
+        color: 'red'
+      }
+    }, "NEED_TO_CONFIGURE_FIELD: ", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
   }
 
   var oService = new Type().getService(firebase);
@@ -1379,9 +1387,7 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
     }
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  })), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     className: "mt-10"
   }, !!selected && createConfiguredListItem({
     item: selected,
@@ -1390,37 +1396,44 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
   })));
 };
 /**
+ * Will create a shaped object display pattern
  *
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {ModelBase} Type Model type literally
+ * @param {object} values Values for a sequence selector
+ * @param {function} i18n Translation source function
  */
 
 
-var createShapedAsComponent$1 = function createShapedAsComponent(model, property, Type, values) {
+var createShapedAsComponent$1 = function createShapedAsComponent(model, property, Type, values, i18n) {
   var fields = createFields$1({
     model: Type,
     baseIntl: "".concat(model.getModelName(), ".form.").concat(property),
-    values: values
+    values: values,
+    i18n: i18n
   });
   return React.createElement("div", {
     className: " mb-15"
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  })), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
       flex: 1
     }
   }, fields));
 };
 /**
+ * Creates an array of items display pattern
  *
- * @param {ModelBase} model
- * @param {string} property
- * @param {FieldType|any} Type
+ * @param {ModelBase} model The model instance for prop picking
+ * @param {string} property Property specifically being treated
+ * @param {ModelBase} Type Model type literally
+ * @param {function} i18n Translation source function
  */
 
 
-var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type) {
+var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n) {
   var _useState3 = useState(values[property] || []),
       _useState4 = _slicedToArray(_useState3, 2),
       list = _useState4[0],
@@ -1439,9 +1452,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.").concat(property)
-  }), " (", list.length, ")")), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), " (", list.length, ")")), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
     style: {
       flex: 1
     }
@@ -1457,8 +1468,9 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
  * Creates all the fields based on the parameters passed and the field Type configuration for each one of them
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
+ * @param {object} param0.baseIntl Variable containing the the labelling pattern
  * @param {object} param0.values Variable containing the values of all fields
- * @param {object} param0.errors Variable containing the error list
+ * @param {function} param0.i18n Translation source function
  * @param {function} param0.handleChange Function to handle save event. Needs to be a function that receives a property as param and returns another function
  */
 
@@ -1467,6 +1479,7 @@ var createFields$1 = function createFields(_ref) {
   var model = _ref.model,
       baseIntl = _ref.baseIntl,
       values = _ref.values,
+      i18n = _ref.i18n,
       firebase = _ref.firebase;
   var fields = [];
   Object.keys(model.$fieldConfig).map(function (property, i) {
@@ -1475,6 +1488,7 @@ var createFields$1 = function createFields(_ref) {
       model: model,
       label: "".concat(baseIntl, ".").concat(property),
       values: values,
+      i18n: i18n,
       firebase: firebase
     }));
 
@@ -1492,11 +1506,13 @@ var createFields$1 = function createFields(_ref) {
 };
 /**
  * Creates a field based on the parameters passed and the field Type configuration
+ *
  * @param {object} param0
  * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
  * @param {string} param0.property Property from the model, destined to this field
  * @param {object} param0.label Variable containing the label text
  * @param {object} param0.values Variable containing the values of all fields
+ * @param {function} param0.i18n Translation source function
  * @param {object} param0.firebase Firebase instance for servicing purposes
  */
 
@@ -1506,6 +1522,7 @@ var createField$1 = function createField(_ref2) {
       property = _ref2.property,
       label = _ref2.label,
       values = _ref2.values,
+      i18n = _ref2.i18n,
       firebase = _ref2.firebase;
   var field = model.$fieldConfig[property];
 
@@ -1531,12 +1548,12 @@ var createField$1 = function createField(_ref2) {
           style: {
             overflow: 'visible'
           }
-        }, React.createElement(CardContent, null, createIdOfComponent$1(model, property, values, field.type.Type, firebase)));
+        }, React.createElement(CardContent, null, createIdOfComponent$1(model, property, values, field.type.Type, i18n, firebase)));
         break;
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent$2(model, property, values, field.type.Type);
+        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n);
         break;
 
       case ComplexTypes.ShapedAs:
@@ -1548,15 +1565,13 @@ var createField$1 = function createField(_ref2) {
 
         component = React.createElement(Card, {
           className: "mb-15"
-        }, React.createElement(CardContent, null, createShapedAsComponent$1(model, property, new field.type.Type(), values[property])));
+        }, React.createElement(CardContent, null, createShapedAsComponent$1(model, property, new field.type.Type(), values[property], i18n)));
         break;
     }
   } else {
     switch (field.type) {
       case FieldTypes.String:
-        component = React.createElement("div", null, React.createElement(FormLabel, null, React.createElement(IntlMessages, {
-          id: label
-        })), React.createElement("div", {
+        component = React.createElement("div", null, React.createElement(FormLabel, null, i18n(label)), React.createElement("div", {
           style: _objectSpread2({
             fontSize: 18,
             fontWeight: '100'
@@ -1572,8 +1587,15 @@ var createField$1 = function createField(_ref2) {
   }, component);
 };
 /**
+ * Will render a view, based on configuration from "model", translation souce (i18n),
+ * firebase connection api, a possible ID and base-routing.
  *
  * @param {object} param0
+ * @param {ModelBase} param0.model Model from the system, passed to DynamicForm
+ * @param {string} param0.id A compulsory object ID, from where to extract display info
+ * @param {string} param0.baseRoute Variable containing the base origin of route
+ * @param {function} param0.i18n Translation source function
+ * @param {object} param0.firebase Firebase instance for servicing purposes
  */
 
 
@@ -1581,6 +1603,7 @@ var DynamicView = function DynamicView(_ref3) {
   var model = _ref3.model,
       id = _ref3.id,
       baseRoute = _ref3.baseRoute,
+      i18n = _ref3.i18n,
       firebase = _ref3.firebase;
 
   var _useState5 = useState(model),
@@ -1594,6 +1617,7 @@ var DynamicView = function DynamicView(_ref3) {
     model: model,
     baseIntl: "".concat(model.getModelName(), ".form"),
     values: values,
+    i18n: i18n,
     firebase: firebase
   });
   useEffect(function () {
@@ -1627,9 +1651,7 @@ var DynamicView = function DynamicView(_ref3) {
       alignItems: 'center',
       alignContent: 'center'
     }
-  }, React.createElement(IntlMessages, {
-    id: "".concat(model.getModelName(), ".form.$title")
-  }), React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.$title")), " />", React.createElement("div", {
     style: {
       flex: 1
     }
@@ -1640,24 +1662,19 @@ var DynamicView = function DynamicView(_ref3) {
     onClick: function onClick() {
       history.push("".concat(baseRoute, "/form/").concat(values.uid));
     }
-  }, React.createElement(IntlMessages, {
-    id: "button.edit"
-  })), React.createElement(Button, {
+  }, i18n('button.edit')), React.createElement(Button, {
     variant: "contained",
     className: "mr-5 btn-danger text-white",
     onClick: function onClick() {
       deleteConfirmationDialogRef.current.open();
     }
-  }, React.createElement(IntlMessages, {
-    id: "button.delete"
-  }))), React.createElement(DeleteConfirmationDialog, {
+  }, i18n('button.delete'))), React.createElement(DeleteConfirmationDialog, {
     ref: deleteConfirmationDialogRef,
-    title: React.createElement(IntlMessages, {
-      id: "dynamic.form.deleteConfirmation"
-    }),
+    title: i18n('dynamic.form.deleteConfirmation'),
     onConfirm: function onConfirm() {
       return remove();
-    }
+    },
+    i18n: i18n
   }), React.createElement("div", {
     className: "field-group"
   }, fields));
@@ -1667,7 +1684,8 @@ DynamicView.propTypes = {
   model: PropTypes.object.isRequired,
   id: PropTypes.string,
   baseRoute: PropTypes.string,
+  i18n: PropTypes.func.isRequired,
   firebase: PropTypes.object.isRequired
 };
 
-export { DynamicForm, DynamicList, DynamicView, validations };
+export { BottomButtons, CancelButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, SaveButton, validations };
