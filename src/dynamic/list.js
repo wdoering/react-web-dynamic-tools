@@ -219,7 +219,7 @@ DynamicList.propTypes = {
 	model: PropTypes.object,
 	configuration: PropTypes.object,
 	baseRoute: PropTypes.string,
-	i18n: PropTypes.function.isRequired,
+	i18n: PropTypes.func.isRequired,
 	firebase: PropTypes.object.isRequired,
 	store: PropTypes.any.isRequired
 };
