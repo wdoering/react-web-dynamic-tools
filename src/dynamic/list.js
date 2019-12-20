@@ -246,7 +246,7 @@ DynamicList.propTypes = {
 	configuration: PropTypes.object,
 	baseRoute: PropTypes.string,
 	i18n: PropTypes.func.isRequired,
-	firebase: PropTypes.object.isRequired,
+	firebase: PropTypes.object,
 	serviceInstance: PropTypes.object,
 	store: PropTypes.any
 };
