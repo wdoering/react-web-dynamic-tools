@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, ListItem, ListItemSecondaryAction, Typography as Typography$1, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
+import { Button, ListItem, ListItemSecondaryAction, Typography, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -461,7 +461,7 @@ var DateDetail = function DateDetail(_ref) {
     style: {
       flexBasis: '100%'
     }
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     style: {
       color: '#111',
       fontWeight: '700'
@@ -490,7 +490,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
         style: {
           flexBasis: '100%'
         }
-      }, React.createElement(Typography$1, {
+      }, React.createElement(Typography, {
         style: {
           color: i > 0 ? '#666' : '#111',
           fontWeight:  '200' 
@@ -503,7 +503,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
       style: {
         flexBasis: '100%'
       }
-    }, React.createElement(Typography$1, {
+    }, React.createElement(Typography, {
       style: {
         color: '#111',
         fontWeight: '700'
@@ -586,7 +586,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     style: {
       position: 'relative'
     }
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
@@ -704,7 +704,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
   });
   return React.createElement("div", {
     className: " mb-15"
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property, ".add"))), React.createElement("div", {
     style: {
@@ -826,7 +826,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     defaultExpanded: true
   }, React.createElement(ExpansionPanelSummary, {
     expandIcon: React.createElement(ExpandMoreIcon, null)
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18nPropertyLabel, " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
     style: {
@@ -1119,7 +1119,7 @@ var DynamicForm = function DynamicForm(_ref3) {
   return React.createElement("form", {
     noValidate: true,
     autoComplete: "off"
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h4",
     className: "mb-15"
   }, i18n("".concat(model.getModelName(), ".form.$title"))), React.createElement("div", {
@@ -1400,7 +1400,7 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
     style: {
       position: 'relative'
     }
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     className: "mt-10"
@@ -1430,7 +1430,7 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
   });
   return React.createElement("div", {
     className: " mb-15"
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
@@ -1465,7 +1465,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
     defaultExpanded: true
   }, React.createElement(ExpansionPanelSummary, {
     expandIcon: React.createElement(ExpandMoreIcon, null)
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property)), " (", list.length, ")")), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
     style: {
@@ -1657,7 +1657,7 @@ var DynamicView = function DynamicView(_ref3) {
   return React.createElement("form", {
     noValidate: true,
     autoComplete: "off"
-  }, React.createElement(Typography$1, {
+  }, React.createElement(Typography, {
     variant: "h4",
     className: "mb-15",
     style: {

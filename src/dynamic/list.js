@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { TextField, Card, CardContent, List } from '@material-ui/core';
+import { TextField, Card, CardContent, List, Typography } from '@material-ui/core';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 
