@@ -165,25 +165,51 @@ const createFilters = (model, i18n, updateFilters) => {
 let searchTimeout;
 const search = (oService, filters) => {
 	clearTimeout(searchTimeout);
+	if (oService.filter && typeof oService.filter === 'function')
+		throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
+
 	if (filters && filters.length) {
+		//will filter, then
 		oService.filter(filters);
 	}
 
 	searchTimeout = setTimeout(() => {
+		if (!oService.list || typeof oService.list !== 'function')
+			throw Error('dynamic-list-service-has-to-have-list()-method');
+
 		oService.list();
 	}, 300);
 };
 let oService;
 
-const DynamicList = ({ reduxList, model, configuration, baseRoute, i18n, firebase, store }) => {
+const DynamicList = ({
+	reduxList,
+	model,
+	configuration,
+	baseRoute,
+	i18n,
+	firebase,
+	store,
+	serviceInstance
+}) => {
 	const history = useHistory();
 	useEffect(() => {
-		oService = model.getService(firebase, store);
+		//direct service instance
+		if (!!serviceInstance) oService = serviceInstance;
+
+		//Firebase/store mode support
+		if (!!store && !!firebase) {
+			oService = model.getService(firebase, store);
+		}
+
 		search(oService, []);
 	}, []);
 
 	return (
 		<div>
+			<Typography variant="h4" className="mb-15">
+				{i18n(`${model.getModelName()}.list.$title`)}
+			</Typography>
 			<Card className="mb-15">
 				<CardContent>
 					<div className="field-group">
@@ -221,7 +247,8 @@ DynamicList.propTypes = {
 	baseRoute: PropTypes.string,
 	i18n: PropTypes.func.isRequired,
 	firebase: PropTypes.object.isRequired,
-	store: PropTypes.any.isRequired
+	serviceInstance: PropTypes.object,
+	store: PropTypes.any
 };
 
 export default DynamicList;
