@@ -412,6 +412,7 @@ DeleteConfirmationDialog.propTypes = {
 var useStyles = makeStyles(function (theme) {
   return {
     root: {
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(1),
       display: 'flex',
       flexDirection: 'row',
