@@ -957,7 +957,9 @@ var createFields = function createFields(_ref) {
       }));
     }
   });
-  return fields;
+  return fields.filter(function (item) {
+    return !!item && item !== '';
+  });
 };
 /**
  * Creates a field based on the parameters passed and the field Type configuration
@@ -1399,7 +1401,8 @@ DynamicList.propTypes = {
 };
 
 var searchIdOfTimeout$1;
-var protectedFieldValue = '******';
+var protectedFieldValue = '******',
+    blankFieldPlaceholder = '&nbsp;';
 /**
  * Will create an ID of component pattern
  *
@@ -1560,7 +1563,9 @@ var createFields$1 = function createFields(_ref) {
       }));
     }
   });
-  return fields;
+  return fields.filter(function (item) {
+    return !!item && item !== '';
+  });
 };
 /**
  * Creates a field based on the parameters passed and the field Type configuration
@@ -1636,7 +1641,7 @@ var createField$1 = function createField(_ref2) {
             fontSize: 18,
             fontWeight: '100'
           }, field.style.field)
-        }, !!field.protected ? protectedFieldValue : values[property]));
+        }, !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder));
     }
   }
 

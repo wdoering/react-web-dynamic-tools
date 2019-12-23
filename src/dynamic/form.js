@@ -286,7 +286,7 @@ const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleC
 			);
 		}
 	});
-	return fields;
+	return fields.filter((item) => !!item && item !== '');
 };
 
 /**

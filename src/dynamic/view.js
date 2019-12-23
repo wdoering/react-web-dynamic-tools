@@ -19,7 +19,8 @@ import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog
 import { TitleAndButtons } from '../components/title';
 
 let searchIdOfTimeout;
-const protectedFieldValue = '******';
+const protectedFieldValue = '******',
+	blankFieldPlaceholder = '&nbsp;';
 
 /**
  * Will create an ID of component pattern
@@ -161,7 +162,7 @@ const createFields = ({ model, baseIntl, values, i18n, firebase }) => {
 			);
 		}
 	});
-	return fields;
+	return fields.filter((item) => !!item && item !== '');
 };
 
 /**
@@ -241,7 +242,11 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 					<div>
 						<FormLabel>{i18n(label)}</FormLabel>
 						<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
-							{!!field.protected ? protectedFieldValue : values[property]}
+							{!!field.protected
+								? protectedFieldValue
+								: !!values[property] && values[property] !== ''
+								? values[property]
+								: blankFieldPlaceholder}
 						</div>
 					</div>
 				);
