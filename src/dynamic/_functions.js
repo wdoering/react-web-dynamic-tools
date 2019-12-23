@@ -9,7 +9,8 @@ import {
 	InputAdornment,
 	Paper,
 	Checkbox,
-	FormLabel
+	FormLabel,
+	FormControl
 } from '@material-ui/core';
 import { FieldTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -367,23 +368,22 @@ const createBooleanComponent = ({
 	handleChange,
 	view = false
 }) => {
+	const usableLabel = i18n(label);
+
 	return !!view ? (
 		i18n(`boolean.view.${values[property].toString()}`)
 	) : (
-		<FormControlLabel
-			label={i18n(label)}
-			value={property}
-			control={
-				<Checkbox
-					color="primary"
-					checked={values[property]}
-					handleChange={(e) => handleChange(property, !e.target.checked)}
-					inputProps={{ 'aria-label': i18n(label) }}
-					disabled={!!field.disabled}
-				/>
-			}
-			labelPlacement="top"
-		/>
+		<FormControl>
+			<FormLabel>{usableLabel}</FormLabel>
+			<Checkbox
+				value={property}
+				color="primary"
+				checked={values[property]}
+				handleChange={(e) => handleChange(property, !e.target.checked)}
+				inputProps={{ 'aria-label': usableLabel }}
+				disabled={!!field.disabled}
+			/>
+		</FormControl>
 	);
 };
 

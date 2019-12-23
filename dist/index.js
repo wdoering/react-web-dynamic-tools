@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
+import { Button, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControl, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -812,22 +812,19 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       _handleChange = _ref7.handleChange,
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
-    label: i18n(label),
+  var usableLabel = i18n(label);
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControl, null, React.createElement(FormLabel, null, usableLabel), React.createElement(Checkbox, {
     value: property,
-    control: React.createElement(Checkbox, {
-      color: "primary",
-      checked: values[property],
-      handleChange: function handleChange(e) {
-        return _handleChange(property, !e.target.checked);
-      },
-      inputProps: {
-        'aria-label': i18n(label)
-      },
-      disabled: !!field.disabled
-    }),
-    labelPlacement: "top"
-  });
+    color: "primary",
+    checked: values[property],
+    handleChange: function handleChange(e) {
+      return _handleChange(property, !e.target.checked);
+    },
+    inputProps: {
+      'aria-label': usableLabel
+    },
+    disabled: !!field.disabled
+  }));
 };
 
 var validateTimeout;
