@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
+import { TitleAndButtons } from '../components/title';
 
 let searchIdOfTimeout;
 
@@ -292,37 +293,29 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	};
 	return (
 		<form noValidate autoComplete="off">
-			<Typography
-				variant="h4"
-				className="mb-15"
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					alignContent: 'center'
-				}}
-			>
-				{i18n(`${model.getModelName()}.form.$title`)}
-				<div style={{ flex: 1 }}></div>
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={() => {
-						history.push(`${baseRoute}/form/${values.uid}`);
-					}}
-				>
-					{i18n('button.edit')}
-				</Button>
-				<Button
-					variant="contained"
-					className="ml-5 btn-danger text-white"
-					onClick={() => {
-						deleteConfirmationDialogRef.current.open();
-					}}
-				>
-					{i18n('button.delete')}
-				</Button>
-			</Typography>
+			<TitleAndButtons
+				title={i18n(`${model.getModelName()}.form.$title`)}
+				buttons={[
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => {
+							history.push(`${baseRoute}/form/${values.uid}`);
+						}}
+					>
+						{i18n('button.edit')}
+					</Button>,
+					<Button
+						variant="contained"
+						className="ml-5 btn-danger text-white"
+						onClick={() => {
+							deleteConfirmationDialogRef.current.open();
+						}}
+					>
+						{i18n('button.delete')}
+					</Button>
+				]}
+			/>
 			<DeleteConfirmationDialog
 				ref={deleteConfirmationDialogRef}
 				title={i18n('dynamic.form.deleteConfirmation')}

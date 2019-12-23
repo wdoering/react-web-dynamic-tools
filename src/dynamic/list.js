@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { TextField, Card, CardContent, List, Typography } from '@material-ui/core';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
+import { TitleAndButtons } from '../components/title';
 
 /**
  * Will create a displayable list of components
@@ -207,9 +208,20 @@ const DynamicList = ({
 
 	return (
 		<div>
-			<Typography variant="h4" className="mb-15">
-				{i18n(`${model.getModelName()}.list.$title`)}
-			</Typography>
+			<TitleAndButtons
+				title={i18n(`${model.getModelName()}.list.$title`)}
+				buttons={[
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => {
+							history.push(`${baseRoute}/form/`);
+						}}
+					>
+						{i18n('button.add')}
+					</Button>
+				]}
+			/>
 			<Card className="mb-15">
 				<CardContent>
 					<div className="field-group">
