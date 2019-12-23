@@ -78,9 +78,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 	});
 	return (
 		<div className=" mb-15">
-			<Typography variant="h5">
-				{i18n(`${model.getModelName()}.form.${property}.add`)}
-			</Typography>
+			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
 			<div style={{ flex: 1 }}>{fields}</div>
 		</div>
 	);
