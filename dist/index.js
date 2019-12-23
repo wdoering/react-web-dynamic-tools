@@ -732,6 +732,7 @@ var createByType = function createByType(_ref4) {
         values: values,
         label: label,
         i18n: i18n,
+        field: field,
         handleChange: handleChange,
         view: view
       });
@@ -751,16 +752,20 @@ var createBooleanComponent = function createBooleanComponent(_ref5) {
       values = _ref5.values,
       label = _ref5.label,
       i18n = _ref5.i18n,
-      handleChange = _ref5.handleChange,
+      field = _ref5.field,
+      _handleChange = _ref5.handleChange,
       _ref5$view = _ref5.view,
       view = _ref5$view === void 0 ? false : _ref5$view;
-  return React.createElement(Checkbox, {
-    value: Boolean(values[property]),
-    handleChange: handleChange,
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(Checkbox, {
+    checked: values[property],
+    value: property,
+    handleChange: function handleChange(e) {
+      return _handleChange(property, e.target.checked);
+    },
     inputProps: {
       'aria-label': i18n(label)
     },
-    disabled: !!view
+    disabled: !!field.disabled
   });
 };
 

@@ -272,6 +272,7 @@ const createByType = ({
 				values,
 				label,
 				i18n,
+				field,
 				handleChange,
 				view
 			});
@@ -295,15 +296,19 @@ const createBooleanComponent = ({
 	values,
 	label,
 	i18n,
+	field,
 	handleChange,
 	view = false
 }) => {
-	return (
+	return !!view ? (
+		i18n(`boolean.view.${values[property].toString()}`)
+	) : (
 		<Checkbox
-			value={Boolean(values[property])}
-			handleChange={handleChange}
+			checked={values[property]}
+			value={property}
+			handleChange={(e) => handleChange(property, e.target.checked)}
 			inputProps={{ 'aria-label': i18n(label) }}
-			disabled={!!view}
+			disabled={!!field.disabled}
 		/>
 	);
 };
