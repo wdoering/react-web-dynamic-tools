@@ -307,7 +307,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 		breakField = false;
 
 	//If the field should be hidden, won't show up
-	if (field.hidden) return '';
+	if (!!field.hidden) return null;
 
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };

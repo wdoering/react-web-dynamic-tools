@@ -6,11 +6,17 @@ import {
 	ListItem,
 	ListItemSecondaryAction,
 	InputAdornment,
-	Paper
+	Paper,
+	Checkbox,
+	FormLabel
 } from '@material-ui/core';
+import { FieldTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+
+const protectedFieldValue = '******',
+	blankFieldPlaceholder = '-';
 
 /**
  * TODO: comment/describe
@@ -226,4 +232,80 @@ const createIdOfComponent = (model, property, values, Type, firebase, i18n, hand
 	);
 };
 
-export { createConfiguredListItem, createIdOfComponent };
+const createViewComponent = ({ model, property, field, values, label, i18n }) => {
+	return (
+		<div>
+			<FormLabel>{i18n(label)}</FormLabel>
+			<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
+				{createByType({
+					model,
+					property,
+					values,
+					label,
+					i18n,
+					field,
+					handleChange: null,
+					view: true
+				})}
+			</div>
+		</div>
+	);
+};
+
+const createByType = ({
+	model,
+	property,
+	values,
+	label,
+	i18n,
+	field,
+	handleChange,
+	view = false
+}) => {
+	let component = null;
+
+	switch (field.type) {
+		case FieldTypes.Boolean:
+			component = createBooleanComponent({
+				model,
+				property,
+				values,
+				label,
+				i18n,
+				handleChange,
+				view
+			});
+			break;
+
+		default:
+			component = !!field.protected
+				? protectedFieldValue
+				: !!values[property] && values[property] !== ''
+				? values[property]
+				: blankFieldPlaceholder;
+			break;
+	}
+
+	return component;
+};
+
+const createBooleanComponent = ({
+	model,
+	property,
+	values,
+	label,
+	i18n,
+	handleChange,
+	view = false
+}) => {
+	return (
+		<Checkbox
+			value={Boolean(values[property])}
+			handleChange={handleChange}
+			inputProps={{ 'aria-label': i18n(label) }}
+			disabled={!!view}
+		/>
+	);
+};
+
+export { createConfiguredListItem, createIdOfComponent, createViewComponent };

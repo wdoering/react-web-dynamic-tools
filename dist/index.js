@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, ListItem, ListItemSecondaryAction, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
+import { Button, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldType, ComplexTypes, FieldTypes, ModelBase } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -480,6 +480,8 @@ BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
 
+var protectedFieldValue = '******',
+    blankFieldPlaceholder = '-';
 /**
  * TODO: comment/describe
  */
@@ -684,6 +686,82 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     listItemProperties: config.listItemProperties,
     key: 0
   })));
+};
+
+var createViewComponent = function createViewComponent(_ref3) {
+  var model = _ref3.model,
+      property = _ref3.property,
+      field = _ref3.field,
+      values = _ref3.values,
+      label = _ref3.label,
+      i18n = _ref3.i18n;
+  return React.createElement("div", null, React.createElement(FormLabel, null, i18n(label)), React.createElement("div", {
+    style: _objectSpread2({
+      fontSize: 18,
+      fontWeight: '100'
+    }, field.style.field)
+  }, createByType({
+    model: model,
+    property: property,
+    values: values,
+    label: label,
+    i18n: i18n,
+    field: field,
+    handleChange: null,
+    view: true
+  })));
+};
+
+var createByType = function createByType(_ref4) {
+  var model = _ref4.model,
+      property = _ref4.property,
+      values = _ref4.values,
+      label = _ref4.label,
+      i18n = _ref4.i18n,
+      field = _ref4.field,
+      handleChange = _ref4.handleChange,
+      _ref4$view = _ref4.view,
+      view = _ref4$view === void 0 ? false : _ref4$view;
+  var component = null;
+
+  switch (field.type) {
+    case FieldTypes.Boolean:
+      component = createBooleanComponent({
+        model: model,
+        property: property,
+        values: values,
+        label: label,
+        i18n: i18n,
+        handleChange: handleChange,
+        view: view
+      });
+      break;
+
+    default:
+      component = !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder;
+      break;
+  }
+
+  return component;
+};
+
+var createBooleanComponent = function createBooleanComponent(_ref5) {
+  var model = _ref5.model,
+      property = _ref5.property,
+      values = _ref5.values,
+      label = _ref5.label,
+      i18n = _ref5.i18n,
+      handleChange = _ref5.handleChange,
+      _ref5$view = _ref5.view,
+      view = _ref5$view === void 0 ? false : _ref5$view;
+  return React.createElement(Checkbox, {
+    value: Boolean(values[property]),
+    handleChange: handleChange,
+    inputProps: {
+      'aria-label': i18n(label)
+    },
+    disabled: !!view
+  });
 };
 
 var validateTimeout;
@@ -988,7 +1066,7 @@ var createField = function createField(_ref2) {
       error = '',
       breakField = false; //If the field should be hidden, won't show up
 
-  if (field.hidden) return '';
+  if (!!field.hidden) return null;
 
   if (!field.style) {
     field.style = {
@@ -1401,8 +1479,6 @@ DynamicList.propTypes = {
 };
 
 var searchIdOfTimeout$1;
-var protectedFieldValue = '******',
-    blankFieldPlaceholder = '-';
 /**
  * Will create an ID of component pattern
  *
@@ -1591,7 +1667,7 @@ var createField$1 = function createField(_ref2) {
   var component,
       breakField = false; //in case the field should be hidden, won't render
 
-  if (!!field.hidden) return '';
+  if (!!field.hidden) return null;
 
   if (!field.style) {
     field.style = {
@@ -1634,15 +1710,33 @@ var createField$1 = function createField(_ref2) {
         break;
     }
   } else {
-    switch (field.type) {
-      case FieldTypes.String:
-        component = React.createElement("div", null, React.createElement(FormLabel, null, i18n(label)), React.createElement("div", {
-          style: _objectSpread2({
-            fontSize: 18,
-            fontWeight: '100'
-          }, field.style.field)
-        }, !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder));
-    }
+    //Creates a component by using an external function
+    component = createViewComponent({
+      model: model,
+      property: property,
+      field: field,
+      values: values,
+      label: label,
+      i18n: i18n
+    }); // switch (field.type) {
+    // 	case FieldTypes.String:
+    // 		component = (
+    // 			// <div>
+    // 			// 	<FormLabel>{i18n(label)}</FormLabel>
+    // 			// 	<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
+    // 			// 		{!!field.protected
+    // 			// 			? protectedFieldValue
+    // 			// 			: !!values[property] && values[property] !== ''
+    // 			// 			? values[property]
+    // 			// 			: blankFieldPlaceholder}
+    // 			// 	</div>
+    // 			// </div>
+    // 		);
+    // 		break;
+    // 	default:
+    // 		component = (createViewComponent({ model, property, field, values, label, i18n }))
+    // 		break;
+    // }
   }
 
   return React.createElement("div", {

@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
-import { createConfiguredListItem } from './_functions';
+import { createConfiguredListItem, createViewComponent } from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
 
@@ -182,7 +182,7 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 		breakField = false;
 
 	//in case the field should be hidden, won't render
-	if (!!field.hidden) return '';
+	if (!!field.hidden) return null;
 
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
@@ -236,21 +236,29 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 				break;
 		}
 	} else {
-		switch (field.type) {
-			case FieldTypes.String:
-				component = (
-					<div>
-						<FormLabel>{i18n(label)}</FormLabel>
-						<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
-							{!!field.protected
-								? protectedFieldValue
-								: !!values[property] && values[property] !== ''
-								? values[property]
-								: blankFieldPlaceholder}
-						</div>
-					</div>
-				);
-		}
+		//Creates a component by using an external function
+		component = createViewComponent({ model, property, field, values, label, i18n });
+
+		// switch (field.type) {
+		// 	case FieldTypes.String:
+		// 		component = (
+		// 			// <div>
+		// 			// 	<FormLabel>{i18n(label)}</FormLabel>
+		// 			// 	<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
+		// 			// 		{!!field.protected
+		// 			// 			? protectedFieldValue
+		// 			// 			: !!values[property] && values[property] !== ''
+		// 			// 			? values[property]
+		// 			// 			: blankFieldPlaceholder}
+		// 			// 	</div>
+		// 			// </div>
+		// 		);
+		// 		break;
+
+		// 	default:
+		// 		component = (createViewComponent({ model, property, field, values, label, i18n }))
+		// 		break;
+		// }
 	}
 	return (
 		<div
