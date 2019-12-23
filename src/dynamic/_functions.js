@@ -379,7 +379,7 @@ const createBooleanComponent = ({
 				value={property}
 				color="primary"
 				checked={values[property]}
-				handleChange={(e) => handleChange(property, !e.target.checked)}
+				onChange={(e) => handleChange(property, e.target.checked)}
 				inputProps={{ 'aria-label': usableLabel }}
 				disabled={!!field.disabled}
 			/>

@@ -809,7 +809,7 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       label = _ref7.label,
       i18n = _ref7.i18n,
       field = _ref7.field,
-      _handleChange = _ref7.handleChange,
+      handleChange = _ref7.handleChange,
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
   var usableLabel = i18n(label);
@@ -817,8 +817,8 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
     value: property,
     color: "primary",
     checked: values[property],
-    handleChange: function handleChange(e) {
-      return _handleChange(property, !e.target.checked);
+    onChange: function onChange(e) {
+      return handleChange(property, e.target.checked);
     },
     inputProps: {
       'aria-label': usableLabel
