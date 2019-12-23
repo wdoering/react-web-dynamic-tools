@@ -24,7 +24,7 @@ import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import { createConfiguredListItem, createIdOfComponent } from './_functions';
+import { createConfiguredListItem, createIdOfComponent, createFormComponent } from './_functions';
 
 let validateTimeout;
 
@@ -382,26 +382,35 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 				break;
 		}
 	} else {
-		switch (field.type) {
-			case FieldTypes.String:
-				component = (
-					<TextField
-						{...field.props}
-						style={field.style.field}
-						label={i18n(label)}
-						value={values[property]}
-						type={
-							!!field.protected
-								? 'password'
-								: !!field.props.type
-								? field.props.type
-								: 'text'
-						}
-						onChange={(e) => handleChange(property, e.target.value)}
-						helperText={error ? i18n(`form.error.${error}`) : ' '}
-					/>
-				);
-		}
+		// switch (field.type) {
+		// 	default:
+		component = createFormComponent({
+			model,
+			property,
+			values,
+			field,
+			error,
+			label,
+			i18n,
+			handleChange
+		});
+		// <TextField
+		// 	{...field.props}
+		// 	style={field.style.field}
+		// 	label={i18n(label)}
+		// 	value={values[property]}
+		// 	type={
+		// 		!!field.protected
+		// 			? 'password'
+		// 			: !!field.props.type
+		// 			? field.props.type
+		// 			: 'text'
+		// 	}
+		// 	onChange={(e) => handleChange(property, e.target.value)}
+		// 	helperText={error ? i18n(`form.error.${error}`) : ' '}
+		// />
+		// 		break;
+		// }
 	}
 	return (
 		<div

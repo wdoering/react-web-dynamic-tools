@@ -232,6 +232,32 @@ const createIdOfComponent = (model, property, values, Type, firebase, i18n, hand
 	);
 };
 
+const createFormComponent = ({
+	model,
+	property,
+	values,
+	field,
+	error,
+	label,
+	i18n,
+	handleChange
+}) => {
+	let component = null;
+
+	component = createByType({
+		model,
+		property,
+		values,
+		label,
+		i18n,
+		field,
+		handleChange,
+		view: false
+	});
+
+	return component;
+};
+
 const createViewComponent = ({ model, property, field, values, label, i18n }) => {
 	return (
 		<div>
@@ -267,7 +293,6 @@ const createByType = ({
 	switch (field.type) {
 		case FieldTypes.Boolean:
 			component = createBooleanComponent({
-				model,
 				property,
 				values,
 				label,
@@ -279,19 +304,53 @@ const createByType = ({
 			break;
 
 		default:
-			component = !!field.protected
-				? protectedFieldValue
-				: !!values[property] && values[property] !== ''
-				? values[property]
-				: blankFieldPlaceholder;
+			component = createTextComponent({
+				property,
+				values,
+				field,
+				label,
+				i18n,
+				error,
+				handleChange,
+				view
+			});
 			break;
 	}
 
 	return component;
 };
 
+const createTextComponent = ({
+	property,
+	values,
+	field,
+	label,
+	i18n,
+	error,
+	handleChange,
+	view = false
+}) =>
+	!!view ? (
+		!!field.protected ? (
+			protectedFieldValue
+		) : !!values[property] && values[property] !== '' ? (
+			values[property]
+		) : (
+			blankFieldPlaceholder
+		)
+	) : (
+		<TextField
+			{...field.props}
+			style={field.style.field}
+			label={i18n(label)}
+			value={values[property]}
+			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
+			onChange={(e) => handleChange(property, e.target.value)}
+			helperText={error ? i18n(`form.error.${error}`) : ' '}
+		/>
+	);
+
 const createBooleanComponent = ({
-	model,
 	property,
 	values,
 	label,
@@ -313,4 +372,4 @@ const createBooleanComponent = ({
 	);
 };
 
-export { createConfiguredListItem, createIdOfComponent, createViewComponent };
+export { createConfiguredListItem, createIdOfComponent, createViewComponent, createFormComponent };

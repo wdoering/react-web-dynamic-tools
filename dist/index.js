@@ -688,13 +688,36 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   })));
 };
 
-var createViewComponent = function createViewComponent(_ref3) {
+var createFormComponent = function createFormComponent(_ref3) {
   var model = _ref3.model,
       property = _ref3.property,
-      field = _ref3.field,
       values = _ref3.values,
+      field = _ref3.field,
+      error = _ref3.error,
       label = _ref3.label,
-      i18n = _ref3.i18n;
+      i18n = _ref3.i18n,
+      handleChange = _ref3.handleChange;
+  var component = null;
+  component = createByType({
+    model: model,
+    property: property,
+    values: values,
+    label: label,
+    i18n: i18n,
+    field: field,
+    handleChange: handleChange,
+    view: false
+  });
+  return component;
+};
+
+var createViewComponent = function createViewComponent(_ref4) {
+  var model = _ref4.model,
+      property = _ref4.property,
+      field = _ref4.field,
+      values = _ref4.values,
+      label = _ref4.label,
+      i18n = _ref4.i18n;
   return React.createElement("div", null, React.createElement(FormLabel, null, i18n(label)), React.createElement("div", {
     style: _objectSpread2({
       fontSize: 18,
@@ -712,22 +735,21 @@ var createViewComponent = function createViewComponent(_ref3) {
   })));
 };
 
-var createByType = function createByType(_ref4) {
-  var model = _ref4.model,
-      property = _ref4.property,
-      values = _ref4.values,
-      label = _ref4.label,
-      i18n = _ref4.i18n,
-      field = _ref4.field,
-      handleChange = _ref4.handleChange,
-      _ref4$view = _ref4.view,
-      view = _ref4$view === void 0 ? false : _ref4$view;
+var createByType = function createByType(_ref5) {
+  var model = _ref5.model,
+      property = _ref5.property,
+      values = _ref5.values,
+      label = _ref5.label,
+      i18n = _ref5.i18n,
+      field = _ref5.field,
+      handleChange = _ref5.handleChange,
+      _ref5$view = _ref5.view,
+      view = _ref5$view === void 0 ? false : _ref5$view;
   var component = null;
 
   switch (field.type) {
     case FieldTypes.Boolean:
       component = createBooleanComponent({
-        model: model,
         property: property,
         values: values,
         label: label,
@@ -739,23 +761,53 @@ var createByType = function createByType(_ref4) {
       break;
 
     default:
-      component = !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder;
+      component = createTextComponent({
+        property: property,
+        values: values,
+        field: field,
+        label: label,
+        i18n: i18n,
+        error: error,
+        handleChange: handleChange,
+        view: view
+      });
       break;
   }
 
   return component;
 };
 
-var createBooleanComponent = function createBooleanComponent(_ref5) {
-  var model = _ref5.model,
-      property = _ref5.property,
-      values = _ref5.values,
-      label = _ref5.label,
-      i18n = _ref5.i18n,
-      field = _ref5.field,
-      _handleChange = _ref5.handleChange,
-      _ref5$view = _ref5.view,
-      view = _ref5$view === void 0 ? false : _ref5$view;
+var createTextComponent = function createTextComponent(_ref6) {
+  var property = _ref6.property,
+      values = _ref6.values,
+      field = _ref6.field,
+      label = _ref6.label,
+      i18n = _ref6.i18n,
+      error = _ref6.error,
+      handleChange = _ref6.handleChange,
+      _ref6$view = _ref6.view,
+      view = _ref6$view === void 0 ? false : _ref6$view;
+  return !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+    style: field.style.field,
+    label: i18n(label),
+    value: values[property],
+    type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
+    onChange: function onChange(e) {
+      return handleChange(property, e.target.value);
+    },
+    helperText: error ? i18n("form.error.".concat(error)) : ' '
+  }));
+};
+
+var createBooleanComponent = function createBooleanComponent(_ref7) {
+  var property = _ref7.property,
+      values = _ref7.values,
+      label = _ref7.label,
+      i18n = _ref7.i18n,
+      field = _ref7.field,
+      _handleChange = _ref7.handleChange,
+      _ref7$view = _ref7.view,
+      view = _ref7$view === void 0 ? false : _ref7$view;
   return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(Checkbox, {
     checked: values[property],
     value: property,
@@ -1125,19 +1177,34 @@ var createField = function createField(_ref2) {
         break;
     }
   } else {
-    switch (field.type) {
-      case FieldTypes.String:
-        component = React.createElement(TextField, _extends({}, field.props, {
-          style: field.style.field,
-          label: i18n(label),
-          value: values[property],
-          type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
-          onChange: function onChange(e) {
-            return handleChange(property, e.target.value);
-          },
-          helperText: error ? i18n("form.error.".concat(error)) : ' '
-        }));
-    }
+    // switch (field.type) {
+    // 	default:
+    component = createFormComponent({
+      model: model,
+      property: property,
+      values: values,
+      field: field,
+      error: error,
+      label: label,
+      i18n: i18n,
+      handleChange: handleChange
+    }); // <TextField
+    // 	{...field.props}
+    // 	style={field.style.field}
+    // 	label={i18n(label)}
+    // 	value={values[property]}
+    // 	type={
+    // 		!!field.protected
+    // 			? 'password'
+    // 			: !!field.props.type
+    // 			? field.props.type
+    // 			: 'text'
+    // 	}
+    // 	onChange={(e) => handleChange(property, e.target.value)}
+    // 	helperText={error ? i18n(`form.error.${error}`) : ' '}
+    // />
+    // 		break;
+    // }
   }
 
   return React.createElement("div", {
