@@ -25,7 +25,7 @@ const TitleAndButtons = ({ title, children, buttons, variant = 'h4' }) => {
 TitleAndButtons.propTypes = {
 	title: PropTypes.string,
 	children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
-	buttons: PropTypes.arrayOf([PropTypes.node, PropTypes.element])
+	buttons: PropTypes.arrayOf(PropTypes.element)
 };
 
 export default TitleAndButtons;

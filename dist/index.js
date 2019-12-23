@@ -440,7 +440,7 @@ var TitleAndButtons = function TitleAndButtons(_ref) {
 TitleAndButtons.propTypes = {
   title: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
-  buttons: PropTypes.arrayOf([PropTypes.node, PropTypes.element])
+  buttons: PropTypes.arrayOf(PropTypes.element)
 };
 
 var useStyles = makeStyles(function (theme) {
