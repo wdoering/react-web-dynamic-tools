@@ -249,6 +249,7 @@ const createFormComponent = ({
 		property,
 		values,
 		label,
+		error,
 		i18n,
 		field,
 		handleChange,
@@ -283,6 +284,7 @@ const createByType = ({
 	property,
 	values,
 	label,
+	error,
 	i18n,
 	field,
 	handleChange,
@@ -329,8 +331,10 @@ const createTextComponent = ({
 	error,
 	handleChange,
 	view = false
-}) =>
-	!!view ? (
+}) => {
+	let component = null;
+
+	component = !!view ? (
 		!!field.protected ? (
 			protectedFieldValue
 		) : !!values[property] && values[property] !== '' ? (
@@ -349,6 +353,9 @@ const createTextComponent = ({
 			helperText={error ? i18n(`form.error.${error}`) : ' '}
 		/>
 	);
+
+	return component;
+};
 
 const createBooleanComponent = ({
 	property,

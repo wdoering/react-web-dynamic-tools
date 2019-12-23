@@ -1,6 +1,6 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.1.43",
+	"version": "0.1.44",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [

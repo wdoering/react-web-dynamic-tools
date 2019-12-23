@@ -703,6 +703,7 @@ var createFormComponent = function createFormComponent(_ref3) {
     property: property,
     values: values,
     label: label,
+    error: error,
     i18n: i18n,
     field: field,
     handleChange: handleChange,
@@ -740,6 +741,7 @@ var createByType = function createByType(_ref5) {
       property = _ref5.property,
       values = _ref5.values,
       label = _ref5.label,
+      error = _ref5.error,
       i18n = _ref5.i18n,
       field = _ref5.field,
       handleChange = _ref5.handleChange,
@@ -787,7 +789,8 @@ var createTextComponent = function createTextComponent(_ref6) {
       handleChange = _ref6.handleChange,
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
-  return !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+  var component = null;
+  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
     style: field.style.field,
     label: i18n(label),
     value: values[property],
@@ -797,6 +800,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     },
     helperText: error ? i18n("form.error.".concat(error)) : ' '
   }));
+  return component;
 };
 
 var createBooleanComponent = function createBooleanComponent(_ref7) {
