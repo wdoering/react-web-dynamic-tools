@@ -19,6 +19,7 @@ import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog
 import { TitleAndButtons } from '../components/title';
 
 let searchIdOfTimeout;
+const protectedFieldValue = '******';
 
 /**
  * Will create an ID of component pattern
@@ -176,13 +177,18 @@ const createFields = ({ model, baseIntl, values, i18n, firebase }) => {
  */
 const createField = ({ model, property, label, values, i18n, firebase }) => {
 	const field = model.$fieldConfig[property];
+	let component,
+		breakField = false;
+
+	//in case the field should be hidden, won't render
+	if (!!field.hidden) return '';
+
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
 	}
-	let component;
 
-	let breakField = false;
 	field.props = field.props || {};
+
 	if (field.type instanceof FieldType) {
 		breakField = true;
 		switch (field.type.complexType) {
@@ -235,7 +241,7 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 					<div>
 						<FormLabel>{i18n(label)}</FormLabel>
 						<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
-							{values[property]}
+							{!!field.protected ? protectedFieldValue : values[property]}
 						</div>
 					</div>
 				);

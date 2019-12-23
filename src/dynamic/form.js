@@ -302,16 +302,23 @@ const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleC
  */
 const createField = ({ model, property, label, values, errors, firebase, i18n, handleChange }) => {
 	const field = model.$fieldConfig[property];
+	let component,
+		error = '',
+		breakField = false;
+
+	//If the field should be hidden, won't show up
+	if (field.hidden) return '';
+
 	if (!field.style) {
 		field.style = { wrapper: {}, field: {} };
 	}
-	let component;
-	let error = '';
+
 	if (errors[property]) {
 		error = errors[property][0];
 	}
-	let breakField = false;
+
 	field.props = field.props || {};
+
 	if (field.type instanceof FieldType) {
 		breakField = true;
 		switch (field.type.complexType) {
@@ -383,6 +390,13 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 						style={field.style.field}
 						label={i18n(label)}
 						value={values[property]}
+						type={
+							!!field.protected
+								? 'password'
+								: !!field.props.type
+								? field.props.type
+								: 'text'
+						}
 						onChange={(e) => handleChange(property, e.target.value)}
 						helperText={error ? i18n(`form.error.${error}`) : ' '}
 					/>

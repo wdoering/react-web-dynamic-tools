@@ -982,6 +982,11 @@ var createField = function createField(_ref2) {
       i18n = _ref2.i18n,
       handleChange = _ref2.handleChange;
   var field = model.$fieldConfig[property];
+  var component,
+      error = '',
+      breakField = false; //If the field should be hidden, won't show up
+
+  if (field.hidden) return '';
 
   if (!field.style) {
     field.style = {
@@ -990,14 +995,10 @@ var createField = function createField(_ref2) {
     };
   }
 
-  var component;
-  var error = '';
-
   if (errors[property]) {
     error = errors[property][0];
   }
 
-  var breakField = false;
   field.props = field.props || {};
 
   if (field.type instanceof FieldType) {
@@ -1045,6 +1046,7 @@ var createField = function createField(_ref2) {
           style: field.style.field,
           label: i18n(label),
           value: values[property],
+          type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
           onChange: function onChange(e) {
             return handleChange(property, e.target.value);
           },
@@ -1397,6 +1399,7 @@ DynamicList.propTypes = {
 };
 
 var searchIdOfTimeout$1;
+var protectedFieldValue = '******';
 /**
  * Will create an ID of component pattern
  *
@@ -1580,6 +1583,10 @@ var createField$1 = function createField(_ref2) {
       i18n = _ref2.i18n,
       firebase = _ref2.firebase;
   var field = model.$fieldConfig[property];
+  var component,
+      breakField = false; //in case the field should be hidden, won't render
+
+  if (!!field.hidden) return '';
 
   if (!field.style) {
     field.style = {
@@ -1588,8 +1595,6 @@ var createField$1 = function createField(_ref2) {
     };
   }
 
-  var component;
-  var breakField = false;
   field.props = field.props || {};
 
   if (field.type instanceof FieldType) {
@@ -1631,7 +1636,7 @@ var createField$1 = function createField(_ref2) {
             fontSize: 18,
             fontWeight: '100'
           }, field.style.field)
-        }, values[property]));
+        }, !!field.protected ? protectedFieldValue : values[property]));
     }
   }
 
