@@ -40,10 +40,15 @@ class DeleteConfirmationDialog extends React.Component {
 					<DialogContentText id="alert-dialog-description">{message}</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={() => this.close()} className="btn-danger text-white">
+					<Button variant="text" onClick={() => this.close()} className="ml-5">
 						{i18n('button.cancel')}
 					</Button>
-					<Button onClick={onConfirm} className="btn-primary text-white" autoFocus>
+					<Button
+						variant="contained"
+						onClick={onConfirm}
+						className="btn-danger text-white"
+						autoFocus
+					>
 						{i18n('button.yes')}
 					</Button>
 				</DialogActions>

@@ -390,13 +390,15 @@ function (_React$Component) {
       }, title), React.createElement(DialogContent, null, React.createElement(DialogContentText, {
         id: "alert-dialog-description"
       }, message)), React.createElement(DialogActions, null, React.createElement(Button$1, {
+        variant: "text",
         onClick: function onClick() {
           return _this2.close();
         },
-        className: "btn-danger text-white"
+        className: "ml-5"
       }, i18n('button.cancel')), React.createElement(Button$1, {
+        variant: "contained",
         onClick: onConfirm,
-        className: "btn-primary text-white",
+        className: "btn-danger text-white",
         autoFocus: true
       }, i18n('button.yes'))));
     }
