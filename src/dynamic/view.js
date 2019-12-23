@@ -302,7 +302,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 					alignContent: 'center'
 				}}
 			>
-				{i18n(`${model.getModelName()}.form.$title`)} />
+				{i18n(`${model.getModelName()}.form.$title`)}
 				<div style={{ flex: 1 }}></div>
 				<Button
 					variant="contained"

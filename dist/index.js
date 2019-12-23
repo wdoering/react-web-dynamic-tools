@@ -1669,7 +1669,7 @@ var DynamicView = function DynamicView(_ref3) {
       alignItems: 'center',
       alignContent: 'center'
     }
-  }, i18n("".concat(model.getModelName(), ".form.$title")), " />", React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.$title")), React.createElement("div", {
     style: {
       flex: 1
     }
