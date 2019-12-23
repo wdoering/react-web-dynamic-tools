@@ -13,11 +13,9 @@ export default {
 		'@material-ui/core',
 		'@material-ui/icons',
 		'@zerobytes/object-model-js',
-		'@zerobytes/seed-object-model',
 		'prop-types',
 		'react',
 		'react-dom',
-		'react-intl',
 		'react-router-dom'
 	],
 	plugins: [
