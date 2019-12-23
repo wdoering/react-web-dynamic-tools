@@ -1611,6 +1611,7 @@ var createField$1 = function createField(_ref2) {
  * @param {string} param0.baseRoute Variable containing the base origin of route
  * @param {function} param0.i18n Translation source function
  * @param {object} param0.firebase Firebase instance for servicing purposes
+ * @param {object} param0.serviceInstance Firebase substitute instance for servicing purposes
  */
 
 
@@ -1619,7 +1620,8 @@ var DynamicView = function DynamicView(_ref3) {
       id = _ref3.id,
       baseRoute = _ref3.baseRoute,
       i18n = _ref3.i18n,
-      firebase = _ref3.firebase;
+      firebase = _ref3.firebase,
+      serviceInstance = _ref3.serviceInstance;
 
   var _useState5 = useState(model),
       _useState6 = _slicedToArray(_useState5, 2),
@@ -1636,6 +1638,7 @@ var DynamicView = function DynamicView(_ref3) {
     firebase: firebase
   });
   useEffect(function () {
+    //TODO: implement service flexibility
     if (id) {
       var oService = model.getService(firebase);
       oService.get(id).then(function (r) {
@@ -1700,7 +1703,8 @@ DynamicView.propTypes = {
   id: PropTypes.string,
   baseRoute: PropTypes.string,
   i18n: PropTypes.func.isRequired,
-  firebase: PropTypes.object.isRequired
+  firebase: PropTypes.object,
+  serviceInstance: PropTypes.object
 };
 
 export { BottomButtons, CancelButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, SaveButton, validations };
