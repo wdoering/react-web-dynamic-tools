@@ -20,7 +20,7 @@ import { TitleAndButtons } from '../components/title';
 
 let searchIdOfTimeout;
 const protectedFieldValue = '******',
-	blankFieldPlaceholder = '&nbsp;';
+	blankFieldPlaceholder = ' ';
 
 /**
  * Will create an ID of component pattern
