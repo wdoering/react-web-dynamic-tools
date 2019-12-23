@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button as Button$1, Typography, ListItem, ListItemSecondaryAction, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
+import { Button, Typography, ListItem, ListItemSecondaryAction, TextField, InputAdornment, Paper, List, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, FormLabel } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Button$2 from '@material-ui/core/Button';
+import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldType, ComplexTypes, FieldTypes, ModelBase } from '@zerobytes/object-model-js';
@@ -278,7 +278,7 @@ var CancelButton = function CancelButton(_ref) {
       other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
 
   var history = useHistory();
-  return React.createElement(Button$1, _extends({
+  return React.createElement(Button, _extends({
     variant: "outlined",
     color: color,
     children: i18n('button.cancel'),
@@ -308,7 +308,7 @@ var SaveButton = function SaveButton(_ref) {
       color = _ref$color === void 0 ? 'primary' : _ref$color,
       other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
 
-  return React.createElement(Button$1, _extends({
+  return React.createElement(Button, _extends({
     variant: "contained",
     color: color // type="submit"
     ,
@@ -389,13 +389,13 @@ function (_React$Component) {
         id: "alert-dialog-title"
       }, title), React.createElement(DialogContent, null, React.createElement(DialogContentText, {
         id: "alert-dialog-description"
-      }, message)), React.createElement(DialogActions, null, React.createElement(Button$2, {
+      }, message)), React.createElement(DialogActions, null, React.createElement(Button$1, {
         variant: "text",
         onClick: function onClick() {
           return _this2.close();
         },
         className: "ml-5"
-      }, i18n('button.cancel')), React.createElement(Button$2, {
+      }, i18n('button.cancel')), React.createElement(Button$1, {
         variant: "contained",
         onClick: onConfirm,
         className: "btn-danger text-white",
@@ -866,7 +866,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     style: {
       padding: '0 25px'
     }
-  }, React.createElement(Button$1, {
+  }, React.createElement(Button, {
     variant: 'contained',
     onClick: function onClick() {
       return setOpen(true);
@@ -1702,13 +1702,13 @@ var DynamicView = function DynamicView(_ref3) {
     autoComplete: "off"
   }, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".form.$title")),
-    buttons: [React.createElement(Button$1, {
+    buttons: [React.createElement(Button, {
       variant: "contained",
       color: "primary",
       onClick: function onClick() {
         history.push("".concat(baseRoute, "/form/").concat(values.uid));
       }
-    }, i18n('button.edit')), React.createElement(Button$1, {
+    }, i18n('button.edit')), React.createElement(Button, {
       variant: "contained",
       className: "ml-5 btn-danger text-white",
       onClick: function onClick() {
