@@ -261,8 +261,9 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
  * @param {string} param0.baseRoute Variable containing the base origin of route
  * @param {function} param0.i18n Translation source function
  * @param {object} param0.firebase Firebase instance for servicing purposes
+ * @param {object} param0.serviceInstance Firebase substitute instance for servicing purposes
  */
-const DynamicView = ({ model, id, baseRoute, i18n, firebase }) => {
+const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) => {
 	const [values, setValues] = useState(model);
 	const history = useHistory();
 	const deleteConfirmationDialogRef = React.createRef();
@@ -274,6 +275,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase }) => {
 		firebase
 	});
 	useEffect(() => {
+		//TODO: implement service flexibility
 		if (id) {
 			let oService = model.getService(firebase);
 			oService.get(id).then((r) => {
@@ -338,7 +340,8 @@ DynamicView.propTypes = {
 	id: PropTypes.string,
 	baseRoute: PropTypes.string,
 	i18n: PropTypes.func.isRequired,
-	firebase: PropTypes.object.isRequired
+	firebase: PropTypes.object,
+	serviceInstance: PropTypes.object
 };
 
 export default DynamicView;
