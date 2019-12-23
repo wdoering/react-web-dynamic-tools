@@ -307,7 +307,6 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 				<Button
 					variant="contained"
 					color="primary"
-					className="mr-5"
 					onClick={() => {
 						history.push(`${baseRoute}/form/${values.uid}`);
 					}}
@@ -316,7 +315,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 				</Button>
 				<Button
 					variant="contained"
-					className="mr-5 btn-danger text-white"
+					className="ml-5 btn-danger text-white"
 					onClick={() => {
 						deleteConfirmationDialogRef.current.open();
 					}}
@@ -330,7 +329,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 				onConfirm={() => remove()}
 				i18n={i18n}
 			/>
-			<div className="field-group">{fields}</div>
+			<div className="field-group mt-15">{fields}</div>
 		</form>
 	);
 };

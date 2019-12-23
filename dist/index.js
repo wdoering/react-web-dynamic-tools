@@ -1676,13 +1676,12 @@ var DynamicView = function DynamicView(_ref3) {
   }), React.createElement(Button, {
     variant: "contained",
     color: "primary",
-    className: "mr-5",
     onClick: function onClick() {
       history.push("".concat(baseRoute, "/form/").concat(values.uid));
     }
   }, i18n('button.edit')), React.createElement(Button, {
     variant: "contained",
-    className: "mr-5 btn-danger text-white",
+    className: "ml-5 btn-danger text-white",
     onClick: function onClick() {
       deleteConfirmationDialogRef.current.open();
     }
@@ -1694,7 +1693,7 @@ var DynamicView = function DynamicView(_ref3) {
     },
     i18n: i18n
   }), React.createElement("div", {
-    className: "field-group"
+    className: "field-group mt-15"
   }, fields));
 };
 
