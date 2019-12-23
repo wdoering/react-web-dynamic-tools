@@ -369,12 +369,19 @@ const createBooleanComponent = ({
 	return !!view ? (
 		i18n(`boolean.view.${values[property].toString()}`)
 	) : (
-		<Checkbox
-			checked={values[property]}
+		<FormControlLabel
+			label={i18n(label)}
 			value={property}
-			handleChange={(e) => handleChange(property, e.target.checked)}
-			inputProps={{ 'aria-label': i18n(label) }}
-			disabled={!!field.disabled}
+			control={
+				<Checkbox
+					color="primary"
+					checked={values[property]}
+					handleChange={(e) => handleChange(property, !e.target.checked)}
+					inputProps={{ 'aria-label': i18n(label) }}
+					disabled={!!field.disabled}
+				/>
+			}
+			labelPlacement="top"
 		/>
 	);
 };

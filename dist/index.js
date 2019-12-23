@@ -812,16 +812,21 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       _handleChange = _ref7.handleChange,
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(Checkbox, {
-    checked: values[property],
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
+    label: i18n(label),
     value: property,
-    handleChange: function handleChange(e) {
-      return _handleChange(property, e.target.checked);
-    },
-    inputProps: {
-      'aria-label': i18n(label)
-    },
-    disabled: !!field.disabled
+    control: React.createElement(Checkbox, {
+      color: "primary",
+      checked: values[property],
+      handleChange: function handleChange(e) {
+        return _handleChange(property, !e.target.checked);
+      },
+      inputProps: {
+        'aria-label': i18n(label)
+      },
+      disabled: !!field.disabled
+    }),
+    labelPlacement: "top"
   });
 };
 
