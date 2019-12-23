@@ -1402,7 +1402,7 @@ DynamicList.propTypes = {
 
 var searchIdOfTimeout$1;
 var protectedFieldValue = '******',
-    blankFieldPlaceholder = ' ';
+    blankFieldPlaceholder = '-';
 /**
  * Will create an ID of component pattern
  *
