@@ -394,23 +394,6 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 			i18n,
 			handleChange
 		});
-		// <TextField
-		// 	{...field.props}
-		// 	style={field.style.field}
-		// 	label={i18n(label)}
-		// 	value={values[property]}
-		// 	type={
-		// 		!!field.protected
-		// 			? 'password'
-		// 			: !!field.props.type
-		// 			? field.props.type
-		// 			: 'text'
-		// 	}
-		// 	onChange={(e) => handleChange(property, e.target.value)}
-		// 	helperText={error ? i18n(`form.error.${error}`) : ' '}
-		// />
-		// 		break;
-		// }
 	}
 	return (
 		<div
