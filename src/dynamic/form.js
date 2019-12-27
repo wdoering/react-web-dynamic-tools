@@ -125,10 +125,12 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		handleChange(property, list);
 	};
 
-	let inputs;
-	let isIdOfModelBase =
-		typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+	let inputs,
+		isIdOfModelBase =
+			typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+
 	if (Type instanceof FieldType) {
+		console.log('is fieldType');
 		switch (Type.complexType) {
 			case ComplexTypes.ShapedAs:
 				inputs = createShapedAsComponent(

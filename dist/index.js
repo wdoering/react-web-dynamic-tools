@@ -946,10 +946,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     };
   };
 
-  var inputs;
-  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+  var inputs,
+      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
   if (Type instanceof FieldType) {
+    console.log('is fieldType');
+
     switch (Type.complexType) {
       case ComplexTypes.ShapedAs:
         inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
