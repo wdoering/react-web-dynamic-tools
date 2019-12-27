@@ -1172,8 +1172,8 @@ var createField = function createField(_ref2) {
 
     switch (field.type.complexType) {
       case ComplexTypes.IdOf:
+        //Has to use entire line
         breakField = true;
-        console.log('createField:switch:complexType:idOf:field.type', field.type);
         component = React.createElement(Card, {
           className: "mb-15",
           style: {
@@ -1185,13 +1185,16 @@ var createField = function createField(_ref2) {
         break;
 
       case ComplexTypes.ArrayOf:
+        //Has to use entire line
         breakField = true;
+        console.log('createField:switch:complexType:idOf:field.type', field.type);
         component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });
         break;
 
       case ComplexTypes.ShapedAs:
+        //Has to use entire line
         breakField = true;
 
         if (!model[property]) {

@@ -350,9 +350,8 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 		breakField = true;
 		switch (field.type.complexType) {
 			case ComplexTypes.IdOf:
+				//Has to use entire line
 				breakField = true;
-
-				console.log('createField:switch:complexType:idOf:field.type', field.type);
 
 				component = (
 					<Card className="mb-15" style={{ overflow: 'visible' }}>
@@ -373,7 +372,11 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 				);
 				break;
 			case ComplexTypes.ArrayOf:
+				//Has to use entire line
 				breakField = true;
+
+				console.log('createField:switch:complexType:idOf:field.type', field.type);
+
 				component = createArrayOfComponent(
 					model,
 					property,
@@ -387,7 +390,9 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 				);
 				break;
 			case ComplexTypes.ShapedAs:
+				//Has to use entire line
 				breakField = true;
+
 				if (!model[property]) {
 					model[property] = new field.type.Type();
 				}
