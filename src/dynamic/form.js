@@ -128,9 +128,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		handleChange(property, list);
 	};
 
+	//TODO: remove this
 	console.log('--------------');
 	console.log('ArrayOf: ', property);
-	// console.log(`Values[${property}]: `, values[property]);
 	console.log('Type: ', Type);
 
 	let inputs,
@@ -378,6 +378,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 				//Has to use entire line
 				breakField = true;
 
+				console.log('--------------------------');
 				console.log('createField:switch:complexType:ArrayOf:field.type', field.type);
 
 				component = createArrayOfComponent(

@@ -582,9 +582,12 @@ var searchIdOfTimeout;
 
 var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var config = model.$fieldConfig[property];
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">")); // const oService = new Type().getService(firebase);
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">")); //TODO: remove this
 
-  var oService = new Type.Type().getService(firebase);
+  console.log('--------------');
+  console.log('IdOf: ', property);
+  console.log('Type: ', Type);
+  var oService = new Type().getService(firebase); // const oService = new Type.Type().getService(firebase);
 
   var _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -944,11 +947,11 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       setOpen(false);
       handleChange(property, list);
     };
-  };
+  }; //TODO: remove this
+
 
   console.log('--------------');
-  console.log('ArrayOf: ', property); // console.log(`Values[${property}]: `, values[property]);
-
+  console.log('ArrayOf: ', property);
   console.log('Type: ', Type);
   var inputs,
       typeIsFieldType = Type instanceof FieldType,
@@ -1189,6 +1192,7 @@ var createField = function createField(_ref2) {
       case ComplexTypes.ArrayOf:
         //Has to use entire line
         breakField = true;
+        console.log('--------------------------');
         console.log('createField:switch:complexType:ArrayOf:field.type', field.type);
         component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
