@@ -166,7 +166,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		if (typeIsComplexType) {
 			console.log('typeIsComplexType', typeIsComplexType);
 			switch (Type.complexType) {
-				case ComplexTypes.ShapedAs:
+				case ComplexTypes.ShapedAs: {
 					inputs = createShapedAsComponent(
 						model,
 						property,
@@ -178,8 +178,22 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						}
 					);
 					break;
+				}
+				case ComplexTypes.IdOf: {
+					inputs = createIdOfComponent(
+						model,
+						property,
+						values,
+						Type,
+						firebase,
+						i18n,
+						(p, uid, item) => {
+							setCurrentDialogValue(item);
+						}
+					);
+				}
 				default:
-					inputs = `DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ${Type.complexType} | Type.Type: ${Type.Type}`;
+					inputs = `DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ${Type.complexType} | Type.Type: ${Type.Type.name}`;
 					break;
 			}
 		} else {

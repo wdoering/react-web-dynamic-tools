@@ -977,13 +977,22 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
-          inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
-            setCurrentDialogValue(fullObject);
-          });
-          break;
+          {
+            inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
+              setCurrentDialogValue(fullObject);
+            });
+            break;
+          }
+
+        case ComplexTypes.IdOf:
+          {
+            inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
+              setCurrentDialogValue(item);
+            });
+          }
 
         default:
-          inputs = "DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ".concat(Type.complexType, " | Type.Type: ").concat(Type.Type);
+          inputs = "DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ".concat(Type.complexType, " | Type.Type: ").concat(Type.Type.name);
           break;
       }
     } else {
