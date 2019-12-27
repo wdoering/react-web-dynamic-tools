@@ -958,6 +958,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         break;
     }
   } else if (isIdOfModelBase) {
+    console.log('isIdOfModelBase', isIdOfModelBase);
     inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
       setCurrentDialogValue(item);
     });

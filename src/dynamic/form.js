@@ -144,6 +144,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				break;
 		}
 	} else if (isIdOfModelBase) {
+		console.log('isIdOfModelBase', isIdOfModelBase);
 		inputs = createIdOfComponent(
 			model,
 			property,
