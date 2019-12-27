@@ -605,6 +605,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   var useOwnTitle = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var config = model.$fieldConfig[property];
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+  console.log('createIdOfComponent:property', property);
   console.log('createIdOfComponent:Type', Type);
   var oService = new Type().getService(firebase);
 

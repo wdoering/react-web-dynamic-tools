@@ -139,6 +139,7 @@ const createIdOfComponent = (
 			</div>
 		);
 
+	console.log('createIdOfComponent:property', property);
 	console.log('createIdOfComponent:Type', Type);
 
 	const oService = new Type().getService(firebase);
