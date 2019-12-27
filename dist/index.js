@@ -581,6 +581,7 @@ var searchIdOfTimeout;
  */
 
 var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
+  var useOwnTitle = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : true;
   var config = model.$fieldConfig[property];
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">")); //TODO: remove this
 
@@ -626,7 +627,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     style: {
       position: 'relative'
     }
-  }, React.createElement(Typography, {
+  }, useOwnTitle && React.createElement(Typography, {
     variant: "h5"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
@@ -902,6 +903,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
 
 var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var defaultCurrentDialogValue = {},
+      shouldOverflowListItems = false,
       i18nPropertyLabel = i18n("".concat(model.getModelName(), ".form.").concat(property));
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
@@ -964,7 +966,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   // 	new Type.Type() instanceof ModelBase;
 
   if (isIdOfModelBase) {
-    console.log('isIdOfModelBase', isIdOfModelBase);
+    //Allows overflowing
+    shouldOverflowListItems = true; // console.log('isIdOfModelBase', isIdOfModelBase);
+
     inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
       setCurrentDialogValue(item);
     });
@@ -986,14 +990,16 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
         case ComplexTypes.IdOf:
           {
+            //Allows overflowing
+            shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
               setCurrentDialogValue(item);
-            });
+            }, false);
             break;
           }
 
         default:
-          inputs = "DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ".concat(Type.complexType, " | Type.Type: ").concat(Type.Type.name);
+          inputs = "DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ".concat(Type.complexType, " | Type.name: ").concat(Type.Type.name);
           break;
       }
     } else {
@@ -1060,13 +1066,13 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     "aria-describedby": "alert-dialog-description",
     style: {
       root: {
-        overflow: isIdOfModelBase ? 'visible' : ''
+        overflow: shouldOverflowListItems ? 'visible' : ''
       }
     }
   }, React.createElement(DialogTitle$1, null, i18nPropertyLabel), React.createElement(DialogContent$1, {
     style: {
-      height: isIdOfModelBase ? 300 : '',
-      overflow: isIdOfModelBase ? 'visible' : ''
+      height: shouldOverflowListItems ? 300 : '',
+      overflow: shouldOverflowListItems ? 'visible' : ''
     }
   }, inputs), React.createElement(DialogActions$1, null, React.createElement(SaveButton, {
     onClick: save,

@@ -94,6 +94,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
  */
 const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
 	let defaultCurrentDialogValue = {},
+		shouldOverflowListItems = false,
 		i18nPropertyLabel = i18n(`${model.getModelName()}.form.${property}`);
 
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
@@ -146,7 +147,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 	// 	new Type.Type() instanceof ModelBase;
 
 	if (isIdOfModelBase) {
-		console.log('isIdOfModelBase', isIdOfModelBase);
+		//Allows overflowing
+		shouldOverflowListItems = true;
+		// console.log('isIdOfModelBase', isIdOfModelBase);
 		inputs = createIdOfComponent(
 			model,
 			property,
@@ -180,6 +183,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 					break;
 				}
 				case ComplexTypes.IdOf: {
+					//Allows overflowing
+					shouldOverflowListItems = true;
+
 					inputs = createIdOfComponent(
 						model,
 						property,
@@ -189,12 +195,13 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						i18n,
 						(p, uid, item) => {
 							setCurrentDialogValue(item);
-						}
+						},
+						false
 					);
 					break;
 				}
 				default:
-					inputs = `DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ${Type.complexType} | Type.Type: ${Type.Type.name}`;
+					inputs = `DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ${Type.complexType} | Type.name: ${Type.Type.name}`;
 					break;
 			}
 		} else {
@@ -258,13 +265,13 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						onClose={() => setOpen(false)}
 						aria-labelledby="alert-dialog-title"
 						aria-describedby="alert-dialog-description"
-						style={{ root: { overflow: isIdOfModelBase ? 'visible' : '' } }}
+						style={{ root: { overflow: shouldOverflowListItems ? 'visible' : '' } }}
 					>
 						<DialogTitle>{i18nPropertyLabel}</DialogTitle>
 						<DialogContent
 							style={{
-								height: isIdOfModelBase ? 300 : '',
-								overflow: isIdOfModelBase ? 'visible' : ''
+								height: shouldOverflowListItems ? 300 : '',
+								overflow: shouldOverflowListItems ? 'visible' : ''
 							}}
 						>
 							{inputs}

@@ -120,7 +120,16 @@ let searchIdOfTimeout;
  * @param {function} i18n Translation base function. Has to receive an ID
  * @param {function} handleChange
  */
-const createIdOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
+const createIdOfComponent = (
+	model,
+	property,
+	values,
+	Type,
+	firebase,
+	i18n,
+	handleChange,
+	useOwnTitle = true
+) => {
 	const config = model.$fieldConfig[property];
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
@@ -157,7 +166,11 @@ const createIdOfComponent = (model, property, values, Type, firebase, i18n, hand
 	};
 	return (
 		<div style={{ position: 'relative' }}>
-			<Typography variant="h5">{i18n(`${model.getModelName()}.form.${property}`)}</Typography>
+			{useOwnTitle && (
+				<Typography variant="h5">
+					{i18n(`${model.getModelName()}.form.${property}`)}
+				</Typography>
+			)}
 			<div style={{ flex: 1 }} className="mt-10">
 				<TextField
 					variant="outlined"
