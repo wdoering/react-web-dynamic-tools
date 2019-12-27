@@ -191,6 +191,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 							setCurrentDialogValue(item);
 						}
 					);
+					break;
 				}
 				default:
 					inputs = `DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ${Type.complexType} | Type.Type: ${Type.Type.name}`;
