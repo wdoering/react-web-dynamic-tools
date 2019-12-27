@@ -125,6 +125,11 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		handleChange(property, list);
 	};
 
+	console.log('Model: ', model);
+	console.log('ArrayOf: ', property);
+	console.log('Values: ', values);
+	console.log('Type: ', Type);
+
 	let inputs,
 		typeIsFieldType = Type instanceof FieldType,
 		typeIsComplexType = !!Type.complexType,

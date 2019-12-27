@@ -946,6 +946,10 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     };
   };
 
+  console.log('Model: ', model);
+  console.log('ArrayOf: ', property);
+  console.log('Values: ', values);
+  console.log('Type: ', Type);
   var inputs,
       typeIsFieldType = Type instanceof FieldType,
       typeIsComplexType = !!Type.complexType,
