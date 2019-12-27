@@ -908,17 +908,16 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   var _useState3 = useState(values[property] || []),
       _useState4 = _slicedToArray(_useState3, 2),
       list = _useState4[0],
-      setList = _useState4[1];
-
-  var _useState5 = useState(false),
+      setList = _useState4[1],
+      _useState5 = useState(false),
       _useState6 = _slicedToArray(_useState5, 2),
       open = _useState6[0],
-      setOpen = _useState6[1];
-
-  var _useState7 = useState(defaultCurrentDialogValue),
+      setOpen = _useState6[1],
+      _useState7 = useState(defaultCurrentDialogValue),
       _useState8 = _slicedToArray(_useState7, 2),
       currentDialogValue = _useState8[0],
-      setCurrentDialogValue = _useState8[1];
+      setCurrentDialogValue = _useState8[1]; //Picking array of items from model instance
+
 
   if (!list.length && values[property] && values[property].length) {
     setList(values[property]);
@@ -947,32 +946,35 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     };
   };
 
-  console.log('Model: ', model);
   console.log('ArrayOf: ', property);
-  console.log('Values: ', values);
+  console.log("Values[".concat(property, "]: "), values[property]);
   console.log('Type: ', Type);
   var inputs,
       typeIsFieldType = Type instanceof FieldType,
       typeIsComplexType = !!Type.complexType,
-      // isIdOfModelBase =
-  // 	typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase,
-  isIdOfModelBase = typeIsFieldType && Type.complexType && typeof Type.Type === 'function' && Type.Type.name !== 'Object' && new Type.Type() instanceof ModelBase;
+      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase; // isIdOfModelBase =
+  // 	typeIsFieldType &&
+  // 	Type.complexType &&
+  // 	typeof Type.Type === 'function' &&
+  // 	Type.Type.name !== 'Object' &&
+  // 	new Type.Type() instanceof ModelBase;
 
-  if (typeIsFieldType) {
+  if (isIdOfModelBase) {
+    console.log('isIdOfModelBase', isIdOfModelBase);
+    inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
+      setCurrentDialogValue(item);
+    });
+  } else if (typeIsFieldType) {
     // console.log('Type', Type);
     // console.log('Type.name', Type.name);
     // console.log('new Type()', new Type());
-    if (isIdOfModelBase) {
-      console.log('isIdOfModelBase', isIdOfModelBase);
-      inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
-        setCurrentDialogValue(item);
-      });
-    } else if (typeIsComplexType) {
+    if (typeIsComplexType) {
       console.log('typeIsComplexType', typeIsComplexType);
 
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
-          inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
+          inputs = createShapedAsComponent(model, property, // new Type.Type(),
+          new Type(), currentDialogValue, i18n, function (p, fullObject) {
             setCurrentDialogValue(fullObject);
           });
           break;
@@ -1187,7 +1189,7 @@ var createField = function createField(_ref2) {
       case ComplexTypes.ArrayOf:
         //Has to use entire line
         breakField = true;
-        console.log('createField:switch:complexType:idOf:field.type', field.type);
+        console.log('createField:switch:complexType:ArrayOf:field.type', field.type);
         component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });
