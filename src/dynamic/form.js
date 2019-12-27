@@ -150,12 +150,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			}
 		);
 	} else if (typeIsFieldType) {
-		// console.log('Type', Type);
-		// console.log('Type.name', Type.name);
-		// console.log('new Type()', new Type());
-
 		if (typeIsComplexType) {
-			console.log('typeIsComplexType', typeIsComplexType);
 			switch (Type.complexType) {
 				case ComplexTypes.ShapedAs: {
 					inputs = createShapedAsComponent(
@@ -184,6 +179,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						(p, uid, item) => {
 							setCurrentDialogValue([...currentDialogValue, uid]);
 						},
+						false,
 						false
 					);
 					break;

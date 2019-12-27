@@ -201,13 +201,13 @@ const createIdOfComponent = (
 									['deleted', '==', false]
 								]
 							]);
-							console.log([
-								[
-									[config.searchField, '>=', text],
-									[config.searchField, '<', tend],
-									['deleted', '==', false]
-								]
-							]);
+							// console.log([
+							// 	[
+							// 		[config.searchField, '>=', text],
+							// 		[config.searchField, '<', tend],
+							// 		['deleted', '==', false]
+							// 	]
+							// ]);
 							oService
 								.limit(5)
 								.list()

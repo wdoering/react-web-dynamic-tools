@@ -678,8 +678,14 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
 
       var tend = text.substr(0, text.length - 1) + String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
       searchIdOfTimeout = setTimeout(function () {
-        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]);
-        console.log([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]);
+        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]); // console.log([
+        // 	[
+        // 		[config.searchField, '>=', text],
+        // 		[config.searchField, '<', tend],
+        // 		['deleted', '==', false]
+        // 	]
+        // ]);
+
         oService.limit(5).list().then(function (r) {
           setList(r);
         });
@@ -996,12 +1002,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       setCurrentDialogValue(item);
     });
   } else if (typeIsFieldType) {
-    // console.log('Type', Type);
-    // console.log('Type.name', Type.name);
-    // console.log('new Type()', new Type());
     if (typeIsComplexType) {
-      console.log('typeIsComplexType', typeIsComplexType);
-
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
           {
@@ -1017,7 +1018,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
               setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
-            }, false);
+            }, false, false);
             break;
           }
 
