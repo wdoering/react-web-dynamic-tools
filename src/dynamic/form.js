@@ -130,10 +130,12 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
 	if (Type instanceof FieldType) {
-		console.log('isIdOfModelBase', isIdOfModelBase);
+		console.log('Type', Type);
+		console.log('Type.name', Type.name);
+		console.log('new Type()', new Type());
 
 		if (isIdOfModelBase) {
-			console.log('isIdOfModelBase', isIdOfModelBase);
+			// console.log('isIdOfModelBase', isIdOfModelBase);
 			inputs = createIdOfComponent(
 				model,
 				property,

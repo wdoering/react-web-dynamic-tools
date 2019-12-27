@@ -950,10 +950,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
   if (Type instanceof FieldType) {
-    console.log('isIdOfModelBase', isIdOfModelBase);
+    console.log('Type', Type);
+    console.log('Type.name', Type.name);
+    console.log('new Type()', new Type());
 
     if (isIdOfModelBase) {
-      console.log('isIdOfModelBase', isIdOfModelBase);
+      // console.log('isIdOfModelBase', isIdOfModelBase);
       inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
         setCurrentDialogValue(item);
       });
