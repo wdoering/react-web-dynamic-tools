@@ -130,34 +130,40 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 			typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
 	if (Type instanceof FieldType) {
-		console.log('is fieldType');
-		switch (Type.complexType) {
-			case ComplexTypes.ShapedAs:
-				inputs = createShapedAsComponent(
-					model,
-					property,
-					new Type.Type(),
-					currentDialogValue,
-					i18n,
-					(p, fullObject) => {
-						setCurrentDialogValue(fullObject);
-					}
-				);
-				break;
-		}
-	} else if (isIdOfModelBase) {
 		console.log('isIdOfModelBase', isIdOfModelBase);
-		inputs = createIdOfComponent(
-			model,
-			property,
-			values,
-			Type,
-			firebase,
-			i18n,
-			(p, uid, item) => {
-				setCurrentDialogValue(item);
+
+		if (isIdOfModelBase) {
+			console.log('isIdOfModelBase', isIdOfModelBase);
+			inputs = createIdOfComponent(
+				model,
+				property,
+				values,
+				Type,
+				firebase,
+				i18n,
+				(p, uid, item) => {
+					setCurrentDialogValue(item);
+				}
+			);
+		} else {
+			switch (Type.complexType) {
+				case ComplexTypes.ShapedAs:
+					inputs = createShapedAsComponent(
+						model,
+						property,
+						new Type.Type(),
+						currentDialogValue,
+						i18n,
+						(p, fullObject) => {
+							setCurrentDialogValue(fullObject);
+						}
+					);
+					break;
+				default:
+					inputs = 'TYPE_NOT_IMPLEMENTED';
+					break;
 			}
-		);
+		}
 	} else if (typeof Type === 'string') {
 		switch (Type) {
 			case FieldTypes.String:
