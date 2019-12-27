@@ -1173,6 +1173,7 @@ var createField = function createField(_ref2) {
     switch (field.type.complexType) {
       case ComplexTypes.IdOf:
         breakField = true;
+        console.log('createField:switch:complexType:idOf:field.type', field.type);
         component = React.createElement(Card, {
           className: "mb-15",
           style: {
