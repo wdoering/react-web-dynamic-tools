@@ -1023,7 +1023,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
               console.log('idOfComponent:currentDialogValue: ', currentDialogValue);
               console.log('idOfComponent:uid: ', uid);
-              setCurrentDialogValue(uid);
+              setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
             }, false, false);
             break;
           }

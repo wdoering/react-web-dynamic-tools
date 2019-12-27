@@ -185,7 +185,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 							console.log('idOfComponent:currentDialogValue: ', currentDialogValue);
 							console.log('idOfComponent:uid: ', uid);
 
-							setCurrentDialogValue(uid);
+							setCurrentDialogValue([...currentDialogValue, uid]);
 						},
 						false,
 						false
