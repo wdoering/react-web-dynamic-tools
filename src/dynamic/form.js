@@ -122,6 +122,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		if (typeof defaultCurrentDialogValue === 'object') {
 			list.push(Object.assign({}, currentDialogValue));
 		} else if (defaultCurrentDialogValue instanceof Array) {
+			console.log('currentDialogValue', currentDialogValue);
 			list.push(...currentDialogValue);
 		} else {
 			list.push(currentDialogValue);
@@ -133,7 +134,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 	};
 	const remove = (i) => () => {
 		list.splice(i, 1);
-		setCurrentDialogValue({});
+		setCurrentDialogValue(defaultCurrentDialogValue);
 		setList(list);
 		setOpen(false);
 		handleChange(property, list);
