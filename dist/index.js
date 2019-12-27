@@ -1017,7 +1017,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             //Allows overflowing
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
-              setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
+              console.log('idOfComponent:uid: ', uid);
+              console.log('idOfComponent:item: ', item);
+              setCurrentDialogValue(uid);
             }, false, false);
             break;
           }
