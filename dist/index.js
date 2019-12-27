@@ -947,19 +947,22 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   };
 
   var inputs,
-      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+      typeIsFieldType = Type instanceof FieldType,
+      typeIsComplexType = !!Type.complexType,
+      // isIdOfModelBase =
+  // 	typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase,
+  isIdOfModelBase = typeIsFieldType && Type.complexType && typeof Type.Type === 'function' && Type.Type.name !== 'Object' && new Type.Type() instanceof ModelBase;
 
-  if (Type instanceof FieldType) {
-    console.log('Type', Type);
-    console.log('Type.name', Type.name);
-    console.log('new Type()', new Type());
-
+  if (typeIsFieldType) {
+    // console.log('Type', Type);
+    // console.log('Type.name', Type.name);
+    // console.log('new Type()', new Type());
     if (isIdOfModelBase) {
       // console.log('isIdOfModelBase', isIdOfModelBase);
       inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
         setCurrentDialogValue(item);
       });
-    } else {
+    } else if (typeIsComplexType) {
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
           inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
@@ -968,9 +971,11 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
           break;
 
         default:
-          inputs = 'TYPE_NOT_IMPLEMENTED';
+          inputs = "DEFAULT_COMPLEX_TYPE_NOT_IMPLEMENTED: ComplexType: ".concat(Type.complexType, " | Type.Type: ").concat(Type.Type);
           break;
       }
+    } else {
+      inputs = "FIELD_TYPE_NOT_IMPLEMENTED: Type ".concat(Type);
     }
   } else if (typeof Type === 'string') {
     switch (Type) {
