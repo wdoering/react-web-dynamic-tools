@@ -946,8 +946,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     };
   };
 
-  console.log('ArrayOf: ', property);
-  console.log("Values[".concat(property, "]: "), values[property]);
+  console.log('--------------');
+  console.log('ArrayOf: ', property); // console.log(`Values[${property}]: `, values[property]);
+
   console.log('Type: ', Type);
   var inputs,
       typeIsFieldType = Type instanceof FieldType,
@@ -973,8 +974,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
-          inputs = createShapedAsComponent(model, property, // new Type.Type(),
-          new Type(), currentDialogValue, i18n, function (p, fullObject) {
+          inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
             setCurrentDialogValue(fullObject);
           });
           break;

@@ -128,8 +128,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		handleChange(property, list);
 	};
 
+	console.log('--------------');
 	console.log('ArrayOf: ', property);
-	console.log(`Values[${property}]: `, values[property]);
+	// console.log(`Values[${property}]: `, values[property]);
 	console.log('Type: ', Type);
 
 	let inputs,
@@ -169,8 +170,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 					inputs = createShapedAsComponent(
 						model,
 						property,
-						// new Type.Type(),
-						new Type(),
+						new Type.Type(),
 						currentDialogValue,
 						i18n,
 						(p, fullObject) => {
