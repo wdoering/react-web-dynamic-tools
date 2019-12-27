@@ -128,7 +128,8 @@ const createIdOfComponent = (model, property, values, Type, firebase, i18n, hand
 				NEED_TO_CONFIGURE_FIELD:{property} | FieldType:IdOf{`<${Type.name}>`}
 			</div>
 		);
-	const oService = new Type().getService(firebase);
+	// const oService = new Type().getService(firebase);
+	const oService = new Type.Type().getService(firebase);
 	const [list, setList] = useState([]);
 	const [selected, setSelected] = useState(null);
 	const [value, setValue] = useState('');

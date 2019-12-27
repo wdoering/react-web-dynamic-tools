@@ -148,7 +148,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		// console.log('new Type()', new Type());
 
 		if (isIdOfModelBase) {
-			// console.log('isIdOfModelBase', isIdOfModelBase);
+			console.log('isIdOfModelBase', isIdOfModelBase);
 			inputs = createIdOfComponent(
 				model,
 				property,
@@ -161,6 +161,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 				}
 			);
 		} else if (typeIsComplexType) {
+			console.log('typeIsComplexType', typeIsComplexType);
 			switch (Type.complexType) {
 				case ComplexTypes.ShapedAs:
 					inputs = createShapedAsComponent(

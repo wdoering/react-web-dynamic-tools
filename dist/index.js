@@ -582,8 +582,9 @@ var searchIdOfTimeout;
 
 var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var config = model.$fieldConfig[property];
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
-  var oService = new Type().getService(firebase);
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">")); // const oService = new Type().getService(firebase);
+
+  var oService = new Type.Type().getService(firebase);
 
   var _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -962,11 +963,13 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     // console.log('Type.name', Type.name);
     // console.log('new Type()', new Type());
     if (isIdOfModelBase) {
-      // console.log('isIdOfModelBase', isIdOfModelBase);
+      console.log('isIdOfModelBase', isIdOfModelBase);
       inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
         setCurrentDialogValue(item);
       });
     } else if (typeIsComplexType) {
+      console.log('typeIsComplexType', typeIsComplexType);
+
       switch (Type.complexType) {
         case ComplexTypes.ShapedAs:
           inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
