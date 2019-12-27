@@ -601,21 +601,18 @@ var searchIdOfTimeout;
  */
 
 var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
-  var useOwnTitle = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : true;
+  var singleItem = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : true;
+  var useOwnTitle = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var config = model.$fieldConfig[property];
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">")); //TODO: remove this
-
-  console.log('--------------');
-  console.log('IdOf: ', property);
-  console.log('Type: ', Type);
-  var oService = new Type().getService(firebase); // const oService = new Type.Type().getService(firebase);
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+  var oService = new Type().getService(firebase);
 
   var _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
       setList = _useState2[1];
 
-  var _useState3 = useState(null),
+  var _useState3 = useState(!!singleItem ? null : []),
       _useState4 = _slicedToArray(_useState3, 2),
       selected = _useState4[0],
       setSelected = _useState4[1];
@@ -625,18 +622,27 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       value = _useState6[0],
       setValue = _useState6[1];
 
-  if (!selected && values[property] && !(values[property] instanceof Array)) {
-    clearTimeout(searchIdOfTimeout);
-    searchIdOfTimeout = setTimeout(function () {
-      oService.get(values[property]).then(function (r) {
-        setSelected(r);
-      });
-    }, 200);
+  if (!selected && values[property]) {
+    if (!(values[property] instanceof Array && singleItem)) {
+      clearTimeout(searchIdOfTimeout);
+      searchIdOfTimeout = setTimeout(function () {
+        oService.get(values[property]).then(function (r) {
+          setSelected(r);
+        });
+      }, 200);
+    } else {
+      clearTimeout(searchIdOfTimeout);
+      searchIdOfTimeout = setTimeout(function () {
+        oService.filter([['uid', 'in', values[property]]]).then(function (r) {
+          setSelected(r);
+        });
+      }, 200);
+    }
   }
 
   var select = function select(item) {
     return function () {
-      setSelected(item);
+      setSelected(!!singleItem ? item : [].concat(_toConsumableArray(selected), [item]));
       setList([]);
       setValue('');
       handleChange(property, item.uid, item);
@@ -648,7 +654,8 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       position: 'relative'
     }
   }, useOwnTitle && React.createElement(Typography, {
-    variant: "h5 mb-10"
+    variant: "h5",
+    className: "mb-10"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
       flex: 1
@@ -693,7 +700,8 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     }
   }, React.createElement(List, {
     style: {
-      height: 150,
+      minHeight: 65,
+      maxHeight: 150,
       overflow: 'scroll'
     }
   }, list.map(function (item, i) {
@@ -703,12 +711,18 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       key: i,
       onClick: select(item)
     });
-  }))), React.createElement("div", {
+  }))), !!selected && React.createElement("div", {
     className: "mt-10"
-  }, !!selected && createConfiguredListItem({
+  }, !!singleItem && createConfiguredListItem({
     item: selected,
     listItemProperties: config.listItemProperties,
     key: 0
+  }), !singleItem && selected.map(function (item, index) {
+    return createConfiguredListItem({
+      item: item,
+      listItemProperties: config.listItemProperties,
+      key: index
+    });
   })));
 };
 

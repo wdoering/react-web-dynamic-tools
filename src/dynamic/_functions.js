@@ -128,6 +128,7 @@ const createIdOfComponent = (
 	firebase,
 	i18n,
 	handleChange,
+	singleItem = true,
 	useOwnTitle = true
 ) => {
 	const config = model.$fieldConfig[property];
@@ -138,28 +139,31 @@ const createIdOfComponent = (
 			</div>
 		);
 
-	//TODO: remove this
-	console.log('--------------');
-	console.log('IdOf: ', property);
-	console.log('Type: ', Type);
-
 	const oService = new Type().getService(firebase);
-	// const oService = new Type.Type().getService(firebase);
 	const [list, setList] = useState([]);
-	const [selected, setSelected] = useState(null);
+	const [selected, setSelected] = useState(!!singleItem ? null : []);
 	const [value, setValue] = useState('');
 
-	if (!selected && values[property] && !(values[property] instanceof Array)) {
-		clearTimeout(searchIdOfTimeout);
-		searchIdOfTimeout = setTimeout(() => {
-			oService.get(values[property]).then((r) => {
-				setSelected(r);
-			});
-		}, 200);
+	if (!selected && values[property]) {
+		if (!(values[property] instanceof Array && singleItem)) {
+			clearTimeout(searchIdOfTimeout);
+			searchIdOfTimeout = setTimeout(() => {
+				oService.get(values[property]).then((r) => {
+					setSelected(r);
+				});
+			}, 200);
+		} else {
+			clearTimeout(searchIdOfTimeout);
+			searchIdOfTimeout = setTimeout(() => {
+				oService.filter([['uid', 'in', values[property]]]).then((r) => {
+					setSelected(r);
+				});
+			}, 200);
+		}
 	}
 
 	const select = (item) => () => {
-		setSelected(item);
+		setSelected(!!singleItem ? item : [...selected, item]);
 		setList([]);
 		setValue('');
 		handleChange(property, item.uid, item);
@@ -167,7 +171,7 @@ const createIdOfComponent = (
 	return (
 		<div style={{ position: 'relative' }}>
 			{useOwnTitle && (
-				<Typography variant="h5 mb-10">
+				<Typography variant="h5" className="mb-10">
 					{i18n(`${model.getModelName()}.form.${property}`)}
 				</Typography>
 			)}
@@ -188,6 +192,7 @@ const createIdOfComponent = (
 						let tend =
 							text.substr(0, text.length - 1) +
 							String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
+
 						searchIdOfTimeout = setTimeout(function() {
 							oService.filter([
 								[
@@ -230,7 +235,7 @@ const createIdOfComponent = (
 						right: 0
 					}}
 				>
-					<List style={{ height: 150, overflow: 'scroll' }}>
+					<List style={{ minHeight: 65, maxHeight: 150, overflow: 'scroll' }}>
 						{list.map((item, i) => {
 							return createConfiguredListItem({
 								item,
@@ -242,14 +247,24 @@ const createIdOfComponent = (
 					</List>
 				</Paper>
 			)}
-			<div className="mt-10">
-				{!!selected &&
-					createConfiguredListItem({
-						item: selected,
-						listItemProperties: config.listItemProperties,
-						key: 0
-					})}
-			</div>
+			{!!selected && (
+				<div className="mt-10">
+					{!!singleItem &&
+						createConfiguredListItem({
+							item: selected,
+							listItemProperties: config.listItemProperties,
+							key: 0
+						})}
+					{!singleItem &&
+						selected.map((item, index) =>
+							createConfiguredListItem({
+								item,
+								listItemProperties: config.listItemProperties,
+								key: index
+							})
+						)}
+				</div>
+			)}
 		</div>
 	);
 };
