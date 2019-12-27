@@ -184,7 +184,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						model,
 						property,
 						values,
-						Type,
+						Type.Type,
 						firebase,
 						i18n,
 						(p, uid, item) => {
