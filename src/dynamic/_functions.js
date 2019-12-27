@@ -167,11 +167,11 @@ const createIdOfComponent = (
 	return (
 		<div style={{ position: 'relative' }}>
 			{useOwnTitle && (
-				<Typography variant="h5">
+				<Typography variant="h5 mb-10">
 					{i18n(`${model.getModelName()}.form.${property}`)}
 				</Typography>
 			)}
-			<div style={{ flex: 1 }} className="mt-10">
+			<div style={{ flex: 1 }}>
 				<TextField
 					variant="outlined"
 					value={value}

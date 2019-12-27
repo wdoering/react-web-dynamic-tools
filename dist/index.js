@@ -628,12 +628,11 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       position: 'relative'
     }
   }, useOwnTitle && React.createElement(Typography, {
-    variant: "h5"
+    variant: "h5 mb-10"
   }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
     style: {
       flex: 1
-    },
-    className: "mt-10"
+    }
   }, React.createElement(TextField, {
     variant: "outlined",
     value: value,
@@ -993,7 +992,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             //Allows overflowing
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
-              setCurrentDialogValue(item);
+              setCurrentDialogValue(uid);
             }, false);
             break;
           }
