@@ -104,6 +104,9 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
+	} else if (!!Type.Type) {
+		//collection should be predefined
+		defaultCurrentDialogValue = [];
 	}
 
 	const [list, setList] = useState(values[property] || []),
@@ -118,6 +121,8 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 	const save = () => {
 		if (typeof defaultCurrentDialogValue === 'object') {
 			list.push(Object.assign({}, currentDialogValue));
+			// } else if (defaultCurrentDialogValue instanceof Array) {
+			// 	list.push(currentDialogValue);
 		} else {
 			list.push(currentDialogValue);
 		}
@@ -177,8 +182,8 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						firebase,
 						i18n,
 						(p, uid, item) => {
+							console.log('idOfComponent:currentDialogValue: ', currentDialogValue);
 							console.log('idOfComponent:uid: ', uid);
-							console.log('idOfComponent:item: ', item);
 
 							setCurrentDialogValue(uid);
 						},
