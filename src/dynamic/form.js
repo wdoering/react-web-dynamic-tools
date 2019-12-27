@@ -121,8 +121,8 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 	const save = () => {
 		if (typeof defaultCurrentDialogValue === 'object') {
 			list.push(Object.assign({}, currentDialogValue));
-			// } else if (defaultCurrentDialogValue instanceof Array) {
-			// 	list.push(currentDialogValue);
+		} else if (defaultCurrentDialogValue instanceof Array) {
+			list.push(...currentDialogValue);
 		} else {
 			list.push(currentDialogValue);
 		}
@@ -182,9 +182,6 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						firebase,
 						i18n,
 						(p, uid, item) => {
-							console.log('idOfComponent:currentDialogValue: ', currentDialogValue);
-							console.log('idOfComponent:uid: ', uid);
-
 							setCurrentDialogValue([...currentDialogValue, uid]);
 						},
 						false,

@@ -976,8 +976,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
   var save = function save() {
     if (_typeof(defaultCurrentDialogValue) === 'object') {
-      list.push(Object.assign({}, currentDialogValue)); // } else if (defaultCurrentDialogValue instanceof Array) {
-      // 	list.push(currentDialogValue);
+      list.push(Object.assign({}, currentDialogValue));
+    } else if (defaultCurrentDialogValue instanceof Array) {
+      list.push.apply(list, _toConsumableArray(currentDialogValue));
     } else {
       list.push(currentDialogValue);
     }
@@ -1021,8 +1022,6 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             //Allows overflowing
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
-              console.log('idOfComponent:currentDialogValue: ', currentDialogValue);
-              console.log('idOfComponent:uid: ', uid);
               setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
             }, false, false);
             break;
