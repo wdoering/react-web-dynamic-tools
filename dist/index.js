@@ -225,8 +225,24 @@ function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
 
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
@@ -257,6 +273,10 @@ function _iterableToArrayLimit(arr, i) {
   }
 
   return _arr;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
 function _nonIterableRest() {
@@ -903,7 +923,11 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
 var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
   var defaultCurrentDialogValue = {},
       shouldOverflowListItems = false,
-      i18nPropertyLabel = i18n("".concat(model.getModelName(), ".form.").concat(property));
+      i18nPropertyLabel = i18n("".concat(model.getModelName(), ".form.").concat(property)),
+      inputs,
+      typeIsFieldType = Type instanceof FieldType,
+      typeIsComplexType = !!Type.complexType,
+      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
     defaultCurrentDialogValue = '';
@@ -948,21 +972,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       setOpen(false);
       handleChange(property, list);
     };
-  }; //TODO: remove this
-
-
-  console.log('--------------');
-  console.log('ArrayOf: ', property);
-  console.log('Type: ', Type);
-  var inputs,
-      typeIsFieldType = Type instanceof FieldType,
-      typeIsComplexType = !!Type.complexType,
-      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase; // isIdOfModelBase =
-  // 	typeIsFieldType &&
-  // 	Type.complexType &&
-  // 	typeof Type.Type === 'function' &&
-  // 	Type.Type.name !== 'Object' &&
-  // 	new Type.Type() instanceof ModelBase;
+  };
 
   if (isIdOfModelBase) {
     //Allows overflowing
@@ -992,7 +1002,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             //Allows overflowing
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
-              setCurrentDialogValue(uid);
+              setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
             }, false);
             break;
           }
@@ -1207,8 +1217,6 @@ var createField = function createField(_ref2) {
       case ComplexTypes.ArrayOf:
         //Has to use entire line
         breakField = true;
-        console.log('--------------------------');
-        console.log('createField:switch:complexType:ArrayOf:field.type', field.type);
         component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });

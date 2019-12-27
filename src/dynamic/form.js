@@ -95,7 +95,12 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
 	let defaultCurrentDialogValue = {},
 		shouldOverflowListItems = false,
-		i18nPropertyLabel = i18n(`${model.getModelName()}.form.${property}`);
+		i18nPropertyLabel = i18n(`${model.getModelName()}.form.${property}`),
+		inputs,
+		typeIsFieldType = Type instanceof FieldType,
+		typeIsComplexType = !!Type.complexType,
+		isIdOfModelBase =
+			typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
 	if (!(Type instanceof FieldType) && typeof Type !== 'object') {
 		defaultCurrentDialogValue = '';
@@ -128,23 +133,6 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 		setOpen(false);
 		handleChange(property, list);
 	};
-
-	//TODO: remove this
-	console.log('--------------');
-	console.log('ArrayOf: ', property);
-	console.log('Type: ', Type);
-
-	let inputs,
-		typeIsFieldType = Type instanceof FieldType,
-		typeIsComplexType = !!Type.complexType,
-		isIdOfModelBase =
-			typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
-	// isIdOfModelBase =
-	// 	typeIsFieldType &&
-	// 	Type.complexType &&
-	// 	typeof Type.Type === 'function' &&
-	// 	Type.Type.name !== 'Object' &&
-	// 	new Type.Type() instanceof ModelBase;
 
 	if (isIdOfModelBase) {
 		//Allows overflowing
@@ -194,7 +182,7 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 						firebase,
 						i18n,
 						(p, uid, item) => {
-							setCurrentDialogValue(uid);
+							setCurrentDialogValue([...currentDialogValue, uid]);
 						},
 						false
 					);
@@ -399,9 +387,6 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 			case ComplexTypes.ArrayOf:
 				//Has to use entire line
 				breakField = true;
-
-				console.log('--------------------------');
-				console.log('createField:switch:complexType:ArrayOf:field.type', field.type);
 
 				component = createArrayOfComponent(
 					model,
