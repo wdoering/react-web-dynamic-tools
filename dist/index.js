@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControl, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
+import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControl, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -500,6 +500,20 @@ BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
 
+var errorStyles = makeStyles$1({
+  root: {
+    color: '#f44336',
+    alignSelf: 'center',
+    marginLeft: '10px',
+    marginRight: '10px'
+  }
+});
+var textFieldStyles = makeStyles$1({
+  spacer: {
+    marginBottom: '5px'
+  }
+});
+
 var protectedFieldValue = '******',
     blankFieldPlaceholder = '-';
 /**
@@ -833,8 +847,10 @@ var createTextComponent = function createTextComponent(_ref6) {
       handleChange = _ref6.handleChange,
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
+  var classes = textFieldStyles();
   var component = null;
   component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+    className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
     value: values[property],
@@ -857,8 +873,11 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       handleChange = _ref7.handleChange,
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
-  var usableLabel = i18n(label);
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControl, null, React.createElement(FormLabel, null, usableLabel), React.createElement(Checkbox, {
+  var classes = textFieldStyles(),
+      usableLabel = i18n(label);
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControl, {
+    className: classes.spacer
+  }, React.createElement(FormLabel, null, usableLabel), React.createElement(Checkbox, {
     value: property,
     color: "primary",
     checked: values[property],
@@ -872,20 +891,12 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
   }));
 };
 
-var errorStyles = function errorStyles() {
-  return {
-    color: '#f44336',
-    alignSelf: 'center',
-    marginLeft: '10px',
-    marginRight: '10px'
-  };
-};
-
 var ErrorLabel = function ErrorLabel(_ref) {
   var children = _ref.children;
+  var classes = errorStyles();
   return children && React.createElement(Typography, {
     variant: "body2",
-    style: errorStyles()
+    className: classes.root
   }, children);
 };
 

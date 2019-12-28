@@ -16,6 +16,7 @@ import { FieldTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+import { textFieldStyles } from '../assets/_styles';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -369,6 +370,7 @@ const createTextComponent = ({
 	handleChange,
 	view = false
 }) => {
+	const classes = textFieldStyles();
 	let component = null;
 
 	component = !!view ? (
@@ -382,6 +384,7 @@ const createTextComponent = ({
 	) : (
 		<TextField
 			{...field.props}
+			className={classes.spacer}
 			style={field.style.field}
 			label={i18n(label)}
 			value={values[property]}
@@ -404,12 +407,13 @@ const createBooleanComponent = ({
 	handleChange,
 	view = false
 }) => {
-	const usableLabel = i18n(label);
+	const classes = textFieldStyles(),
+		usableLabel = i18n(label);
 
 	return !!view ? (
 		i18n(`boolean.view.${values[property].toString()}`)
 	) : (
-		<FormControl>
+		<FormControl className={classes.spacer}>
 			<FormLabel>{usableLabel}</FormLabel>
 			<Checkbox
 				value={property}
