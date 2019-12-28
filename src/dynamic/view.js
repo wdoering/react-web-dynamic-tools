@@ -99,9 +99,12 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {function} i18n Translation source function
  */
 const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
+	console.log('Type', Type);
+
 	const typeInstance = new Type(),
 		typeService = !!typeInstance && typeInstance.getService(firebase),
 		[list, setList] = useState(values[property] || []);
+
 	if (!list.length && values[property].length) {
 		//Is there a service behind?
 		if (typeService)

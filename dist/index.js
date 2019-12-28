@@ -1712,6 +1712,8 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+  console.log('Type', Type);
+
   var typeInstance = new Type(),
       typeService = !!typeInstance && typeInstance.getService(firebase),
       _useState3 = useState(values[property] || []),
