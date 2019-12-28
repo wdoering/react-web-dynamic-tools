@@ -1338,7 +1338,9 @@ var DynamicForm = function DynamicForm(_ref3) {
     clearTimeout(validateTimeout);
     model[prop] = value;
     validateTimeout = setTimeout(function () {
-      setErrors(_objectSpread2({}, errors, _defineProperty({}, prop, model.$fieldConfig[prop].validate())));
+      var validateResult = model.$fieldConfig[prop].validate();
+      console.log("validate[".concat(prop, "]"), validateResult);
+      setErrors(_objectSpread2({}, errors, _defineProperty({}, prop, validateResult)));
     }, 100);
   }, [errors, model]);
   /**
@@ -1348,6 +1350,7 @@ var DynamicForm = function DynamicForm(_ref3) {
   var save = useCallback(function () {
     model.$fill(values);
     var validation = model.$validate();
+    console.log("validation", validation);
     setErrors(validation);
 
     if (!Object.keys(validation).length) {

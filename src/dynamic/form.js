@@ -505,9 +505,13 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 			model[prop] = value;
 
 			validateTimeout = setTimeout(() => {
+				const validateResult = model.$fieldConfig[prop].validate();
+
+				console.log(`validate[${prop}]`, validateResult);
+
 				setErrors({
 					...errors,
-					[prop]: model.$fieldConfig[prop].validate()
+					[prop]: validateResult
 				});
 			}, 100);
 		},
@@ -519,7 +523,11 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 	const save = useCallback(() => {
 		model.$fill(values);
 		let validation = model.$validate();
+
+		console.log(`validation`, validation);
+
 		setErrors(validation);
+
 		if (!Object.keys(validation).length) {
 			if (handleSave) {
 				handleSave(values);
