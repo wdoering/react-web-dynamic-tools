@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { TextField, Card, CardContent, List, Button } from '@material-ui/core';
@@ -194,17 +194,17 @@ const DynamicList = ({
 	serviceInstance
 }) => {
 	const history = useHistory();
+	let oService = useCallback(
+		!!store && !!firebase && !reduxList && model.getService(firebase, store),
+		[store, firebase, reduxList, model]
+	);
+
 	useEffect(() => {
 		//direct service instance
 		if (!!serviceInstance) oService = serviceInstance;
 
-		//Firebase/store mode support
-		if (!!store && !!firebase) {
-			oService = model.getService(firebase, store);
-		}
-
 		search(oService, []);
-	}, []);
+	}, [oService, serviceInstance]);
 
 	return (
 		<div>

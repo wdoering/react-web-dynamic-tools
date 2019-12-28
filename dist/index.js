@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControl, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
@@ -1302,53 +1302,50 @@ var DynamicForm = function DynamicForm(_ref3) {
   var _useState9 = useState(model),
       _useState10 = _slicedToArray(_useState9, 2),
       values = _useState10[0],
-      setValues = _useState10[1];
-
-  var _useState11 = useState({}),
+      setValues = _useState10[1],
+      _useState11 = useState({}),
       _useState12 = _slicedToArray(_useState11, 2),
       errors = _useState12[0],
       setErrors = _useState12[1];
 
+  oService = useCallback(model.getService(firebase), [model, firebase]);
   useEffect(function () {
-    if (id) {
-      var oService = model.getService(firebase);
+    if (id && (!model.uid || model.uid !== id)) {
       oService.get(id).then(function (r) {
         model.$fill(r);
         setValues(r);
       });
     }
-  }, []);
+  }, [model, id, oService, setValues]);
   /**
    * Update values[prop] state
    * @param {string} prop
    */
 
-  var handleChange = function handleChange(prop, value) {
+  var handleChange = useCallback(function (prop, value) {
     var v = _objectSpread2({}, values, _defineProperty({}, prop, value));
 
     setValues(v);
     validate(prop, value);
-  };
+  }, [values, setValues, validate]);
   /**
    * Validates a property of the model
    * @param {string} prop
    * @param {any} value
    */
 
-
-  var validate = function validate(prop, value) {
+  var validate = useCallback(function (prop, value) {
     clearTimeout(validateTimeout);
     model[prop] = value;
     validateTimeout = setTimeout(function () {
       setErrors(_objectSpread2({}, errors, _defineProperty({}, prop, model.$fieldConfig[prop].validate())));
     }, 100);
-  };
+  }, [errors, model]);
   /**
    * saves model at the server, after validation
    */
 
-
-  var save = function save() {
+  var save = useCallback(function () {
     model.$fill(values);
     var validation = model.$validate();
     setErrors(validation);
@@ -1357,11 +1354,10 @@ var DynamicForm = function DynamicForm(_ref3) {
       if (handleSave) {
         handleSave(values);
       } else {
-        model.getService(firebase).save(values);
+        oService.save(values);
       }
     }
-  };
-
+  }, [setErrors, model, oService]);
   var fields = createFields({
     model: model,
     baseIntl: "".concat(model.getModelName(), ".form"),
@@ -1555,8 +1551,6 @@ var search = function search(oService, filters) {
   }, 300);
 };
 
-var oService;
-
 var DynamicList = function DynamicList(_ref) {
   var reduxList = _ref.reduxList,
       model = _ref.model,
@@ -1567,16 +1561,12 @@ var DynamicList = function DynamicList(_ref) {
       store = _ref.store,
       serviceInstance = _ref.serviceInstance;
   var history = useHistory();
+  var oService = useCallback(!!store && !!firebase && !reduxList && model.getService(firebase, store), [store, firebase, reduxList, model]);
   useEffect(function () {
     //direct service instance
-    if (!!serviceInstance) oService = serviceInstance; //Firebase/store mode support
-
-    if (!!store && !!firebase) {
-      oService = model.getService(firebase, store);
-    }
-
+    if (!!serviceInstance) oService = serviceInstance;
     search(oService, []);
-  }, []);
+  }, [oService, serviceInstance]);
   return React.createElement("div", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".list.$title")),
     buttons: [React.createElement(Button, {
@@ -1909,30 +1899,27 @@ var DynamicView = function DynamicView(_ref3) {
   var _useState5 = useState(model),
       _useState6 = _slicedToArray(_useState5, 2),
       values = _useState6[0],
-      setValues = _useState6[1];
+      setValues = _useState6[1],
+      history = useHistory(),
+      deleteConfirmationDialogRef = React.createRef(),
+      oService = useCallback(model.getService(firebase), [model, firebase]);
 
-  var history = useHistory();
-  var deleteConfirmationDialogRef = React.createRef();
   useEffect(function () {
     //TODO: implement service flexibility
-    if (id) {
-      var oService = model.getService(firebase);
+    if (id && (!model.uid || model.uid !== id)) {
       oService.get(id).then(function (r) {
         model.$fill(r);
         setValues(r);
       });
     }
-  }, []);
-
-  var remove = function remove() {
-    var oService = model.getService(firebase);
+  }, [model, id, oService, setValues]);
+  var remove = useCallback(function () {
     oService.patch(values.uid, {
       deleted: true
     });
     deleteConfirmationDialogRef.current.close();
     history.push("".concat(baseRoute, "/list"));
-  };
-
+  }, [oService, values, deleteConfirmationDialogRef, history]);
   var fields = createFields$1({
     model: model,
     baseIntl: "".concat(model.getModelName(), ".form"),

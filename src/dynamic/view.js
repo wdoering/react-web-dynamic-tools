@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -296,27 +296,26 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
  * @param {object} param0.serviceInstance Firebase substitute instance for servicing purposes
  */
 const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) => {
-	const [values, setValues] = useState(model);
-	const history = useHistory();
-	const deleteConfirmationDialogRef = React.createRef();
+	const [values, setValues] = useState(model),
+		history = useHistory(),
+		deleteConfirmationDialogRef = React.createRef(),
+		oService = useCallback(model.getService(firebase), [model, firebase]);
 
 	useEffect(() => {
 		//TODO: implement service flexibility
-		if (id) {
-			let oService = model.getService(firebase);
+		if (id && (!model.uid || model.uid !== id)) {
 			oService.get(id).then((r) => {
 				model.$fill(r);
 				setValues(r);
 			});
 		}
-	}, []);
+	}, [model, id, oService, setValues]);
 
-	const remove = () => {
-		let oService = model.getService(firebase);
+	const remove = useCallback(() => {
 		oService.patch(values.uid, { deleted: true });
 		deleteConfirmationDialogRef.current.close();
 		history.push(`${baseRoute}/list`);
-	};
+	}, [oService, values, deleteConfirmationDialogRef, history]);
 
 	let fields = createFields({
 		model,

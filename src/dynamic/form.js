@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // TODO: check whether can be referenced by moduleNameMapper
 // import { SaveButton, CancelButton } from 'Components/Button';
 import { SaveButton, CancelButton } from '../components/Button';
@@ -465,52 +465,58 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
  *
  */
 const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
-	const [values, setValues] = useState(model);
-	const [errors, setErrors] = useState({});
+	const [values, setValues] = useState(model),
+		[errors, setErrors] = useState({});
+	oService = useCallback(model.getService(firebase), [model, firebase]);
 
 	useEffect(() => {
-		if (id) {
-			let oService = model.getService(firebase);
+		if (id && (!model.uid || model.uid !== id)) {
 			oService.get(id).then((r) => {
 				model.$fill(r);
 				setValues(r);
 			});
 		}
-	}, []);
+	}, [model, id, oService, setValues]);
 
 	/**
 	 * Update values[prop] state
 	 * @param {string} prop
 	 */
-	const handleChange = (prop, value) => {
-		let v = {
-			...values,
-			[prop]: value
-		};
+	const handleChange = useCallback(
+		(prop, value) => {
+			let v = {
+				...values,
+				[prop]: value
+			};
 
-		setValues(v);
-		validate(prop, value);
-	};
+			setValues(v);
+			validate(prop, value);
+		},
+		[values, setValues, validate]
+	);
 	/**
 	 * Validates a property of the model
 	 * @param {string} prop
 	 * @param {any} value
 	 */
-	const validate = (prop, value) => {
-		clearTimeout(validateTimeout);
-		model[prop] = value;
+	const validate = useCallback(
+		(prop, value) => {
+			clearTimeout(validateTimeout);
+			model[prop] = value;
 
-		validateTimeout = setTimeout(() => {
-			setErrors({
-				...errors,
-				[prop]: model.$fieldConfig[prop].validate()
-			});
-		}, 100);
-	};
+			validateTimeout = setTimeout(() => {
+				setErrors({
+					...errors,
+					[prop]: model.$fieldConfig[prop].validate()
+				});
+			}, 100);
+		},
+		[errors, model]
+	);
 	/**
 	 * saves model at the server, after validation
 	 */
-	const save = () => {
+	const save = useCallback(() => {
 		model.$fill(values);
 		let validation = model.$validate();
 		setErrors(validation);
@@ -518,10 +524,10 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 			if (handleSave) {
 				handleSave(values);
 			} else {
-				model.getService(firebase).save(values);
+				oService.save(values);
 			}
 		}
-	};
+	}, [setErrors, model, oService]);
 
 	let fields = createFields({
 		model,
