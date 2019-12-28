@@ -225,6 +225,9 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 				break;
 			case ComplexTypes.ArrayOf:
 				breakField = true;
+
+				console.log('field.type', field.type);
+
 				component = createArrayOfComponent(
 					model,
 					property,

@@ -1844,6 +1844,7 @@ var createField$1 = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
+        console.log('field.type', field.type);
         component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
         break;
 
