@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControl, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
+import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -510,8 +510,14 @@ var errorStyles = makeStyles$1({
 });
 var textFieldStyles = makeStyles$1({
   spacer: {
-    marginBottom: '5px'
+    marginBottom: '10px'
   }
+});
+var viewInfoStyles = makeStyles$1({
+  title: {
+    marginBottom: '5px'
+  },
+  detail: {}
 });
 
 var protectedFieldValue = '******',
@@ -777,7 +783,11 @@ var createViewComponent = function createViewComponent(_ref4) {
       values = _ref4.values,
       label = _ref4.label,
       i18n = _ref4.i18n;
-  return React.createElement("div", null, React.createElement(FormLabel, null, i18n(label)), React.createElement("div", {
+  var classes = viewInfoStyles();
+  return React.createElement("div", null, React.createElement(FormLabel, {
+    className: classes.title
+  }, i18n(label)), React.createElement("div", {
+    className: classes.detail,
     style: _objectSpread2({
       fontSize: 18,
       fontWeight: '100'
@@ -875,9 +885,11 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       view = _ref7$view === void 0 ? false : _ref7$view;
   var classes = textFieldStyles(),
       usableLabel = i18n(label);
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControl, {
-    className: classes.spacer
-  }, React.createElement(FormLabel, null, usableLabel), React.createElement(Checkbox, {
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
+    className: classes.spacer,
+    labelPlacement: "start"
+  }, React.createElement(Checkbox, {
+    label: usableLabel,
     value: property,
     color: "primary",
     checked: values[property],
@@ -1115,12 +1127,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18nPropertyLabel, " (", list.length, ")"), errorMessage && React.createElement(Typography, {
-    variant: "body1",
-    style: {
-      color: 'darkred'
-    }
-  }, errorMessage)), React.createElement(ExpansionPanelActions, {
+  }, i18nPropertyLabel, " (", list.length, ")"), React.createElement(ErrorLabel, null, errorMessage)), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }

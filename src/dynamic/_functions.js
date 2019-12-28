@@ -16,7 +16,7 @@ import { FieldTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-import { textFieldStyles } from '../assets/_styles';
+import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -298,10 +298,15 @@ const createFormComponent = ({
 };
 
 const createViewComponent = ({ model, property, field, values, label, i18n }) => {
+	const classes = viewInfoStyles();
+
 	return (
 		<div>
-			<FormLabel>{i18n(label)}</FormLabel>
-			<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
+			<FormLabel className={classes.title}>{i18n(label)}</FormLabel>
+			<div
+				className={classes.detail}
+				style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}
+			>
 				{createByType({
 					model,
 					property,
@@ -413,9 +418,9 @@ const createBooleanComponent = ({
 	return !!view ? (
 		i18n(`boolean.view.${values[property].toString()}`)
 	) : (
-		<FormControl className={classes.spacer}>
-			<FormLabel>{usableLabel}</FormLabel>
+		<FormControlLabel className={classes.spacer} labelPlacement="start">
 			<Checkbox
+				label={usableLabel}
 				value={property}
 				color="primary"
 				checked={values[property]}
@@ -423,7 +428,7 @@ const createBooleanComponent = ({
 				inputProps={{ 'aria-label': usableLabel }}
 				disabled={!!field.disabled}
 			/>
-		</FormControl>
+		</FormControlLabel>
 	);
 };
 

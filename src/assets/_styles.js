@@ -11,6 +11,13 @@ export const errorStyles = makeStyles({
 
 export const textFieldStyles = makeStyles({
 	spacer: {
-		marginBottom: '5px'
+		marginBottom: '10px'
 	}
+});
+
+export const viewInfoStyles = makeStyles({
+	title: {
+		marginBottom: '5px'
+	},
+	detail: {}
 });

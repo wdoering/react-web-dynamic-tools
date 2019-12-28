@@ -258,11 +258,7 @@ const createArrayOfComponent = (
 					<Typography variant="h5">
 						{i18nPropertyLabel} ({list.length})
 					</Typography>
-					{errorMessage && (
-						<Typography variant="body1" style={{ color: 'darkred' }}>
-							{errorMessage}
-						</Typography>
-					)}
+					<ErrorLabel>{errorMessage}</ErrorLabel>
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
 					<Button variant={'contained'} onClick={() => setOpen(true)} color={'primary'}>
