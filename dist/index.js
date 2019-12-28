@@ -912,10 +912,6 @@ var ErrorLabel = function ErrorLabel(_ref) {
   }, children);
 };
 
-ErrorLabel.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-};
-
 var validateTimeout;
 /**
  * @param {property} model the model reference
