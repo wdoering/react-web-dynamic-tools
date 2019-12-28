@@ -1716,7 +1716,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   console.log('model[property]', model[property]);
   console.log('Type', Type);
 
-  var typeInstance = !!Type && typeof Type === 'function' && new Type(),
+  var typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
       typeService = !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase),
       _useState3 = useState(values[property] || []),
       _useState4 = _slicedToArray(_useState3, 2),
@@ -1851,7 +1851,6 @@ var createField$1 = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        console.log('field.type', field.type);
         component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
         break;
 

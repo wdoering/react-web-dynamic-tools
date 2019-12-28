@@ -105,7 +105,8 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
-	const typeInstance = !!Type && typeof Type === 'function' && new Type(),
+	const typeInstance =
+			!!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
 		typeService =
 			!!typeInstance &&
 			typeInstance instanceof ModelBase &&
@@ -236,8 +237,6 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 				break;
 			case ComplexTypes.ArrayOf:
 				breakField = true;
-
-				console.log('field.type', field.type);
 
 				component = createArrayOfComponent(
 					model,
