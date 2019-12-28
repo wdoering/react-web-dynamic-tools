@@ -1907,13 +1907,6 @@ var DynamicView = function DynamicView(_ref3) {
 
   var history = useHistory();
   var deleteConfirmationDialogRef = React.createRef();
-  var fields = createFields$1({
-    model: model,
-    baseIntl: "".concat(model.getModelName(), ".form"),
-    values: values,
-    i18n: i18n,
-    firebase: firebase
-  });
   useEffect(function () {
     //TODO: implement service flexibility
     if (id) {
@@ -1934,6 +1927,13 @@ var DynamicView = function DynamicView(_ref3) {
     history.push("".concat(baseRoute, "/list"));
   };
 
+  var fields = createFields$1({
+    model: model,
+    baseIntl: "".concat(model.getModelName(), ".form"),
+    values: values,
+    i18n: i18n,
+    firebase: firebase
+  });
   return React.createElement("form", {
     noValidate: true,
     autoComplete: "off"

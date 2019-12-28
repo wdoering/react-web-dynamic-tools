@@ -532,6 +532,7 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 		i18n,
 		handleChange
 	});
+
 	return (
 		<form noValidate autoComplete="off">
 			<Typography variant="h4" className="mb-15">

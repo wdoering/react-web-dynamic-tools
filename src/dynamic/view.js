@@ -13,7 +13,7 @@ import {
 	FormLabel
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem, createViewComponent } from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
@@ -291,13 +291,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	const [values, setValues] = useState(model);
 	const history = useHistory();
 	const deleteConfirmationDialogRef = React.createRef();
-	let fields = createFields({
-		model,
-		baseIntl: `${model.getModelName()}.form`,
-		values,
-		i18n,
-		firebase
-	});
+
 	useEffect(() => {
 		//TODO: implement service flexibility
 		if (id) {
@@ -308,12 +302,22 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 			});
 		}
 	}, []);
+
 	const remove = () => {
 		let oService = model.getService(firebase);
 		oService.patch(values.uid, { deleted: true });
 		deleteConfirmationDialogRef.current.close();
 		history.push(`${baseRoute}/list`);
 	};
+
+	let fields = createFields({
+		model,
+		baseIntl: `${model.getModelName()}.form`,
+		values,
+		i18n,
+		firebase
+	});
+
 	return (
 		<form noValidate autoComplete="off">
 			<TitleAndButtons
