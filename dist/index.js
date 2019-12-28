@@ -887,20 +887,21 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       usableLabel = i18n(label);
   return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
     className: classes.spacer,
-    labelPlacement: "start"
-  }, React.createElement(Checkbox, {
-    label: usableLabel,
-    value: property,
-    color: "primary",
-    checked: values[property],
-    onChange: function onChange(e) {
-      return handleChange(property, e.target.checked);
-    },
-    inputProps: {
-      'aria-label': usableLabel
-    },
-    disabled: !!field.disabled
-  }));
+    labelPlacement: "start",
+    control: React.createElement(Checkbox, {
+      label: usableLabel,
+      value: property,
+      color: "primary",
+      checked: values[property],
+      onChange: function onChange(e) {
+        return handleChange(property, e.target.checked);
+      },
+      inputProps: {
+        'aria-label': usableLabel
+      },
+      disabled: !!field.disabled
+    })
+  });
 };
 
 var ErrorLabel = function ErrorLabel(_ref) {

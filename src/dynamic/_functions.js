@@ -418,17 +418,21 @@ const createBooleanComponent = ({
 	return !!view ? (
 		i18n(`boolean.view.${values[property].toString()}`)
 	) : (
-		<FormControlLabel className={classes.spacer} labelPlacement="start">
-			<Checkbox
-				label={usableLabel}
-				value={property}
-				color="primary"
-				checked={values[property]}
-				onChange={(e) => handleChange(property, e.target.checked)}
-				inputProps={{ 'aria-label': usableLabel }}
-				disabled={!!field.disabled}
-			/>
-		</FormControlLabel>
+		<FormControlLabel
+			className={classes.spacer}
+			labelPlacement="start"
+			control={
+				<Checkbox
+					label={usableLabel}
+					value={property}
+					color="primary"
+					checked={values[property]}
+					onChange={(e) => handleChange(property, e.target.checked)}
+					inputProps={{ 'aria-label': usableLabel }}
+					disabled={!!field.disabled}
+				/>
+			}
+		/>
 	);
 };
 
