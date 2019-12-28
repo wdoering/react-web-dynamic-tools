@@ -19,8 +19,6 @@ import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog
 import { TitleAndButtons } from '../components/title';
 
 let searchIdOfTimeout;
-const protectedFieldValue = '******',
-	blankFieldPlaceholder = '-';
 
 /**
  * Will create an ID of component pattern
@@ -100,10 +98,21 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {ModelBase} Type Model type literally
  * @param {function} i18n Translation source function
  */
-const createArrayOfComponent = (model, property, values, Type, i18n) => {
-	const [list, setList] = useState(values[property] || []);
+const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
+	const typeInstance = new Type(),
+		typeService = !!typeInstance && typeInstance.getService(firebase),
+		[list, setList] = useState(values[property] || []);
 	if (!list.length && values[property].length) {
-		setList(values[property]);
+		//Is there a service behind?
+		if (typeService)
+			typeService
+				.filter([['uid', 'in', values[property]]])
+				.list()
+				.then((result) => {
+					setList(result);
+				});
+		//No service at all, sets raw
+		else setList(values[property]);
 	}
 
 	return (
@@ -212,7 +221,14 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 				break;
 			case ComplexTypes.ArrayOf:
 				breakField = true;
-				component = createArrayOfComponent(model, property, values, field.type.Type, i18n);
+				component = createArrayOfComponent(
+					model,
+					property,
+					values,
+					field.type.Type,
+					i18n,
+					firebase
+				);
 				break;
 			case ComplexTypes.ShapedAs:
 				breakField = true;
@@ -238,27 +254,6 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 	} else {
 		//Creates a component by using an external function
 		component = createViewComponent({ model, property, field, values, label, i18n });
-
-		// switch (field.type) {
-		// 	case FieldTypes.String:
-		// 		component = (
-		// 			// <div>
-		// 			// 	<FormLabel>{i18n(label)}</FormLabel>
-		// 			// 	<div style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}>
-		// 			// 		{!!field.protected
-		// 			// 			? protectedFieldValue
-		// 			// 			: !!values[property] && values[property] !== ''
-		// 			// 			? values[property]
-		// 			// 			: blankFieldPlaceholder}
-		// 			// 	</div>
-		// 			// </div>
-		// 		);
-		// 		break;
-
-		// 	default:
-		// 		component = (createViewComponent({ model, property, field, values, label, i18n }))
-		// 		break;
-		// }
 	}
 	return (
 		<div
