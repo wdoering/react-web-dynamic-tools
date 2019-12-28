@@ -887,9 +887,9 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       usableLabel = i18n(label);
   return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
     className: classes.spacer,
+    label: usableLabel,
     labelPlacement: "start",
     control: React.createElement(Checkbox, {
-      label: usableLabel,
       value: property,
       color: "primary",
       checked: values[property],

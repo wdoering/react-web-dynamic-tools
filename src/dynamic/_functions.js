@@ -420,10 +420,10 @@ const createBooleanComponent = ({
 	) : (
 		<FormControlLabel
 			className={classes.spacer}
+			label={usableLabel}
 			labelPlacement="start"
 			control={
 				<Checkbox
-					label={usableLabel}
 					value={property}
 					color="primary"
 					checked={values[property]}
