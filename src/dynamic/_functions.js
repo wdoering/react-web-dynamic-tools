@@ -388,6 +388,7 @@ const createTextComponent = ({
 			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
 			onChange={(e) => handleChange(property, e.target.value)}
 			helperText={error ? i18n(`form.error.${error}`) : ' '}
+			error={!!error}
 		/>
 	);
 

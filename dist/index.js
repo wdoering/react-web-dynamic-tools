@@ -842,7 +842,8 @@ var createTextComponent = function createTextComponent(_ref6) {
     onChange: function onChange(e) {
       return handleChange(property, e.target.value);
     },
-    helperText: error ? i18n("form.error.".concat(error)) : ' '
+    helperText: error ? i18n("form.error.".concat(error)) : ' ',
+    error: !!error
   }));
   return component;
 };
@@ -933,18 +934,23 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
 };
 /**
  *
- * @param {object} model
- * @param {ModelBase} model
+ * @param {object|ModelBase} model
  * @param {string} property
+ * @param {object} values
+ * @param {string} error
  * @param {FieldType|any} Type
+ * @param {object} firebase
+ * @param {Function} i18n
+ * @param {Function} handleChange
  */
 
 
-var createArrayOfComponent = function createArrayOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
+var createArrayOfComponent = function createArrayOfComponent(model, property, values, error, Type, firebase, i18n, handleChange) {
   var defaultCurrentDialogValue = {},
       shouldOverflowListItems = false,
       i18nPropertyLabel = i18n("".concat(model.getModelName(), ".form.").concat(property)),
       inputs,
+      errorMessage = !!error && error !== '' && i18n("form.error.".concat(error)),
       typeIsFieldType = Type instanceof FieldType,
       typeIsComplexType = !!Type.complexType,
       isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
@@ -1077,7 +1083,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18nPropertyLabel, " (", list.length, ")")), React.createElement(ExpansionPanelActions, {
+  }, i18nPropertyLabel, " (", list.length, ")"), errorMessage && React.createElement(Typography, {
+    variant: "body1",
+    style: {
+      color: 'darkred'
+    }
+  }, errorMessage)), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }
@@ -1201,7 +1212,8 @@ var createField = function createField(_ref2) {
   var field = model.$fieldConfig[property];
   var component,
       error = '',
-      breakField = false; //If the field should be hidden, won't show up
+      breakField = false,
+      errorMessage = null; //If the field should be hidden, won't show up
 
   if (!!field.hidden) return null;
 
@@ -1219,6 +1231,8 @@ var createField = function createField(_ref2) {
   field.props = field.props || {};
 
   if (field.type instanceof FieldType) {
+    //Getting the error message
+    errorMessage = !!error && error !== '' && i18n("form.error.".concat(error));
     breakField = true;
 
     switch (field.type.complexType) {
@@ -1232,13 +1246,18 @@ var createField = function createField(_ref2) {
           }
         }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, id) {
           handleChange(property, id);
-        })));
+        }), !!errorMessage && React.createElement(Typography, {
+          variant: "body1",
+          style: {
+            color: 'darkred'
+          }
+        }, errorMessage)));
         break;
 
       case ComplexTypes.ArrayOf:
         //Has to use entire line
         breakField = true;
-        component = createArrayOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, fullArray) {
+        component = createArrayOfComponent(model, property, values, error, field.type.Type, firebase, i18n, function (property, fullArray) {
           handleChange(property, fullArray);
         });
         break;
@@ -1256,7 +1275,12 @@ var createField = function createField(_ref2) {
         }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], i18n, function (property, fullObject) {
           delete fullObject.$fieldConfig;
           handleChange(property, fullObject);
-        })));
+        }), !!errorMessage && React.createElement(Typography, {
+          variant: "body1",
+          style: {
+            color: 'darkred'
+          }
+        }, errorMessage)));
         break;
     }
   } else {

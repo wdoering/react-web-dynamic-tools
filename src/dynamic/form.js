@@ -87,16 +87,30 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 };
 /**
  *
- * @param {object} model
- * @param {ModelBase} model
+ * @param {object|ModelBase} model
  * @param {string} property
+ * @param {object} values
+ * @param {string} error
  * @param {FieldType|any} Type
+ * @param {object} firebase
+ * @param {Function} i18n
+ * @param {Function} handleChange
  */
-const createArrayOfComponent = (model, property, values, Type, firebase, i18n, handleChange) => {
+const createArrayOfComponent = (
+	model,
+	property,
+	values,
+	error,
+	Type,
+	firebase,
+	i18n,
+	handleChange
+) => {
 	let defaultCurrentDialogValue = {},
 		shouldOverflowListItems = false,
 		i18nPropertyLabel = i18n(`${model.getModelName()}.form.${property}`),
 		inputs,
+		errorMessage = !!error && error !== '' && i18n(`form.error.${error}`),
 		typeIsFieldType = Type instanceof FieldType,
 		typeIsComplexType = !!Type.complexType,
 		isIdOfModelBase =
@@ -243,6 +257,11 @@ const createArrayOfComponent = (model, property, values, Type, firebase, i18n, h
 					<Typography variant="h5">
 						{i18nPropertyLabel} ({list.length})
 					</Typography>
+					{errorMessage && (
+						<Typography variant="body1" style={{ color: 'darkred' }}>
+							{errorMessage}
+						</Typography>
+					)}
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
 					<Button variant={'contained'} onClick={() => setOpen(true)} color={'primary'}>
@@ -346,7 +365,8 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 	const field = model.$fieldConfig[property];
 	let component,
 		error = '',
-		breakField = false;
+		breakField = false,
+		errorMessage = null;
 
 	//If the field should be hidden, won't show up
 	if (!!field.hidden) return null;
@@ -362,6 +382,9 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 	field.props = field.props || {};
 
 	if (field.type instanceof FieldType) {
+		//Getting the error message
+		errorMessage = !!error && error !== '' && i18n(`form.error.${error}`);
+
 		breakField = true;
 		switch (field.type.complexType) {
 			case ComplexTypes.IdOf:
@@ -382,6 +405,11 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 									handleChange(property, id);
 								}
 							)}
+							{!!errorMessage && (
+								<Typography variant="body1" style={{ color: 'darkred' }}>
+									{errorMessage}
+								</Typography>
+							)}
 						</CardContent>
 					</Card>
 				);
@@ -394,6 +422,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 					model,
 					property,
 					values,
+					error,
 					field.type.Type,
 					firebase,
 					i18n,
@@ -423,6 +452,11 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 									delete fullObject.$fieldConfig;
 									handleChange(property, fullObject);
 								}
+							)}
+							{!!errorMessage && (
+								<Typography variant="body1" style={{ color: 'darkred' }}>
+									{errorMessage}
+								</Typography>
 							)}
 						</CardContent>
 					</Card>
