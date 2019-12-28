@@ -1712,6 +1712,7 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+  console.log('property', property);
   console.log('Type', Type);
 
   var typeInstance = new Type(),
