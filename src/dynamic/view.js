@@ -104,8 +104,11 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
-	const typeInstance = new Type(),
-		typeService = !!typeInstance && typeInstance.getService(firebase),
+	const typeInstance = !!Type && typeof Type === 'function' && new Type(),
+		typeService =
+			!!typeInstance &&
+			typeInstance instanceof ModelBase &&
+			typeInstance.getService(firebase),
 		[list, setList] = useState(values[property] || []);
 
 	if (!list.length && values[property].length) {
@@ -319,7 +322,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	});
 
 	return (
-		<form noValidate autoComplete="off">
+		<form>
 			<TitleAndButtons
 				title={i18n(`${model.getModelName()}.form.$title`)}
 				buttons={[

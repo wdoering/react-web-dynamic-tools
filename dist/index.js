@@ -1715,8 +1715,8 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   console.log('model[property]', model[property]);
   console.log('Type', Type);
 
-  var typeInstance = new Type(),
-      typeService = !!typeInstance && typeInstance.getService(firebase),
+  var typeInstance = !!Type && typeof Type === 'function' && new Type(),
+      typeService = !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase),
       _useState3 = useState(values[property] || []),
       _useState4 = _slicedToArray(_useState3, 2),
       list = _useState4[0],
@@ -1934,10 +1934,7 @@ var DynamicView = function DynamicView(_ref3) {
     i18n: i18n,
     firebase: firebase
   });
-  return React.createElement("form", {
-    noValidate: true,
-    autoComplete: "off"
-  }, React.createElement(TitleAndButtons, {
+  return React.createElement("form", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".form.$title")),
     buttons: [React.createElement(Button, {
       variant: "contained",
