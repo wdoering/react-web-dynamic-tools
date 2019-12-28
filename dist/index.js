@@ -872,6 +872,27 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
   }));
 };
 
+var errorStyles = function errorStyles() {
+  return {
+    color: '#f44336',
+    alignSelf: 'center',
+    marginLeft: '10px',
+    marginRight: '10px'
+  };
+};
+
+var ErrorLabel = function ErrorLabel(_ref) {
+  var children = _ref.children;
+  return children && React.createElement(Typography, {
+    variant: "body2",
+    style: errorStyles()
+  }, children);
+};
+
+ErrorLabel.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+};
+
 var validateTimeout;
 /**
  * @param {property} model the model reference
@@ -1246,12 +1267,7 @@ var createField = function createField(_ref2) {
           }
         }, React.createElement(CardContent, null, createIdOfComponent(model, property, values, field.type.Type, firebase, i18n, function (property, id) {
           handleChange(property, id);
-        }), !!errorMessage && React.createElement(Typography, {
-          variant: "body1",
-          style: {
-            color: 'darkred'
-          }
-        }, errorMessage)));
+        }), React.createElement(ErrorLabel, null, errorMessage)));
         break;
 
       case ComplexTypes.ArrayOf:
@@ -1275,12 +1291,7 @@ var createField = function createField(_ref2) {
         }, React.createElement(CardContent, null, createShapedAsComponent(model, property, new field.type.Type(), values[property], i18n, function (property, fullObject) {
           delete fullObject.$fieldConfig;
           handleChange(property, fullObject);
-        }), !!errorMessage && React.createElement(Typography, {
-          variant: "body1",
-          style: {
-            color: 'darkred'
-          }
-        }, errorMessage)));
+        }), React.createElement(ErrorLabel, null, errorMessage)));
         break;
     }
   } else {

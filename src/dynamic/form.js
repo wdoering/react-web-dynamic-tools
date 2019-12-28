@@ -25,6 +25,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem, createIdOfComponent, createFormComponent } from './_functions';
+import ErrorLabel from '../components/form/ErrorLabel';
 
 let validateTimeout;
 
@@ -405,11 +406,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 									handleChange(property, id);
 								}
 							)}
-							{!!errorMessage && (
-								<Typography variant="body1" style={{ color: 'darkred' }}>
-									{errorMessage}
-								</Typography>
-							)}
+							<ErrorLabel>{errorMessage}</ErrorLabel>
 						</CardContent>
 					</Card>
 				);
@@ -453,11 +450,7 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
 									handleChange(property, fullObject);
 								}
 							)}
-							{!!errorMessage && (
-								<Typography variant="body1" style={{ color: 'darkred' }}>
-									{errorMessage}
-								</Typography>
-							)}
+							<ErrorLabel>{errorMessage}</ErrorLabel>
 						</CardContent>
 					</Card>
 				);
