@@ -99,7 +99,9 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {function} i18n Translation source function
  */
 const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
+	console.log('model', model);
 	console.log('property', property);
+	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
 	const typeInstance = new Type(),

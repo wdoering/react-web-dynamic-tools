@@ -605,8 +605,6 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   var useOwnTitle = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var config = model.$fieldConfig[property];
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
-  console.log('createIdOfComponent:property', property);
-  console.log('createIdOfComponent:Type', Type);
   var oService = new Type().getService(firebase);
 
   var _useState = useState([]),
@@ -1712,7 +1710,9 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+  console.log('model', model);
   console.log('property', property);
+  console.log('model[property]', model[property]);
   console.log('Type', Type);
 
   var typeInstance = new Type(),

@@ -139,9 +139,6 @@ const createIdOfComponent = (
 			</div>
 		);
 
-	console.log('createIdOfComponent:property', property);
-	console.log('createIdOfComponent:Type', Type);
-
 	const oService = new Type().getService(firebase);
 	const [list, setList] = useState([]);
 	const [selected, setSelected] = useState(!!singleItem ? null : []);
