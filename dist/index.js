@@ -1710,6 +1710,7 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+  console.log('-----------');
   console.log('model', model);
   console.log('property', property);
   console.log('model[property]', model[property]);
@@ -1724,10 +1725,16 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
 
   if (!list.length && values[property].length) {
     //Is there a service behind?
-    if (typeService) typeService.filter([['uid', 'in', values[property]]]).list().then(function (result) {
-      setList(result);
-    }); //No service at all, sets raw
-    else setList(values[property]);
+    if (typeService) {
+      console.log('typeService', typeService);
+      typeService.filter([['uid', 'in', values[property]]]).list().then(function (result) {
+        console.log('service list', result);
+        setList(result);
+      });
+    } //No service at all, sets raw
+    else {
+        setList(values[property]);
+      }
   }
 
   return React.createElement("div", {

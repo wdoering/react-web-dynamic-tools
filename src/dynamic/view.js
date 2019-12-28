@@ -99,6 +99,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {function} i18n Translation source function
  */
 const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
+	console.log('-----------');
 	console.log('model', model);
 	console.log('property', property);
 	console.log('model[property]', model[property]);
@@ -113,15 +114,20 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 
 	if (!list.length && values[property].length) {
 		//Is there a service behind?
-		if (typeService)
+		if (typeService) {
+			console.log('typeService', typeService);
 			typeService
 				.filter([['uid', 'in', values[property]]])
 				.list()
 				.then((result) => {
+					console.log('service list', result);
 					setList(result);
 				});
+		}
 		//No service at all, sets raw
-		else setList(values[property]);
+		else {
+			setList(values[property]);
+		}
 	}
 
 	return (
