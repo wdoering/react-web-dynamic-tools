@@ -1306,9 +1306,9 @@ var DynamicForm = function DynamicForm(_ref3) {
       _useState11 = useState({}),
       _useState12 = _slicedToArray(_useState11, 2),
       errors = _useState12[0],
-      setErrors = _useState12[1];
+      setErrors = _useState12[1],
+      oService = useCallback(model.getService(firebase), [model, firebase]);
 
-  oService = useCallback(model.getService(firebase), [model, firebase]);
   useEffect(function () {
     if (id && (!model.uid || model.uid !== id)) {
       oService.get(id).then(function (r) {

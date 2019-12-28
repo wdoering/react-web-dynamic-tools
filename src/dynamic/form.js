@@ -466,8 +466,8 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
  */
 const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 	const [values, setValues] = useState(model),
-		[errors, setErrors] = useState({});
-	oService = useCallback(model.getService(firebase), [model, firebase]);
+		[errors, setErrors] = useState({}),
+		oService = useCallback(model.getService(firebase), [model, firebase]);
 
 	useEffect(() => {
 		if (id && (!model.uid || model.uid !== id)) {
