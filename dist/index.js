@@ -1022,8 +1022,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   }
 
   var save = function save() {
-    if (defaultCurrentDialogValue instanceof Array) {
-      console.log('currentDialogValue', currentDialogValue);
+    console.log('currentDialogValue', currentDialogValue);
+
+    if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
       list.push.apply(list, _toConsumableArray(currentDialogValue));
     } else if (_typeof(defaultCurrentDialogValue) === 'object') {
       list.push(Object.assign({}, currentDialogValue));

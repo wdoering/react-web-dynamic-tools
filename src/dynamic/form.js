@@ -134,8 +134,9 @@ const createArrayOfComponent = (
 	}
 
 	const save = () => {
-		if (defaultCurrentDialogValue instanceof Array) {
-			console.log('currentDialogValue', currentDialogValue);
+		console.log('currentDialogValue', currentDialogValue);
+
+		if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
 			list.push(...currentDialogValue);
 		} else if (typeof defaultCurrentDialogValue === 'object') {
 			list.push(Object.assign({}, currentDialogValue));
