@@ -1037,7 +1037,8 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
   var _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
-      setList = _useState2[1]; // const runService = useMemo(() => {
+      setList = _useState2[1],
+      objectPropIsArray = objectWithProps[property] instanceof Array; // const runService = useMemo(() => {
   // 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
   // 		setList(result);
   // 	});
@@ -1045,18 +1046,18 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
 
 
   useEffect(function () {
-    // if (!list || !list.length) {
-    //And is there a service behind?
-    if (objectWithProps[property] instanceof Array && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
-      getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
-        setList(result);
-      });
-    } else {
-      //No service at all, sets raw data
-      setList(objectWithProps[property]);
-    } // }
-
-  }, [setList, objectWithProps, property, Type, firebase]);
+    if (!list || !list.length || objectPropIsArray && objectWithProps[property].length !== list.length) {
+      //And is there a service behind?
+      if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
+          setList(result);
+        });
+      } else {
+        //No service at all, sets raw data
+        setList(objectWithProps[property]);
+      }
+    }
+  }, [list, setList, objectWithProps, property, Type, firebase]);
   return [list, setList];
 };
 
