@@ -12,7 +12,7 @@ import {
 	FormLabel,
 	FormControl
 } from '@material-ui/core';
-import { FieldTypes } from '@zerobytes/object-model-js';
+import { FieldTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';

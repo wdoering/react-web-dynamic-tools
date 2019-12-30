@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase as ModelBase$1 } from '@zerobytes/object-model-js';
+import { FieldTypes, ModelBase, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -1049,7 +1049,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       errorMessage = !!error && error !== '' && i18n("form.error.".concat(error)),
       typeIsFieldType = Type instanceof FieldType,
       typeIsComplexType = !!Type.complexType,
-      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase$1;
+      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
     defaultCurrentDialogValue = '';
@@ -1552,7 +1552,7 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
       setItems = _useState2[1];
 
   var component = '';
-  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase$1;
+  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
 
   if (isIdOfModelBase) ; else if (Type instanceof FieldType) ; else {
     switch (Type) {
