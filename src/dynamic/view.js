@@ -144,7 +144,8 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						{i18n(`${model.getModelName()}.form.${property}`)} ({list.length})
+						{i18n(`${model.getModelName()}.form.${property}`)}{' '}
+						{!!list && list.length > 0 && `(${list.length})`}
 					</Typography>
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>

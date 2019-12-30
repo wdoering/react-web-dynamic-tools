@@ -1910,7 +1910,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), " (", list.length, ")")), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), ' ', !!list && list.length > 0 && "(".concat(list.length, ")"))), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
     style: {
       flex: 1
     }
