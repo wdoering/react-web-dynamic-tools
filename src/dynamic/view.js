@@ -113,7 +113,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('Type', Type);
 
 	//will use a hook which maps the list of data
-	const list = useListOfData(values, property, Type, firebase);
+	const [list, setList] = useListOfData(values, property, Type, firebase);
 
 	return (
 		<div className="break-field mb-15" key={property}>

@@ -1945,7 +1945,11 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   console.log('model[property]', model[property]);
   console.log('Type', Type); //will use a hook which maps the list of data
 
-  var list = useListOfData(values, property, Type, firebase);
+  var _useListOfData = useListOfData(values, property, Type, firebase),
+      _useListOfData2 = _slicedToArray(_useListOfData, 2),
+      list = _useListOfData2[0],
+      setList = _useListOfData2[1];
+
   return React.createElement("div", {
     className: "break-field mb-15",
     key: property
