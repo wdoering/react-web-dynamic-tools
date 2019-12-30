@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getServiceList, typeShouldUseService } from './_functions';
 
 /**
  * Custom hook for finding a list of data from an object array-prop

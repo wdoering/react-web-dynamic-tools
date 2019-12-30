@@ -541,6 +541,28 @@ var listEmptyStyles = makeStyles$1({
   }
 });
 
+/**
+ * Firebase in-array slice limit
+ */
+var arraySliceLength = 10;
+/**
+ * Utility for array slicing up to 10 itens
+ * When building in-array for firebase-basic-service queries
+ *
+ * @param {string} property The property to be compared
+ * @param {array} items List items of string
+ */
+
+var inArray = function inArray(property, items) {
+  var filters = [];
+
+  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
+    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
+  }
+
+  return filters;
+};
+
 var protectedFieldValue = '******',
     blankFieldPlaceholder = '-';
 /**
@@ -564,6 +586,59 @@ var DateDetail = function DateDetail(_ref) {
       fontWeight: '700'
     }
   }, dateString + (!timeString || " ".concat(timeString))));
+};
+/**
+ * Checks whether a type should use a service
+ *
+ * @param {FieldType} Type The type being checked
+ */
+
+
+var typeShouldUseService = function typeShouldUseService(Type) {
+  var should = false; //Type is a FieldType
+  //And is specific shape
+  //No service will exist behind
+
+  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType !== ComplexTypes.ShapedAs) {
+    should = true;
+  }
+
+  return should;
+};
+
+var typeInstance, typeService;
+/**
+ * Creates a type service based on a Type instance
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {object} firebase The base object for connections
+ */
+
+var getTypeService = function getTypeService(Type, firebase) {
+  typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
+  return !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
+};
+/**
+ * Will create an instance of Type=>Service, then request a list of objects,
+ * based on a set/array of **uid-strings** specified at **objectWithProps**
+ *
+ * @param {string} property The prop name being used for reference
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
+ * @param {object} firebase The base object for connections
+ */
+
+
+var getServiceList = function getServiceList(property, Type, objectWithProps, firebase) {
+  typeService = getTypeService(Type, firebase);
+  if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
+  return typeService.filter(inArray('uid', objectWithProps[property])).list().then(function (result) {
+    //TODO: remove from here
+    console.log('getServiceList:serviceList:result', result);
+    return Promise.resolve(result);
+  }).catch(function (e) {
+    throw e;
+  });
 };
 /**
  * TODO: comment/describe
