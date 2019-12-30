@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -1038,10 +1038,14 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
       setList = _useState2[1],
-      objectPropIsArray = objectWithProps[property] instanceof Array,
-      runService = useCallback(function () {
-    return getServiceList(property, Type, objectWithProps, firebase);
-  }, [property, Type, objectWithProps, firebase]); // const runService = useMemo(() => {
+      objectPropIsArray = objectWithProps[property] instanceof Array; //,
+  // runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
+  // 	property,
+  // 	Type,
+  // 	objectWithProps,
+  // 	firebase
+  // ]);
+  // const runService = useMemo(() => {
   // 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
   // 		setList(result);
   // 	});
@@ -1052,19 +1056,10 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
   useEffect(function () {
     if (!list || !list.length) {
       //And is there a service behind?
-      if (objectPropIsArray) {
-        if (objectWithProps[property].length === 0) {
-          setList([]);
-        } else if (objectWithProps[property].length > 0) {
-          if (typeShouldUseService(Type)) {
-            runService().then(function (result) {
-              setList(result);
-            });
-          } else {
-            //No service at all, sets raw data
-            setList(objectWithProps[property]);
-          }
-        }
+      if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
+          setList(result);
+        });
       } else {
         //No service at all, sets raw data
         setList(objectWithProps[property]);

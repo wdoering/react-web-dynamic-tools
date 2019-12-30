@@ -11,13 +11,13 @@ import { getServiceList, typeShouldUseService } from './_functions';
  */
 const useListOfData = (objectWithProps, property, Type, firebase) => {
 	const [list, setList] = useState([]),
-		objectPropIsArray = objectWithProps[property] instanceof Array,
-		runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
-			property,
-			Type,
-			objectWithProps,
-			firebase
-		]);
+		objectPropIsArray = objectWithProps[property] instanceof Array; //,
+	// runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
+	// 	property,
+	// 	Type,
+	// 	objectWithProps,
+	// 	firebase
+	// ]);
 	// const runService = useMemo(() => {
 	// 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
 	// 		setList(result);
@@ -29,19 +29,14 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	useEffect(() => {
 		if (!list || !list.length) {
 			//And is there a service behind?
-			if (objectPropIsArray) {
-				if (objectWithProps[property].length === 0) {
-					setList([]);
-				} else if (objectWithProps[property].length > 0) {
-					if (typeShouldUseService(Type)) {
-						runService().then((result) => {
-							setList(result);
-						});
-					} else {
-						//No service at all, sets raw data
-						setList(objectWithProps[property]);
-					}
-				}
+			if (
+				objectPropIsArray &&
+				objectWithProps[property].length > 0 &&
+				typeShouldUseService(Type)
+			) {
+				getServiceList(property, Type, objectWithProps, firebase).then((result) => {
+					setList(result);
+				});
 			} else {
 				//No service at all, sets raw data
 				setList(objectWithProps[property]);
