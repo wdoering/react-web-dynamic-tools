@@ -169,7 +169,7 @@ const search = (oService, filters) => {
 	//removes previous versions of timeout
 	clearTimeout(searchTimeout);
 
-	if (!oService.filter || typeof oService.filter === 'function')
+	if (!oService.filter || typeof oService.filter !== 'function')
 		throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
 
 	if (filters && filters.length) {
