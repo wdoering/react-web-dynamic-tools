@@ -215,9 +215,9 @@ const DynamicList = ({
 		// if (!!serviceInstance && !oService) oService = serviceInstance;
 
 		//No items yet searched
-		if (!reduxList) {
-			search(oService, []);
-		}
+		//if (!reduxList) {
+		search(oService, []);
+		//}
 	}, [oService, serviceInstance]);
 
 	return (

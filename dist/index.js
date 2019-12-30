@@ -1631,9 +1631,8 @@ var DynamicList = function DynamicList(_ref) {
     //direct service instance, when not yet instanced
     // if (!!serviceInstance && !oService) oService = serviceInstance;
     //No items yet searched
-    if (!reduxList) {
-      search(oService, []);
-    }
+    //if (!reduxList) {
+    search(oService, []); //}
   }, [oService, serviceInstance]);
   return React.createElement("div", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".list.$title")),
