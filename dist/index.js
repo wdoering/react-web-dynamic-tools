@@ -1910,7 +1910,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
     style: {
       flex: 1
     }
-  }, React.createElement(List, null, list.map(function (item, i) {
+  }, !!list && list.length > 0 && React.createElement(List, null, list.map(function (item, i) {
     return createConfiguredListItem({
       item: item,
       listItemProperties: model.$fieldConfig[property].listItemProperties,

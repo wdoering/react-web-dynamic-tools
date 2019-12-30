@@ -146,16 +146,18 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>
 					<div style={{ flex: 1 }}>
-						<List>
-							{list.map((item, i) => {
-								return createConfiguredListItem({
-									item,
-									listItemProperties:
-										model.$fieldConfig[property].listItemProperties,
-									key: i
-								});
-							})}
-						</List>
+						{!!list && list.length > 0 && (
+							<List>
+								{list.map((item, i) => {
+									return createConfiguredListItem({
+										item,
+										listItemProperties:
+											model.$fieldConfig[property].listItemProperties,
+										key: i
+									});
+								})}
+							</List>
+						)}
 					</div>
 				</ExpansionPanelDetails>
 			</ExpansionPanel>
