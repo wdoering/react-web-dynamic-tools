@@ -26,6 +26,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem, createIdOfComponent, createFormComponent } from './_functions';
 import ErrorLabel from '../components/form/ErrorLabel';
+import { useListOfData } from './_hooks';
 
 let validateTimeout;
 
@@ -124,14 +125,15 @@ const createArrayOfComponent = (
 		defaultCurrentDialogValue = [];
 	}
 
-	const [list, setList] = useState(values[property] || []),
+	//Using the external data grabber hook
+	const list = useListOfData(values, property, Type, firebase),
 		[open, setOpen] = useState(false),
 		[currentDialogValue, setCurrentDialogValue] = useState(defaultCurrentDialogValue);
 
-	//Picking array of items from model instance
-	if (!list.length && values[property] && values[property].length) {
-		setList(values[property]);
-	}
+	// //Picking array of items from model instance
+	// if (!list.length && values[property] && values[property].length) {
+	// 	setList(values[property]);
+	// }
 
 	const save = () => {
 		console.log('currentDialogValue', currentDialogValue);
@@ -257,7 +259,7 @@ const createArrayOfComponent = (
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						{i18nPropertyLabel} ({list.length})
+						{i18nPropertyLabel} {!!list && list.length > 0 && `(${list.length})`}
 					</Typography>
 					<ErrorLabel>{errorMessage}</ErrorLabel>
 				</ExpansionPanelSummary>
@@ -294,17 +296,19 @@ const createArrayOfComponent = (
 						</DialogActions>
 					</Dialog>
 					<div style={{ flex: 1 }}>
-						<List>
-							{list.map((item, i) => {
-								return createConfiguredListItem({
-									item,
-									listItemProperties:
-										model.$fieldConfig[property].listItemProperties,
-									key: i,
-									remove: remove(i)
-								});
-							})}
-						</List>
+						{!!list && list.length > 0 && (
+							<List>
+								{list.map((item, i) => {
+									return createConfiguredListItem({
+										item,
+										listItemProperties:
+											model.$fieldConfig[property].listItemProperties,
+										key: i,
+										remove: remove(i)
+									});
+								})}
+							</List>
+						)}
 					</div>
 				</ExpansionPanelDetails>
 			</ExpansionPanel>

@@ -22,6 +22,7 @@ import {
 } from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
+import { useListOfData } from './_hooks';
 
 let searchIdOfTimeout;
 
@@ -111,28 +112,8 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
-	// const [list, setList] = useState(values[property] || []);
-	const [list, setList] = useState([]);
-
-	useEffect(() => {
-		//No list set yet
-		if (!list || !list.length) {
-			//And is there a service behind?
-			if (
-				values[property] instanceof Array &&
-				values[property].length > 0 &&
-				typeShouldUseService(Type)
-			) {
-				getServiceList(property, Type, values, firebase).then((result) => {
-					console.log('getServiceList:result', result);
-					setList(result);
-				});
-			} else {
-				//No service at all, sets raw data
-				setList(values[property]);
-			}
-		}
-	}, [list, setList, values, property, Type]);
+	//will use a hook which maps the list of data
+	const list = useListOfData(values, property, Type, firebase);
 
 	return (
 		<div className="break-field mb-15" key={property}>

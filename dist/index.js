@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -541,28 +541,6 @@ var listEmptyStyles = makeStyles$1({
   }
 });
 
-/**
- * Firebase in-array slice limit
- */
-var arraySliceLength = 10;
-/**
- * Utility for array slicing up to 10 itens
- * When building in-array for firebase-basic-service queries
- *
- * @param {string} property The property to be compared
- * @param {array} items List items of string
- */
-
-var inArray = function inArray(property, items) {
-  var filters = [];
-
-  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
-    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
-  }
-
-  return filters;
-};
-
 var protectedFieldValue = '******',
     blankFieldPlaceholder = '-';
 /**
@@ -586,59 +564,6 @@ var DateDetail = function DateDetail(_ref) {
       fontWeight: '700'
     }
   }, dateString + (!timeString || " ".concat(timeString))));
-};
-/**
- * Checks whether a type should use a service
- *
- * @param {FieldType} Type The type being checked
- */
-
-
-var typeShouldUseService = function typeShouldUseService(Type) {
-  var should = false; //Type is a FieldType
-  //And is specific shape
-  //No service will exist behind
-
-  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType !== ComplexTypes.ShapedAs) {
-    should = true;
-  }
-
-  return should;
-};
-
-var typeInstance, typeService;
-/**
- * Creates a type service based on a Type instance
- *
- * @param {FieldType} Type The type being used for instance & service
- * @param {object} firebase The base object for connections
- */
-
-var getTypeService = function getTypeService(Type, firebase) {
-  typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
-  return !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
-};
-/**
- * Will create an instance of Type=>Service, then request a list of objects,
- * based on a set/array of **uid-strings** specified at **objectWithProps**
- *
- * @param {string} property The prop name being used for reference
- * @param {FieldType} Type The type being used for instance & service
- * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
- * @param {object} firebase The base object for connections
- */
-
-
-var getServiceList = function getServiceList(property, Type, objectWithProps, firebase) {
-  typeService = getTypeService(Type, firebase);
-  if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
-  return typeService.filter(inArray('uid', objectWithProps[property])).list().then(function (result) {
-    //TODO: remove from here
-    console.log('getServiceList:serviceList:result', result);
-    return Promise.resolve(result);
-  }).catch(function (e) {
-    throw e;
-  });
 };
 /**
  * TODO: comment/describe
@@ -1009,6 +934,37 @@ var ErrorLabel = function ErrorLabel(_ref) {
   }, children);
 };
 
+/**
+ * Custom hook for finding a list of data from an object array-prop
+ *
+ * @param {ModelBase} objectWithProps An object as source of data and string-uids
+ * @param {string} property Property in question, the name
+ * @param {FieldType} Type The type in question (complex should be)
+ * @param {object} firebase With connection to a service
+ */
+
+var useListOfData = function useListOfData(objectWithProps, property, Type, firebase) {
+  var _useState = useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      list = _useState2[0],
+      setList = _useState2[1];
+
+  useEffect(function () {
+    if (!list || !list.length) {
+      //And is there a service behind?
+      if (objectWithProps[property] instanceof Array && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
+          setList(result);
+        });
+      } else {
+        //No service at all, sets raw data
+        setList(objectWithProps[property]);
+      }
+    }
+  }, [list, setList, objectWithProps, property, Type, firebase]);
+  return list;
+};
+
 var validateTimeout;
 /**
  * @param {property} model the model reference
@@ -1097,25 +1053,22 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   } else if (!!Type.Type) {
     //collection should be predefined
     defaultCurrentDialogValue = [];
-  }
+  } //Using the external data grabber hook
 
-  var _useState3 = useState(values[property] || []),
+
+  var list = useListOfData(values, property, Type, firebase),
+      _useState3 = useState(false),
       _useState4 = _slicedToArray(_useState3, 2),
-      list = _useState4[0],
-      setList = _useState4[1],
-      _useState5 = useState(false),
+      open = _useState4[0],
+      setOpen = _useState4[1],
+      _useState5 = useState(defaultCurrentDialogValue),
       _useState6 = _slicedToArray(_useState5, 2),
-      open = _useState6[0],
-      setOpen = _useState6[1],
-      _useState7 = useState(defaultCurrentDialogValue),
-      _useState8 = _slicedToArray(_useState7, 2),
-      currentDialogValue = _useState8[0],
-      setCurrentDialogValue = _useState8[1]; //Picking array of items from model instance
+      currentDialogValue = _useState6[0],
+      setCurrentDialogValue = _useState6[1]; // //Picking array of items from model instance
+  // if (!list.length && values[property] && values[property].length) {
+  // 	setList(values[property]);
+  // }
 
-
-  if (!list.length && values[property] && values[property].length) {
-    setList(values[property]);
-  }
 
   var save = function save() {
     console.log('currentDialogValue', currentDialogValue);
@@ -1221,7 +1174,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18nPropertyLabel, " (", list.length, ")"), React.createElement(ErrorLabel, null, errorMessage)), React.createElement(ExpansionPanelActions, {
+  }, i18nPropertyLabel, " ", !!list && list.length > 0 && "(".concat(list.length, ")")), React.createElement(ErrorLabel, null, errorMessage)), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }
@@ -1263,7 +1216,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     style: {
       flex: 1
     }
-  }, React.createElement(List, null, list.map(function (item, i) {
+  }, !!list && list.length > 0 && React.createElement(List, null, list.map(function (item, i) {
     return createConfiguredListItem({
       item: item,
       listItemProperties: model.$fieldConfig[property].listItemProperties,
@@ -1446,14 +1399,14 @@ var DynamicForm = function DynamicForm(_ref3) {
       firebase = _ref3.firebase,
       i18n = _ref3.i18n;
 
-  var _useState9 = useState(model),
+  var _useState7 = useState(model),
+      _useState8 = _slicedToArray(_useState7, 2),
+      values = _useState8[0],
+      setValues = _useState8[1],
+      _useState9 = useState({}),
       _useState10 = _slicedToArray(_useState9, 2),
-      values = _useState10[0],
-      setValues = _useState10[1],
-      _useState11 = useState({}),
-      _useState12 = _slicedToArray(_useState11, 2),
-      errors = _useState12[0],
-      setErrors = _useState12[1],
+      errors = _useState10[0],
+      setErrors = _useState10[1],
       oService = useCallback(model.getService(firebase), [model, firebase]);
 
   useEffect(function () {
@@ -1906,28 +1859,9 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   console.log('model', model);
   console.log('property', property);
   console.log('model[property]', model[property]);
-  console.log('Type', Type); // const [list, setList] = useState(values[property] || []);
+  console.log('Type', Type); //will use a hook which maps the list of data
 
-  var _useState3 = useState([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      list = _useState4[0],
-      setList = _useState4[1];
-
-  useEffect(function () {
-    //No list set yet
-    if (!list || !list.length) {
-      //And is there a service behind?
-      if (values[property] instanceof Array && values[property].length > 0 && typeShouldUseService(Type)) {
-        getServiceList(property, Type, values, firebase).then(function (result) {
-          console.log('getServiceList:result', result);
-          setList(result);
-        });
-      } else {
-        //No service at all, sets raw data
-        setList(values[property]);
-      }
-    }
-  }, [list, setList, values, property, Type]);
+  var list = useListOfData(values, property, Type, firebase);
   return React.createElement("div", {
     className: "break-field mb-15",
     key: property
@@ -2097,10 +2031,10 @@ var DynamicView = function DynamicView(_ref3) {
       firebase = _ref3.firebase,
       serviceInstance = _ref3.serviceInstance;
 
-  var _useState5 = useState(model),
-      _useState6 = _slicedToArray(_useState5, 2),
-      values = _useState6[0],
-      setValues = _useState6[1],
+  var _useState3 = useState(model),
+      _useState4 = _slicedToArray(_useState3, 2),
+      values = _useState4[0],
+      setValues = _useState4[1],
       history = useHistory(),
       deleteConfirmationDialogRef = React.createRef(),
       oService = useCallback(model.getService(firebase), [model, firebase]);
