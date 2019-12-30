@@ -21,3 +21,26 @@ export const viewInfoStyles = makeStyles({
 	},
 	detail: {}
 });
+
+export const listResultText = makeStyles({
+	root: {
+		marginTop: 5,
+		marginBottom: 10,
+		textTransform: 'capitalize'
+	}
+});
+
+export const listEmptyStyles = makeStyles({
+	root: {
+		marginTop: 10,
+		marginBottom: 10,
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		'& > *': {
+			flex: '0 0 auto',
+			marginBottom: 15
+		}
+	}
+});

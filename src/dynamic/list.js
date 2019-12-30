@@ -5,6 +5,8 @@ import { TextField, Card, CardContent, List, Button } from '@material-ui/core';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from './_functions';
 import { TitleAndButtons } from '../components/title';
+import EmptyList from '../components/list/Empty';
+import ListTotaliser from '../components/list/Totaliser';
 
 /**
  * Will create a displayable list of components
@@ -248,18 +250,22 @@ const DynamicList = ({
 
 			<Card className="mb-15">
 				<CardContent>
-					<List>
-						{reduxList.map((item, i) => {
-							return createConfiguredListItem({
-								item,
-								listItemProperties: configuration.listItemProperties,
-								key: i,
-								onClick: () => {
-									history.push(`${baseRoute}/view/${item.uid}`);
-								}
-							});
-						})}
-					</List>
+					{!!reduxList && <ListTotaliser i18n={i18n} length={reduxList.length} />}
+					{!!reduxList && reduxList.length > 0 && (
+						<List>
+							{reduxList.map((item, i) => {
+								return createConfiguredListItem({
+									item,
+									listItemProperties: configuration.listItemProperties,
+									key: i,
+									onClick: () => {
+										history.push(`${baseRoute}/view/${item.uid}`);
+									}
+								});
+							})}
+						</List>
+					)}
+					{!reduxList || (reduxList.length === 0 && <EmptyList i18n={i18n} />)}
 				</CardContent>
 			</Card>
 		</div>

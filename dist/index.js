@@ -14,6 +14,7 @@ import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/objec
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/InfoRounded';
 
 var validateName = function validateName(name) {
   var nameRegex = /^[a-zA-Z]+$/;
@@ -518,6 +519,27 @@ var viewInfoStyles = makeStyles$1({
     marginBottom: '5px'
   },
   detail: {}
+});
+var listResultText = makeStyles$1({
+  root: {
+    marginTop: 5,
+    marginBottom: 10,
+    textTransform: 'capitalize'
+  }
+});
+var listEmptyStyles = makeStyles$1({
+  root: {
+    marginTop: 10,
+    marginBottom: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& > *': {
+      flex: '0 0 auto',
+      marginBottom: 15
+    }
+  }
 });
 
 var protectedFieldValue = '******',
@@ -1447,6 +1469,38 @@ DynamicForm.propTypes = {
   i18n: PropTypes.func.isRequired
 };
 
+var EmptyList = function EmptyList(_ref) {
+  var i18n = _ref.i18n;
+  var classes = listEmptyStyles();
+  return React.createElement("div", {
+    className: classes.root
+  }, React.createElement(Typography, {
+    variant: "h5",
+    component: "p"
+  }, i18n('list.empty.text')), React.createElement(InfoIcon, null));
+};
+
+EmptyList.propTypes = {
+  i18n: PropTypes.func.isRequired
+};
+
+var ListTotaliser = function ListTotaliser(_ref) {
+  var i18n = _ref.i18n,
+      _ref$length = _ref.length,
+      length = _ref$length === void 0 ? 0 : _ref$length;
+  var classes = listResultText();
+  return length > 0 && React.createElement(Typography, {
+    component: "div",
+    variant: "body2",
+    className: classes.root
+  }, i18n('list.result.showing'), " ", length, " ", i18n('list.result.results'));
+};
+
+ListTotaliser.propTypes = {
+  i18n: PropTypes.func.isRequired,
+  length: PropTypes.number
+};
+
 /**
  * Will create a displayable list of components
  *
@@ -1651,7 +1705,10 @@ var DynamicList = function DynamicList(_ref) {
     search(oService, f);
   })))), React.createElement(Card, {
     className: "mb-15"
-  }, React.createElement(CardContent, null, React.createElement(List, null, reduxList.map(function (item, i) {
+  }, React.createElement(CardContent, null, !!reduxList && React.createElement(ListTotaliser, {
+    i18n: i18n,
+    length: reduxList.length
+  }), !!reduxList && reduxList.length > 0 && React.createElement(List, null, reduxList.map(function (item, i) {
     return createConfiguredListItem({
       item: item,
       listItemProperties: configuration.listItemProperties,
@@ -1660,7 +1717,9 @@ var DynamicList = function DynamicList(_ref) {
         history.push("".concat(baseRoute, "/view/").concat(item.uid));
       }
     });
-  })))));
+  })), !reduxList || reduxList.length === 0 && React.createElement(EmptyList, {
+    i18n: i18n
+  }))));
 };
 
 DynamicList.propTypes = {
