@@ -43,6 +43,20 @@ const DateDetail = ({ item, locale = 'pt-br' }) => {
 	);
 };
 
+const mergeSets = (set0, setOrObject1, defaultValue = []) => {
+	let merged = null;
+
+	if (defaultValue instanceof Array && setOrObject1 instanceof Array) {
+		merged = [...set0, ...setOrObject1];
+	} else if (typeof defaultValue === 'object') {
+		merged = [...set0, Object.assign({}, setOrObject1)];
+	} else {
+		merged = [...set0, setOrObject1];
+	}
+
+	return merged;
+};
+
 /**
  * Checks whether a type should use a service
  *
@@ -508,5 +522,6 @@ export {
 	createViewComponent,
 	createFormComponent,
 	getServiceList,
-	typeShouldUseService
+	typeShouldUseService,
+	mergeSets
 };

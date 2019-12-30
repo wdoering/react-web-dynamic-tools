@@ -1037,7 +1037,7 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       }
     }
   }, [list, setList, objectWithProps, property, Type, firebase]);
-  return list;
+  return [list, setList];
 };
 
 var validateTimeout;
@@ -1131,7 +1131,10 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   } //Using the external data grabber hook
 
 
-  var list = useListOfData(values, property, Type, firebase),
+  var _useListOfData = useListOfData(values, property, Type, firebase),
+      _useListOfData2 = _slicedToArray(_useListOfData, 2),
+      list = _useListOfData2[0],
+      setList = _useListOfData2[1],
       _useState3 = useState(false),
       _useState4 = _slicedToArray(_useState3, 2),
       open = _useState4[0],
@@ -1146,17 +1149,20 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
 
   var save = function save() {
-    console.log('currentDialogValue', currentDialogValue);
+    // if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
+    // 	setList([...list, .push(...currentDialogValue);
+    // } else if (typeof defaultCurrentDialogValue === 'object') {
+    // 	list.push(Object.assign({}, currentDialogValue));
+    // } else {
+    // 	list.push(currentDialogValue);
+    // }
+    console.log('save:currentDialogValue', currentDialogValue);
+    console.log('save:property', property);
+    console.log('save:list', list); //resets the dialog
 
-    if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
-      list.push.apply(list, _toConsumableArray(currentDialogValue));
-    } else if (_typeof(defaultCurrentDialogValue) === 'object') {
-      list.push(Object.assign({}, currentDialogValue));
-    } else {
-      list.push(currentDialogValue);
-    }
+    setCurrentDialogValue(defaultCurrentDialogValue); //setting the list itself
 
-    setCurrentDialogValue(defaultCurrentDialogValue); //setList(list);
+    setList(mergeSets(list, currentDialogValue, defaultCurrentDialogValue)); //setList(list);
 
     setOpen(false);
     handleChange(property, list);
@@ -1164,9 +1170,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
   var remove = function remove(i) {
     return function () {
-      list.splice(i, 1);
-      setCurrentDialogValue(defaultCurrentDialogValue); //setList(list);
-
+      console.log('remove:property', property);
+      console.log('remove:list', list);
+      setCurrentDialogValue(defaultCurrentDialogValue);
+      setList(list.filter(function (item, index) {
+        return index !== i;
+      }));
       setOpen(false);
       handleChange(property, list);
     };

@@ -30,7 +30,7 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 		}
 	}, [list, setList, objectWithProps, property, Type, firebase]);
 
-	return list;
+	return [list, setList];
 };
 
 export { useListOfData };

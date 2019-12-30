@@ -126,7 +126,7 @@ const createArrayOfComponent = (
 	}
 
 	//Using the external data grabber hook
-	const list = useListOfData(values, property, Type, firebase),
+	const [list, setList] = useListOfData(values, property, Type, firebase),
 		[open, setOpen] = useState(false),
 		[currentDialogValue, setCurrentDialogValue] = useState(defaultCurrentDialogValue);
 
@@ -136,24 +136,32 @@ const createArrayOfComponent = (
 	// }
 
 	const save = () => {
-		console.log('currentDialogValue', currentDialogValue);
+		// if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
+		// 	setList([...list, .push(...currentDialogValue);
+		// } else if (typeof defaultCurrentDialogValue === 'object') {
+		// 	list.push(Object.assign({}, currentDialogValue));
+		// } else {
+		// 	list.push(currentDialogValue);
+		// }
 
-		if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
-			list.push(...currentDialogValue);
-		} else if (typeof defaultCurrentDialogValue === 'object') {
-			list.push(Object.assign({}, currentDialogValue));
-		} else {
-			list.push(currentDialogValue);
-		}
+		console.log('save:currentDialogValue', currentDialogValue);
+		console.log('save:property', property);
+		console.log('save:list', list);
+
+		//resets the dialog
 		setCurrentDialogValue(defaultCurrentDialogValue);
+		//setting the list itself
+		setList(mergeSets(list, currentDialogValue, defaultCurrentDialogValue));
 		//setList(list);
 		setOpen(false);
 		handleChange(property, list);
 	};
 	const remove = (i) => () => {
-		list.splice(i, 1);
+		console.log('remove:property', property);
+		console.log('remove:list', list);
+
 		setCurrentDialogValue(defaultCurrentDialogValue);
-		//setList(list);
+		setList(list.filter((item, index) => index !== i));
 		setOpen(false);
 		handleChange(property, list);
 	};
