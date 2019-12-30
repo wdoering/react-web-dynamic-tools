@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1 } from '@material-ui/core';
+import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -522,9 +522,8 @@ var viewInfoStyles = makeStyles$1({
 });
 var listResultText = makeStyles$1({
   root: {
-    marginTop: 5,
-    marginBottom: 10,
-    textTransform: 'capitalize'
+    marginTop: 0,
+    marginBottom: 10
   }
 });
 var listEmptyStyles = makeStyles$1({
@@ -1489,11 +1488,12 @@ var ListTotaliser = function ListTotaliser(_ref) {
       _ref$length = _ref.length,
       length = _ref$length === void 0 ? 0 : _ref$length;
   var classes = listResultText();
-  return length > 0 && React.createElement(Typography, {
+  return length > 0 && React.createElement(Chip, {
     component: "div",
-    variant: "body2",
-    className: classes.root
-  }, i18n('list.result.showing'), " ", length, " ", i18n('list.result.results'));
+    variant: "outlined",
+    className: classes.root,
+    label: "".concat(i18n('list.result.showing'), " ").concat(length, " ").concat(i18n('list.result.results'))
+  });
 };
 
 ListTotaliser.propTypes = {

@@ -24,9 +24,8 @@ export const viewInfoStyles = makeStyles({
 
 export const listResultText = makeStyles({
 	root: {
-		marginTop: 5,
-		marginBottom: 10,
-		textTransform: 'capitalize'
+		marginTop: 0,
+		marginBottom: 10
 	}
 });
 
