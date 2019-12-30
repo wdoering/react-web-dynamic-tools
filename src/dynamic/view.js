@@ -118,7 +118,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	useEffect(() => {
 		if (!list.length && values[property].length && Type.complexType !== ComplexTypes.ShapedAs) {
 			//Is there a service behind?
-			getServiceList(Type, values, firebase).then((result) => {
+			getServiceList(property, Type, values, firebase).then((result) => {
 				console.log('getServiceList:result', result);
 				setList(result);
 			});

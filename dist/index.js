@@ -582,13 +582,14 @@ var getTypeService = function getTypeService(Type, firebase) {
  * Will create an instance of Type=>Service, then request a list of objects,
  * based on a set/array of **uid-strings** specified at **objectWithProps**
  *
+ * @param {string} property The prop name being used for reference
  * @param {FieldType} Type The type being used for instance & service
  * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
  * @param {object} firebase The base object for connections
  */
 
 
-var getServiceList = function getServiceList(Type, objectWithProps, firebase) {
+var getServiceList = function getServiceList(property, Type, objectWithProps, firebase) {
   typeService = getTypeService(Type, firebase);
   if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance'); //TODO: remove from here
 
@@ -1882,7 +1883,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   useEffect(function () {
     if (!list.length && values[property].length && Type.complexType !== ComplexTypes.ShapedAs) {
       //Is there a service behind?
-      getServiceList(Type, values, firebase).then(function (result) {
+      getServiceList(property, Type, values, firebase).then(function (result) {
         console.log('getServiceList:result', result);
         setList(result);
       }); // setList(sl);

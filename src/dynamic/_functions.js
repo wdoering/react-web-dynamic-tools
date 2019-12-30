@@ -60,11 +60,12 @@ const getTypeService = (Type, firebase) => {
  * Will create an instance of Type=>Service, then request a list of objects,
  * based on a set/array of **uid-strings** specified at **objectWithProps**
  *
+ * @param {string} property The prop name being used for reference
  * @param {FieldType} Type The type being used for instance & service
  * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
  * @param {object} firebase The base object for connections
  */
-const getServiceList = (Type, objectWithProps, firebase) => {
+const getServiceList = (property, Type, objectWithProps, firebase) => {
 	typeService = getTypeService(Type, firebase);
 
 	if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');

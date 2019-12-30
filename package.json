@@ -1,10 +1,10 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.2.14",
+	"version": "0.2.15",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [
-		"./dist/"
+		"./dist**"
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
