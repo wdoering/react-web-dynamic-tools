@@ -11,12 +11,20 @@ import { getServiceList, typeShouldUseService } from './_functions';
  */
 const useListOfData = (objectWithProps, property, Type, firebase) => {
 	const [list, setList] = useState([]),
-		objectPropIsArray = objectWithProps[property] instanceof Array;
+		objectPropIsArray = objectWithProps[property] instanceof Array,
+		runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
+			property,
+			Type,
+			objectWithProps,
+			firebase
+		]);
 	// const runService = useMemo(() => {
 	// 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
 	// 		setList(result);
 	// 	});
 	// }, []);
+
+	console.log('useListOfData:objectWithProps[property]', objectWithProps[property]);
 
 	useEffect(() => {
 		if (
@@ -25,14 +33,14 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 			(objectPropIsArray && objectWithProps[property].length !== list.length)
 		) {
 			//And is there a service behind?
-			if (
-				objectPropIsArray &&
-				objectWithProps[property].length > 0 &&
-				typeShouldUseService(Type)
-			) {
-				getServiceList(property, Type, objectWithProps, firebase).then((result) => {
-					setList(result);
-				});
+			if (objectPropIsArray) {
+				if (objectWithProps[property].length === 0) {
+					setList([]);
+				} else if (objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+					runService(property, Type, objectWithProps, firebase).then((result) => {
+						setList(result);
+					});
+				}
 			} else {
 				//No service at all, sets raw data
 				setList(objectWithProps[property]);

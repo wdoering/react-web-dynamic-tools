@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback as useCallback$1 } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -1038,20 +1038,28 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
       setList = _useState2[1],
-      objectPropIsArray = objectWithProps[property] instanceof Array; // const runService = useMemo(() => {
+      objectPropIsArray = objectWithProps[property] instanceof Array,
+      runService = useCallback(function () {
+    return getServiceList(property, Type, objectWithProps, firebase);
+  }, [property, Type, objectWithProps, firebase]); // const runService = useMemo(() => {
   // 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
   // 		setList(result);
   // 	});
   // }, []);
 
 
+  console.log('useListOfData:objectWithProps[property]', objectWithProps[property]);
   useEffect(function () {
     if (!list || !list.length || objectPropIsArray && objectWithProps[property].length !== list.length) {
       //And is there a service behind?
-      if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
-        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
-          setList(result);
-        });
+      if (objectPropIsArray) {
+        if (objectWithProps[property].length === 0) {
+          setList([]);
+        } else if (objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+          runService(property, Type, objectWithProps, firebase).then(function (result) {
+            setList(result);
+          });
+        }
       } else {
         //No service at all, sets raw data
         setList(objectWithProps[property]);
@@ -1512,7 +1520,7 @@ var DynamicForm = function DynamicForm(_ref3) {
       _useState10 = _slicedToArray(_useState9, 2),
       errors = _useState10[0],
       setErrors = _useState10[1],
-      oService = useCallback(model.getService(firebase), [model, firebase]);
+      oService = useCallback$1(model.getService(firebase), [model, firebase]);
 
   useEffect(function () {
     if (id && (!model.uid || model.uid !== id)) {
@@ -1527,7 +1535,7 @@ var DynamicForm = function DynamicForm(_ref3) {
    * @param {string} prop
    */
 
-  var handleChange = useCallback(function (prop, value) {
+  var handleChange = useCallback$1(function (prop, value) {
     var v = _objectSpread2({}, values, _defineProperty({}, prop, value));
 
     setValues(v);
@@ -1539,7 +1547,7 @@ var DynamicForm = function DynamicForm(_ref3) {
    * @param {any} value
    */
 
-  var validate = useCallback(function (prop, value) {
+  var validate = useCallback$1(function (prop, value) {
     clearTimeout(validateTimeout);
     model[prop] = value;
     validateTimeout = setTimeout(function () {
@@ -1552,7 +1560,7 @@ var DynamicForm = function DynamicForm(_ref3) {
    * saves model at the server, after validation
    */
 
-  var save = useCallback(function () {
+  var save = useCallback$1(function () {
     model.$fill(values);
     var validation = model.$validate();
     console.log("validation", validation);
@@ -1702,7 +1710,7 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
       values = _useState4[0],
       setValues = _useState4[1];
 
-  var handleChange = useCallback(function (property, value) {
+  var handleChange = useCallback$1(function (property, value) {
     var v = _objectSpread2({}, values, _defineProperty({}, property, value));
 
     setValues(v);
@@ -2146,7 +2154,7 @@ var DynamicView = function DynamicView(_ref3) {
       setValues = _useState4[1],
       history = useHistory(),
       deleteConfirmationDialogRef = React.createRef(),
-      oService = useCallback(model.getService(firebase), [model, firebase]);
+      oService = useCallback$1(model.getService(firebase), [model, firebase]);
 
   useEffect(function () {
     //TODO: implement service flexibility
@@ -2157,7 +2165,7 @@ var DynamicView = function DynamicView(_ref3) {
       });
     }
   }, [model, id, oService, setValues]);
-  var remove = useCallback(function () {
+  var remove = useCallback$1(function () {
     oService.patch(values.uid, {
       deleted: true
     });
