@@ -1602,7 +1602,7 @@ var search = function search(oService, filters) {
 
   searchTimeout = setTimeout(function () {
     if (!oService.list || typeof oService.list !== 'function') throw Error('dynamic-list-service-has-to-have-list()-method');
-    oService.list();
+    if (!filters || filters.length === 0) oService.list();
   }, 300);
 };
 
