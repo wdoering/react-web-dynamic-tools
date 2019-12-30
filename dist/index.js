@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ModelBase, ComplexTypes as ComplexTypes$1 } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -1133,7 +1133,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   } else if (typeIsFieldType) {
     if (typeIsComplexType) {
       switch (Type.complexType) {
-        case ComplexTypes$1.ShapedAs:
+        case ComplexTypes.ShapedAs:
           {
             inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
               setCurrentDialogValue(fullObject);
@@ -1141,7 +1141,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             break;
           }
 
-        case ComplexTypes$1.IdOf:
+        case ComplexTypes.IdOf:
           {
             //Allows overflowing
             shouldOverflowListItems = true;
@@ -1348,7 +1348,7 @@ var createField = function createField(_ref2) {
     breakField = true;
 
     switch (field.type.complexType) {
-      case ComplexTypes$1.IdOf:
+      case ComplexTypes.IdOf:
         //Has to use entire line
         breakField = true;
         component = React.createElement(Card, {
@@ -1361,7 +1361,7 @@ var createField = function createField(_ref2) {
         }), React.createElement(ErrorLabel, null, errorMessage)));
         break;
 
-      case ComplexTypes$1.ArrayOf:
+      case ComplexTypes.ArrayOf:
         //Has to use entire line
         breakField = true;
         component = createArrayOfComponent(model, property, values, error, field.type.Type, firebase, i18n, function (property, fullArray) {
@@ -1369,7 +1369,7 @@ var createField = function createField(_ref2) {
         });
         break;
 
-      case ComplexTypes$1.ShapedAs:
+      case ComplexTypes.ShapedAs:
         //Has to use entire line
         breakField = true;
 
@@ -1661,14 +1661,14 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
 
     if (fieldConfig.type instanceof FieldType) {
       switch (fieldConfig.type.complexType) {
-        case ComplexTypes$1.IdOf:
+        case ComplexTypes.IdOf:
           break;
 
-        case ComplexTypes$1.ArrayOf:
+        case ComplexTypes.ArrayOf:
           component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, i18n, handleChange);
           break;
 
-        case ComplexTypes$1.ShapedAs:
+        case ComplexTypes.ShapedAs:
           break;
       }
     } else {
@@ -2012,7 +2012,7 @@ var createField$1 = function createField(_ref2) {
     breakField = true;
 
     switch (field.type.complexType) {
-      case ComplexTypes$1.IdOf:
+      case ComplexTypes.IdOf:
         breakField = true;
         component = React.createElement(Card, {
           className: "mb-15",
@@ -2022,12 +2022,12 @@ var createField$1 = function createField(_ref2) {
         }, React.createElement(CardContent, null, createIdOfComponent$1(model, property, values, field.type.Type, i18n, firebase)));
         break;
 
-      case ComplexTypes$1.ArrayOf:
+      case ComplexTypes.ArrayOf:
         breakField = true;
         component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
         break;
 
-      case ComplexTypes$1.ShapedAs:
+      case ComplexTypes.ShapedAs:
         breakField = true;
 
         if (!model[property]) {
