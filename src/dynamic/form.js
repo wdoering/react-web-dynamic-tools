@@ -146,14 +146,14 @@ const createArrayOfComponent = (
 			list.push(currentDialogValue);
 		}
 		setCurrentDialogValue(defaultCurrentDialogValue);
-		setList(list);
+		//setList(list);
 		setOpen(false);
 		handleChange(property, list);
 	};
 	const remove = (i) => () => {
 		list.splice(i, 1);
 		setCurrentDialogValue(defaultCurrentDialogValue);
-		setList(list);
+		//setList(list);
 		setOpen(false);
 		handleChange(property, list);
 	};

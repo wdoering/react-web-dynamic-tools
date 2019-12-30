@@ -1156,8 +1156,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       list.push(currentDialogValue);
     }
 
-    setCurrentDialogValue(defaultCurrentDialogValue);
-    setList(list);
+    setCurrentDialogValue(defaultCurrentDialogValue); //setList(list);
+
     setOpen(false);
     handleChange(property, list);
   };
@@ -1165,8 +1165,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   var remove = function remove(i) {
     return function () {
       list.splice(i, 1);
-      setCurrentDialogValue(defaultCurrentDialogValue);
-      setList(list);
+      setCurrentDialogValue(defaultCurrentDialogValue); //setList(list);
+
       setOpen(false);
       handleChange(property, list);
     };
