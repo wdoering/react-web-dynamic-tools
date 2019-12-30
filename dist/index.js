@@ -590,17 +590,17 @@ var DateDetail = function DateDetail(_ref) {
 /**
  * Checks whether a type should use a service
  *
- * @param {FieldType} Type
+ * @param {FieldType} Type The type being checked
  */
 
 
 var typeShouldUseService = function typeShouldUseService(Type) {
-  var should = true; //Type is a FieldType
+  var should = false; //Type is a FieldType
   //And is specific shape
   //No service will exist behind
 
-  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType === ComplexTypes.ShapedAs) {
-    should = false;
+  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType !== ComplexTypes.ShapedAs) {
+    should = true;
   }
 
   return should;

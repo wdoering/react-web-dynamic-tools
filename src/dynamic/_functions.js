@@ -46,10 +46,10 @@ const DateDetail = ({ item, locale = 'pt-br' }) => {
 /**
  * Checks whether a type should use a service
  *
- * @param {FieldType} Type
+ * @param {FieldType} Type The type being checked
  */
 const typeShouldUseService = (Type) => {
-	let should = true;
+	let should = false;
 
 	//Type is a FieldType
 	//And is specific shape
@@ -58,9 +58,9 @@ const typeShouldUseService = (Type) => {
 		!!Type &&
 		!!Type.complexType &&
 		Type instanceof FieldType &&
-		Type.complexType === ComplexTypes.ShapedAs
+		Type.complexType !== ComplexTypes.ShapedAs
 	) {
-		should = false;
+		should = true;
 	}
 
 	return should;
