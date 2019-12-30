@@ -3,11 +3,13 @@ import commonjs from 'rollup-plugin-commonjs';
 
 export default {
 	input: 'src/index.js',
+	treeshake: true,
 	output: {
 		//file: 'dist/index.js',
 		dir: 'dist',
 		name: '@zerobytes/react-web-dynamic-tools',
-		format: 'esm'
+		format: 'esm',
+		sourcemap: true
 	},
 	external: [
 		'@material-ui/core',
@@ -21,9 +23,9 @@ export default {
 	plugins: [
 		babel({
 			exclude: 'node_modules/**'
+		}),
+		commonjs({
+			include: 'node_modules/**'
 		})
-		// commonjs({
-		// 	include: 'node_modules/**'
-		// })
 	]
 };
