@@ -1515,7 +1515,7 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
       values = _useState4[0],
       setValues = _useState4[1];
 
-  var handleChange = function handleChange(property, value) {
+  var handleChange = useCallback(function (property, value) {
     var v = _objectSpread2({}, values, _defineProperty({}, property, value));
 
     setValues(v);
@@ -1541,8 +1541,7 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
       }
     });
     updateFilters(mainF);
-  };
-
+  });
   model.$fieldConfig.style = model.$fieldConfig.style || {
     field: {},
     wrapper: {}
@@ -1607,6 +1606,8 @@ var search = function search(oService, filters) {
   }, 300);
 };
 
+var oService;
+
 var DynamicList = function DynamicList(_ref) {
   var reduxList = _ref.reduxList,
       model = _ref.model,
@@ -1616,12 +1617,23 @@ var DynamicList = function DynamicList(_ref) {
       firebase = _ref.firebase,
       store = _ref.store,
       serviceInstance = _ref.serviceInstance;
-  var history = useHistory();
-  var oService = useCallback(!!store && !!firebase && !reduxList && model.getService(firebase, store), [store, firebase, reduxList, model]);
+  var history = useHistory(); //Checkers of service
+
+  if (!oService && !serviceInstance && !!store && !!firebase) {
+    oService = model.getService(firebase, store);
+  } else if (!!serviceInstance) {
+    oService = serviceInstance;
+  } else {
+    throw Error('dynamic-list-service-requires-an-available-serviceInstance-or-store-and-firebase');
+  }
+
   useEffect(function () {
-    //direct service instance
-    if (!!serviceInstance) oService = serviceInstance;
-    search(oService, []);
+    //direct service instance, when not yet instanced
+    // if (!!serviceInstance && !oService) oService = serviceInstance;
+    //No items yet searched
+    if (!reduxList) {
+      search(oService, []);
+    }
   }, [oService, serviceInstance]);
   return React.createElement("div", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".list.$title")),

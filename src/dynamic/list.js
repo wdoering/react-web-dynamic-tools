@@ -83,7 +83,7 @@ const createFilters = (model, i18n, updateFilters) => {
 
 	const [values, setValues] = useState(newModel);
 
-	const handleChange = (property, value) => {
+	const handleChange = useCallback((property, value) => {
 		let v = {
 			...values,
 			[property]: value
@@ -113,7 +113,7 @@ const createFilters = (model, i18n, updateFilters) => {
 		});
 
 		updateFilters(mainF);
-	};
+	});
 
 	model.$fieldConfig.style = model.$fieldConfig.style || { field: {}, wrapper: {} };
 
@@ -184,6 +184,7 @@ const search = (oService, filters) => {
 		oService.list();
 	}, 300);
 };
+
 let oService;
 
 const DynamicList = ({
@@ -197,16 +198,26 @@ const DynamicList = ({
 	serviceInstance
 }) => {
 	const history = useHistory();
-	let oService = useCallback(
-		!!store && !!firebase && !reduxList && model.getService(firebase, store),
-		[store, firebase, reduxList, model]
-	);
+
+	//Checkers of service
+	if (!oService && !serviceInstance && !!store && !!firebase) {
+		oService = model.getService(firebase, store);
+	} else if (!!serviceInstance) {
+		oService = serviceInstance;
+	} else {
+		throw Error(
+			'dynamic-list-service-requires-an-available-serviceInstance-or-store-and-firebase'
+		);
+	}
 
 	useEffect(() => {
-		//direct service instance
-		if (!!serviceInstance) oService = serviceInstance;
+		//direct service instance, when not yet instanced
+		// if (!!serviceInstance && !oService) oService = serviceInstance;
 
-		search(oService, []);
+		//No items yet searched
+		if (!reduxList) {
+			search(oService, []);
+		}
 	}, [oService, serviceInstance]);
 
 	return (
