@@ -590,7 +590,7 @@ var getTypeService = function getTypeService(Type, firebase) {
 
 
 var getServiceList = function getServiceList(Type, objectWithProps, firebase) {
-  typeService = getTypeService(Type);
+  typeService = getTypeService(Type, firebase);
   if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance'); //TODO: remove from here
 
   console.log('getServiceList:typeService', typeService);
@@ -1883,7 +1883,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   useEffect(function () {
     if (!list.length && values[property].length) {
       //Is there a service behind?
-      var sl = getServiceList(Type, values);
+      var sl = getServiceList(Type, values, firebase);
       console.log('getServiceList:return', sl);
       setList(sl); // if (typeService) {
       // 	console.log('typeService', typeService);
@@ -2013,7 +2013,7 @@ var createField$1 = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n);
+        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
         break;
 
       case ComplexTypes.ShapedAs:

@@ -67,7 +67,7 @@ const getTypeService = (Type, firebase) => {
  * @param {object} firebase The base object for connections
  */
 const getServiceList = (Type, objectWithProps, firebase) => {
-	typeService = getTypeService(Type);
+	typeService = getTypeService(Type, firebase);
 
 	if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
 
