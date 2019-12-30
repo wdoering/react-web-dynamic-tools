@@ -21,10 +21,12 @@ const createArrayOfComponent = (model, property, Type, i18n, handleChange) => {
 
 	let isIdOfModelBase =
 		typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+
 	if (isIdOfModelBase) {
 	} else if (Type instanceof FieldType) {
 	} else {
 		switch (Type) {
+			//Array of string
 			case FieldTypes.String:
 				component = (
 					<TextField
@@ -59,11 +61,6 @@ const createArrayOfComponent = (model, property, Type, i18n, handleChange) => {
 
 	return (
 		<div>
-			{/* <div>
-				{items.map((item, i) => {
-					return <span>{item}</span>;
-				})}
-			</div> */}
 			<div>{component}</div>
 		</div>
 	);
@@ -77,10 +74,13 @@ const createArrayOfComponent = (model, property, Type, i18n, handleChange) => {
  */
 const createFilters = (model, i18n, updateFilters) => {
 	const newModel = {};
+	let filterFields = [];
+
 	Object.keys(model).map((key) => {
 		if (key == '$fieldConfig') return;
 		newModel[key] = '';
 	});
+
 	const [values, setValues] = useState(newModel);
 
 	const handleChange = (property, value) => {
@@ -114,8 +114,9 @@ const createFilters = (model, i18n, updateFilters) => {
 
 		updateFilters(mainF);
 	};
-	let filterFields = [];
+
 	model.$fieldConfig.style = model.$fieldConfig.style || { field: {}, wrapper: {} };
+
 	Object.keys(model.$fieldConfig).map((property, i) => {
 		const fieldConfig = model.$fieldConfig[property];
 
@@ -165,8 +166,10 @@ const createFilters = (model, i18n, updateFilters) => {
 };
 let searchTimeout;
 const search = (oService, filters) => {
+	//removes previous versions of timeout
 	clearTimeout(searchTimeout);
-	if (oService.filter && typeof oService.filter === 'function')
+
+	if (!oService.filter || typeof oService.filter === 'function')
 		throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
 
 	if (filters && filters.length) {
@@ -253,7 +256,7 @@ const DynamicList = ({
 };
 
 DynamicList.propTypes = {
-	reduxList: PropTypes.any,
+	reduxList: PropTypes.array,
 	model: PropTypes.object,
 	configuration: PropTypes.object,
 	baseRoute: PropTypes.string,

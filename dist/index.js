@@ -1468,6 +1468,7 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
 
   if (isIdOfModelBase) ; else if (Type instanceof FieldType) ; else {
     switch (Type) {
+      //Array of string
       case FieldTypes.String:
         component = React.createElement(TextField, {
           label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
@@ -1503,6 +1504,7 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
 
 var createFilters = function createFilters(model, i18n, updateFilters) {
   var newModel = {};
+  var filterFields = [];
   Object.keys(model).map(function (key) {
     if (key == '$fieldConfig') return;
     newModel[key] = '';
@@ -1541,7 +1543,6 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
     updateFilters(mainF);
   };
 
-  var filterFields = [];
   model.$fieldConfig.style = model.$fieldConfig.style || {
     field: {},
     wrapper: {}
@@ -1591,8 +1592,9 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
 var searchTimeout;
 
 var search = function search(oService, filters) {
+  //removes previous versions of timeout
   clearTimeout(searchTimeout);
-  if (oService.filter && typeof oService.filter === 'function') throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
+  if (!oService.filter || typeof oService.filter === 'function') throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
 
   if (filters && filters.length) {
     //will filter, then
@@ -1651,7 +1653,7 @@ var DynamicList = function DynamicList(_ref) {
 };
 
 DynamicList.propTypes = {
-  reduxList: PropTypes.any,
+  reduxList: PropTypes.array,
   model: PropTypes.object,
   configuration: PropTypes.object,
   baseRoute: PropTypes.string,
