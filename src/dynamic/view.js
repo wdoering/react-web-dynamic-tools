@@ -99,6 +99,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {function} i18n Translation source function
  */
 const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
+	//TODO: remove from here
 	console.log('-----------');
 	console.log('model', model);
 	console.log('property', property);
@@ -112,7 +113,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	// 		typeInstance instanceof ModelBase &&
 	// 		typeInstance.getService(firebase),
 	// const serviceList = getServiceList(Type, values)
-	[list, setList] = useState(values[property] || []);
+	const [list, setList] = useState(values[property] || []);
 
 	useEffect(() => {
 		if (!list.length && values[property].length) {

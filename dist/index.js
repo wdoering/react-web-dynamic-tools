@@ -1860,6 +1860,7 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+  //TODO: remove from here
   console.log('-----------');
   console.log('model', model);
   console.log('property', property);
@@ -1872,12 +1873,11 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   // 		typeInstance.getService(firebase),
   // const serviceList = getServiceList(Type, values)
 
-  var _useState3 = useState(values[property] || []);
+  var _useState3 = useState(values[property] || []),
+      _useState4 = _slicedToArray(_useState3, 2),
+      list = _useState4[0],
+      setList = _useState4[1];
 
-  var _useState4 = _slicedToArray(_useState3, 2);
-
-  list = _useState4[0];
-  setList = _useState4[1];
   useEffect(function () {
     if (!list.length && values[property].length) {
       //Is there a service behind?
