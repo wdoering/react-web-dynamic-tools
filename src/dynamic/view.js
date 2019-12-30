@@ -123,7 +123,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	useEffect(() => {
 		//Is there a service behind?
 		if (
-			!list.length &&
+			(!list || !list.length) &&
 			values[property] instanceof Array &&
 			values[property].length &&
 			typeShouldUseService(Type)

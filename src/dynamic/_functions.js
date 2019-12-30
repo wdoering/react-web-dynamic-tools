@@ -17,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
+import { inArray } from '../util/query';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -93,17 +94,14 @@ const getServiceList = (property, Type, objectWithProps, firebase) => {
 
 	if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
 
-	//TODO: remove from here
-	console.log('getServiceList:typeService', typeService);
-
 	return typeService
-		.filter([['uid', 'in', objectWithProps[property]]])
+		.filter(inArray('uid', objectWithProps[property]))
 		.list()
 		.then((result) => {
 			//TODO: remove from here
 			console.log('getServiceList:serviceList:result', result);
 
-			Promise.resolve(result);
+			return Promise.resolve(result);
 		})
 		.catch((e) => {
 			throw e;
