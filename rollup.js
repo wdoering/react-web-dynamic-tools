@@ -21,9 +21,9 @@ export default {
 	plugins: [
 		babel({
 			exclude: 'node_modules/**'
-		}),
-		commonjs({
-			include: 'node_modules/**'
 		})
+		// commonjs({
+		// 	include: 'node_modules/**'
+		// })
 	]
 };

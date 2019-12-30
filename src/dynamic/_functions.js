@@ -52,10 +52,8 @@ let typeInstance, typeService;
  */
 const getTypeService = (Type, firebase) => {
 	typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
-	typeService =
-		!!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
 
-	return typeService;
+	return !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
 };
 
 /**
