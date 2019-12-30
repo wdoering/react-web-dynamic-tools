@@ -27,19 +27,20 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	console.log('useListOfData:objectWithProps[property]', objectWithProps[property]);
 
 	useEffect(() => {
-		if (
-			!list ||
-			!list.length ||
-			(objectPropIsArray && objectWithProps[property].length !== list.length)
-		) {
+		if (!list || !list.length) {
 			//And is there a service behind?
 			if (objectPropIsArray) {
 				if (objectWithProps[property].length === 0) {
 					setList([]);
-				} else if (objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
-					runService(property, Type, objectWithProps, firebase).then((result) => {
-						setList(result);
-					});
+				} else if (objectWithProps[property].length > 0) {
+					if (typeShouldUseService(Type)) {
+						runService().then((result) => {
+							setList(result);
+						});
+					} else {
+						//No service at all, sets raw data
+						setList(objectWithProps[property]);
+					}
 				}
 			} else {
 				//No service at all, sets raw data

@@ -1050,15 +1050,20 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
 
   console.log('useListOfData:objectWithProps[property]', objectWithProps[property]);
   useEffect(function () {
-    if (!list || !list.length || objectPropIsArray && objectWithProps[property].length !== list.length) {
+    if (!list || !list.length) {
       //And is there a service behind?
       if (objectPropIsArray) {
         if (objectWithProps[property].length === 0) {
           setList([]);
-        } else if (objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
-          runService(property, Type, objectWithProps, firebase).then(function (result) {
-            setList(result);
-          });
+        } else if (objectWithProps[property].length > 0) {
+          if (typeShouldUseService(Type)) {
+            runService().then(function (result) {
+              setList(result);
+            });
+          } else {
+            //No service at all, sets raw data
+            setList(objectWithProps[property]);
+          }
         }
       } else {
         //No service at all, sets raw data
@@ -1967,17 +1972,10 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
 
 
 var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
-  //TODO: remove from here
-  console.log('-----------');
-  console.log('model', model);
-  console.log('property', property);
-  console.log('model[property]', model[property]);
-  console.log('Type', Type); //will use a hook which maps the list of data
-
+  //will use a hook which maps the list of data
   var _useListOfData = useListOfData(values, property, Type, firebase),
-      _useListOfData2 = _slicedToArray(_useListOfData, 2),
-      list = _useListOfData2[0],
-      setList = _useListOfData2[1];
+      _useListOfData2 = _slicedToArray(_useListOfData, 1),
+      list = _useListOfData2[0];
 
   return React.createElement("div", {
     className: "break-field mb-15",

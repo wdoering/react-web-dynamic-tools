@@ -105,15 +105,8 @@ const createShapedAsComponent = (model, property, Type, values, i18n) => {
  * @param {function} i18n Translation source function
  */
 const createArrayOfComponent = (model, property, values, Type, i18n, firebase) => {
-	//TODO: remove from here
-	console.log('-----------');
-	console.log('model', model);
-	console.log('property', property);
-	console.log('model[property]', model[property]);
-	console.log('Type', Type);
-
 	//will use a hook which maps the list of data
-	const [list, setList] = useListOfData(values, property, Type, firebase);
+	const [list] = useListOfData(values, property, Type, firebase);
 
 	return (
 		<div className="break-field mb-15" key={property}>
