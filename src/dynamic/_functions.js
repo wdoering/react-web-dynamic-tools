@@ -12,7 +12,7 @@ import {
 	FormLabel,
 	FormControl
 } from '@material-ui/core';
-import { FieldTypes, ModelBase } from '@zerobytes/object-model-js';
+import { FieldTypes, ModelBase, FieldType } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -40,6 +40,29 @@ const DateDetail = ({ item, locale = 'pt-br' }) => {
 			</Typography>
 		</div>
 	);
+};
+
+/**
+ * Checks whether a type should use a service
+ *
+ * @param {FieldType} Type
+ */
+const typeShouldUseService = (Type) => {
+	let should = true;
+
+	//Type is a FieldType
+	//And is specific shape
+	//No service will exist behind
+	if (
+		!!Type &&
+		!!Type.complexType &&
+		Type instanceof FieldType &&
+		Type.complexType === ComplexTypes.ShapedAs
+	) {
+		should = false;
+	}
+
+	return should;
 };
 
 let typeInstance, typeService;
@@ -486,5 +509,6 @@ export {
 	createIdOfComponent,
 	createViewComponent,
 	createFormComponent,
-	getServiceList
+	getServiceList,
+	typeShouldUseService
 };

@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, ModelBase, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ModelBase, ComplexTypes as ComplexTypes$1 } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -565,6 +565,24 @@ var DateDetail = function DateDetail(_ref) {
     }
   }, dateString + (!timeString || " ".concat(timeString))));
 };
+/**
+ * Checks whether a type should use a service
+ *
+ * @param {FieldType} Type
+ */
+
+
+var typeShouldUseService = function typeShouldUseService(Type) {
+  var should = true; //Type is a FieldType
+  //And is specific shape
+  //No service will exist behind
+
+  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType === ComplexTypes.ShapedAs) {
+    should = false;
+  }
+
+  return should;
+};
 
 var typeInstance, typeService;
 /**
@@ -1115,7 +1133,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   } else if (typeIsFieldType) {
     if (typeIsComplexType) {
       switch (Type.complexType) {
-        case ComplexTypes.ShapedAs:
+        case ComplexTypes$1.ShapedAs:
           {
             inputs = createShapedAsComponent(model, property, new Type.Type(), currentDialogValue, i18n, function (p, fullObject) {
               setCurrentDialogValue(fullObject);
@@ -1123,7 +1141,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             break;
           }
 
-        case ComplexTypes.IdOf:
+        case ComplexTypes$1.IdOf:
           {
             //Allows overflowing
             shouldOverflowListItems = true;
@@ -1330,7 +1348,7 @@ var createField = function createField(_ref2) {
     breakField = true;
 
     switch (field.type.complexType) {
-      case ComplexTypes.IdOf:
+      case ComplexTypes$1.IdOf:
         //Has to use entire line
         breakField = true;
         component = React.createElement(Card, {
@@ -1343,7 +1361,7 @@ var createField = function createField(_ref2) {
         }), React.createElement(ErrorLabel, null, errorMessage)));
         break;
 
-      case ComplexTypes.ArrayOf:
+      case ComplexTypes$1.ArrayOf:
         //Has to use entire line
         breakField = true;
         component = createArrayOfComponent(model, property, values, error, field.type.Type, firebase, i18n, function (property, fullArray) {
@@ -1351,7 +1369,7 @@ var createField = function createField(_ref2) {
         });
         break;
 
-      case ComplexTypes.ShapedAs:
+      case ComplexTypes$1.ShapedAs:
         //Has to use entire line
         breakField = true;
 
@@ -1643,14 +1661,14 @@ var createFilters = function createFilters(model, i18n, updateFilters) {
 
     if (fieldConfig.type instanceof FieldType) {
       switch (fieldConfig.type.complexType) {
-        case ComplexTypes.IdOf:
+        case ComplexTypes$1.IdOf:
           break;
 
-        case ComplexTypes.ArrayOf:
+        case ComplexTypes$1.ArrayOf:
           component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, i18n, handleChange);
           break;
 
-        case ComplexTypes.ShapedAs:
+        case ComplexTypes$1.ShapedAs:
           break;
       }
     } else {
@@ -1881,23 +1899,14 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
       setList = _useState4[1];
 
   useEffect(function () {
-    if (!list.length && values[property].length && Type.complexType !== ComplexTypes.ShapedAs) {
-      //Is there a service behind?
+    //Is there a service behind?
+    if (!list.length && values[property] instanceof Array && values[property].length && typeShouldUseService(Type)) {
       getServiceList(property, Type, values, firebase).then(function (result) {
         console.log('getServiceList:result', result);
         setList(result);
-      }); // setList(sl);
-      // if (typeService) {
-      // 	console.log('typeService', typeService);
-      // 	typeService
-      // 		.filter([['uid', 'in', values[property]]])
-      // 		.list()
-      // 		.then((result) => {
-      // 			console.log('service list', result);
-      // 		});
-      // }
-      //No service at all, sets raw
+      });
     } else {
+      //No service at all, sets raw
       setList(values[property]);
     }
   }, [list, setList, values, property, Type]);
@@ -2003,7 +2012,7 @@ var createField$1 = function createField(_ref2) {
     breakField = true;
 
     switch (field.type.complexType) {
-      case ComplexTypes.IdOf:
+      case ComplexTypes$1.IdOf:
         breakField = true;
         component = React.createElement(Card, {
           className: "mb-15",
@@ -2013,12 +2022,12 @@ var createField$1 = function createField(_ref2) {
         }, React.createElement(CardContent, null, createIdOfComponent$1(model, property, values, field.type.Type, i18n, firebase)));
         break;
 
-      case ComplexTypes.ArrayOf:
+      case ComplexTypes$1.ArrayOf:
         breakField = true;
         component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
         break;
 
-      case ComplexTypes.ShapedAs:
+      case ComplexTypes$1.ShapedAs:
         breakField = true;
 
         if (!model[property]) {

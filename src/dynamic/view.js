@@ -14,7 +14,12 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import { createConfiguredListItem, createViewComponent, getServiceList } from './_functions';
+import {
+	createConfiguredListItem,
+	createViewComponent,
+	getServiceList,
+	typeShouldUseService
+} from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
 
@@ -116,25 +121,19 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	const [list, setList] = useState(values[property] || []);
 
 	useEffect(() => {
-		if (!list.length && values[property].length && Type.complexType !== ComplexTypes.ShapedAs) {
-			//Is there a service behind?
+		//Is there a service behind?
+		if (
+			!list.length &&
+			values[property] instanceof Array &&
+			values[property].length &&
+			typeShouldUseService(Type)
+		) {
 			getServiceList(property, Type, values, firebase).then((result) => {
 				console.log('getServiceList:result', result);
 				setList(result);
 			});
-
-			// setList(sl);
-			// if (typeService) {
-			// 	console.log('typeService', typeService);
-			// 	typeService
-			// 		.filter([['uid', 'in', values[property]]])
-			// 		.list()
-			// 		.then((result) => {
-			// 			console.log('service list', result);
-			// 		});
-			// }
-			//No service at all, sets raw
 		} else {
+			//No service at all, sets raw
 			setList(values[property]);
 		}
 	}, [list, setList, values, property, Type]);
