@@ -1880,11 +1880,13 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
       setList = _useState4[1];
 
   useEffect(function () {
-    if (!list.length && values[property].length) {
+    if (!list.length && values[property].length && Type.complexType !== ComplexTypes.ShapedAs) {
       //Is there a service behind?
-      var sl = getServiceList(Type, values, firebase);
-      console.log('getServiceList:return', sl);
-      setList(sl); // if (typeService) {
+      getServiceList(Type, values, firebase).then(function (result) {
+        console.log('getServiceList:result', result);
+        setList(result);
+      }); // setList(sl);
+      // if (typeService) {
       // 	console.log('typeService', typeService);
       // 	typeService
       // 		.filter([['uid', 'in', values[property]]])
