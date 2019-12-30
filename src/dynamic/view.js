@@ -111,30 +111,26 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
-	// const typeInstance =
-	// 		!!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
-	// 	typeService =
-	// 		!!typeInstance &&
-	// 		typeInstance instanceof ModelBase &&
-	// 		typeInstance.getService(firebase),
-	// const serviceList = getServiceList(Type, values)
-	const [list, setList] = useState(values[property] || []);
+	// const [list, setList] = useState(values[property] || []);
+	const [list, setList] = useState([]);
 
 	useEffect(() => {
-		//Is there a service behind?
-		if (
-			(!list || !list.length) &&
-			values[property] instanceof Array &&
-			values[property].length &&
-			typeShouldUseService(Type)
-		) {
-			getServiceList(property, Type, values, firebase).then((result) => {
-				console.log('getServiceList:result', result);
-				setList(result);
-			});
-		} else {
-			//No service at all, sets raw
-			setList(values[property]);
+		//No list set yet
+		if (!list || !list.length) {
+			//And is there a service behind?
+			if (
+				values[property] instanceof Array &&
+				values[property].length > 0 &&
+				typeShouldUseService(Type)
+			) {
+				getServiceList(property, Type, values, firebase).then((result) => {
+					console.log('getServiceList:result', result);
+					setList(result);
+				});
+			} else {
+				//No service at all, sets raw data
+				setList(values[property]);
+			}
 		}
 	}, [list, setList, values, property, Type]);
 
