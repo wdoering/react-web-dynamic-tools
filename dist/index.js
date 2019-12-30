@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase as ModelBase$1 } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -565,6 +565,40 @@ var DateDetail = function DateDetail(_ref) {
     }
   }, dateString + (!timeString || " ".concat(timeString))));
 };
+
+var typeInstance, typeService;
+/**
+ * Creates a type service based on a Type instance
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ */
+
+var getTypeService = function getTypeService(Type) {
+  typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
+  typeService = !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
+  return typeService;
+};
+/**
+ * Will create an instance of Type=>Service, then request a list of objects,
+ * based on a set/array of **uid-strings** specified at **objectWithProps**
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
+ */
+
+
+var getServiceList = function getServiceList(Type, objectWithProps) {
+  typeService = getTypeService(Type);
+  if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance'); //TODO: remove from here
+
+  console.log('getServiceList:typeService', typeService);
+  return typeService.filter([['uid', 'in', objectWithProps[property]]]).list().then(function (result) {
+    //TODO: remove from here
+    console.log('getServiceList:serviceList:result', result);
+  }).catch(function (e) {
+    throw e;
+  });
+};
 /**
  * TODO: comment/describe
  *
@@ -1015,7 +1049,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       errorMessage = !!error && error !== '' && i18n("form.error.".concat(error)),
       typeIsFieldType = Type instanceof FieldType,
       typeIsComplexType = !!Type.complexType,
-      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+      isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase$1;
 
   if (!(Type instanceof FieldType) && _typeof(Type) !== 'object') {
     defaultCurrentDialogValue = '';
@@ -1518,7 +1552,7 @@ var createArrayOfComponent$1 = function createArrayOfComponent(model, property, 
       setItems = _useState2[1];
 
   var component = '';
-  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
+  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase$1;
 
   if (isIdOfModelBase) ; else if (Type instanceof FieldType) ; else {
     switch (Type) {
@@ -1830,29 +1864,39 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
   console.log('model', model);
   console.log('property', property);
   console.log('model[property]', model[property]);
-  console.log('Type', Type);
+  console.log('Type', Type); // const typeInstance =
+  // 		!!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
+  // 	typeService =
+  // 		!!typeInstance &&
+  // 		typeInstance instanceof ModelBase &&
+  // 		typeInstance.getService(firebase),
+  // const serviceList = getServiceList(Type, values)
 
-  var typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
-      typeService = !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase),
-      _useState3 = useState(values[property] || []),
-      _useState4 = _slicedToArray(_useState3, 2),
-      list = _useState4[0],
-      setList = _useState4[1];
+  var _useState3 = useState(values[property] || []);
 
-  if (!list.length && values[property].length) {
-    //Is there a service behind?
-    if (typeService) {
-      console.log('typeService', typeService);
-      typeService.filter([['uid', 'in', values[property]]]).list().then(function (result) {
-        console.log('service list', result);
-        setList(result);
-      });
-    } //No service at all, sets raw
-    else {
-        setList(values[property]);
-      }
-  }
+  var _useState4 = _slicedToArray(_useState3, 2);
 
+  list = _useState4[0];
+  setList = _useState4[1];
+  useEffect(function () {
+    if (!list.length && values[property].length) {
+      //Is there a service behind?
+      var sl = getServiceList(Type, values);
+      console.log('getServiceList:return', sl);
+      setList(sl); // if (typeService) {
+      // 	console.log('typeService', typeService);
+      // 	typeService
+      // 		.filter([['uid', 'in', values[property]]])
+      // 		.list()
+      // 		.then((result) => {
+      // 			console.log('service list', result);
+      // 		});
+      // }
+      //No service at all, sets raw
+    } else {
+      setList(values[property]);
+    }
+  }, [list, setList, values, property, Type]);
   return React.createElement("div", {
     className: "break-field mb-15",
     key: property
@@ -1967,7 +2011,7 @@ var createField$1 = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
+        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n);
         break;
 
       case ComplexTypes.ShapedAs:

@@ -42,6 +42,50 @@ const DateDetail = ({ item, locale = 'pt-br' }) => {
 	);
 };
 
+let typeInstance, typeService;
+
+/**
+ * Creates a type service based on a Type instance
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ */
+const getTypeService = (Type) => {
+	typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
+	typeService =
+		!!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
+
+	return typeService;
+};
+
+/**
+ * Will create an instance of Type=>Service, then request a list of objects,
+ * based on a set/array of **uid-strings** specified at **objectWithProps**
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
+ */
+const getServiceList = (Type, objectWithProps) => {
+	typeService = getTypeService(Type);
+
+	if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
+
+	//TODO: remove from here
+	console.log('getServiceList:typeService', typeService);
+
+	return typeService
+		.filter([['uid', 'in', objectWithProps[property]]])
+		.list()
+		.then((result) => {
+			//TODO: remove from here
+			console.log('getServiceList:serviceList:result', result);
+
+			Promise.resolve(result);
+		})
+		.catch((e) => {
+			throw e;
+		});
+};
+
 /**
  * TODO: comment/describe
  *
@@ -436,4 +480,10 @@ const createBooleanComponent = ({
 	);
 };
 
-export { createConfiguredListItem, createIdOfComponent, createViewComponent, createFormComponent };
+export {
+	createConfiguredListItem,
+	createIdOfComponent,
+	createViewComponent,
+	createFormComponent,
+	getServiceList
+};

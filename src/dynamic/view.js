@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import { createConfiguredListItem, createViewComponent } from './_functions';
+import { createConfiguredListItem, createViewComponent, getServiceList } from './_functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
 
@@ -105,31 +105,35 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	console.log('model[property]', model[property]);
 	console.log('Type', Type);
 
-	const typeInstance =
-			!!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
-		typeService =
-			!!typeInstance &&
-			typeInstance instanceof ModelBase &&
-			typeInstance.getService(firebase),
-		[list, setList] = useState(values[property] || []);
+	// const typeInstance =
+	// 		!!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type(),
+	// 	typeService =
+	// 		!!typeInstance &&
+	// 		typeInstance instanceof ModelBase &&
+	// 		typeInstance.getService(firebase),
+	// const serviceList = getServiceList(Type, values)
+	[list, setList] = useState(values[property] || []);
 
-	if (!list.length && values[property].length) {
-		//Is there a service behind?
-		if (typeService) {
-			console.log('typeService', typeService);
-			typeService
-				.filter([['uid', 'in', values[property]]])
-				.list()
-				.then((result) => {
-					console.log('service list', result);
-					setList(result);
-				});
-		}
-		//No service at all, sets raw
-		else {
+	useEffect(() => {
+		if (!list.length && values[property].length) {
+			//Is there a service behind?
+			let sl = getServiceList(Type, values);
+			console.log('getServiceList:return', sl);
+			setList(sl);
+			// if (typeService) {
+			// 	console.log('typeService', typeService);
+			// 	typeService
+			// 		.filter([['uid', 'in', values[property]]])
+			// 		.list()
+			// 		.then((result) => {
+			// 			console.log('service list', result);
+			// 		});
+			// }
+			//No service at all, sets raw
+		} else {
 			setList(values[property]);
 		}
-	}
+	}, [list, setList, values, property, Type]);
 
 	return (
 		<div className="break-field mb-15" key={property}>
