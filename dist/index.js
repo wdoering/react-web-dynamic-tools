@@ -587,6 +587,21 @@ var DateDetail = function DateDetail(_ref) {
     }
   }, dateString + (!timeString || " ".concat(timeString))));
 };
+
+var mergeSets = function mergeSets(set0, setOrObject1) {
+  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+  var merged = null;
+
+  if (defaultValue instanceof Array && setOrObject1 instanceof Array) {
+    merged = [].concat(_toConsumableArray(set0), _toConsumableArray(setOrObject1));
+  } else if (_typeof(defaultValue) === 'object') {
+    merged = [].concat(_toConsumableArray(set0), [Object.assign({}, setOrObject1)]);
+  } else {
+    merged = [].concat(_toConsumableArray(set0), [setOrObject1]);
+  }
+
+  return merged;
+};
 /**
  * Checks whether a type should use a service
  *

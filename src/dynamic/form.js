@@ -24,7 +24,12 @@ import { BottomButtons } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import { createConfiguredListItem, createIdOfComponent, createFormComponent } from './_functions';
+import {
+	createConfiguredListItem,
+	createIdOfComponent,
+	createFormComponent,
+	mergeSets
+} from './_functions';
 import ErrorLabel from '../components/form/ErrorLabel';
 import { useListOfData } from './_hooks';
 
