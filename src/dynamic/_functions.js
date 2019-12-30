@@ -48,8 +48,9 @@ let typeInstance, typeService;
  * Creates a type service based on a Type instance
  *
  * @param {FieldType} Type The type being used for instance & service
+ * @param {object} firebase The base object for connections
  */
-const getTypeService = (Type) => {
+const getTypeService = (Type, firebase) => {
 	typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
 	typeService =
 		!!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
@@ -63,8 +64,9 @@ const getTypeService = (Type) => {
  *
  * @param {FieldType} Type The type being used for instance & service
  * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
+ * @param {object} firebase The base object for connections
  */
-const getServiceList = (Type, objectWithProps) => {
+const getServiceList = (Type, objectWithProps, firebase) => {
 	typeService = getTypeService(Type);
 
 	if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');

@@ -118,7 +118,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 	useEffect(() => {
 		if (!list.length && values[property].length) {
 			//Is there a service behind?
-			let sl = getServiceList(Type, values);
+			let sl = getServiceList(Type, values, firebase);
 			console.log('getServiceList:return', sl);
 			setList(sl);
 			// if (typeService) {
