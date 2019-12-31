@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -1047,12 +1047,8 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
       setList = _useState2[1],
-      objectPropIsArray = objectWithProps[property] instanceof Array,
-      currentValues = JSON.stringify(objectWithProps[property]),
-      previousValues = useMemo(function () {
-    return JSON.stringify(objectWithProps[property]);
-  }, [objectWithProps, property]); //,
-  // runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
+      currentValues = objectWithProps[property],
+      objectPropIsArray = currentValues instanceof Array; // runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
   // 	property,
   // 	Type,
   // 	objectWithProps,
@@ -1068,7 +1064,7 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
   console.log('useListOfData:currentValues', currentValues);
   console.log('useListOfData:previousValues', previousValues);
   useEffect(function () {
-    if (!list || !list.length || previousValues !== currentValues) {
+    if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
       //And is there a service behind?
       if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
         getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
