@@ -744,21 +744,20 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
   var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
-  var config = model.$fieldConfig[property];
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
-  var oService = new Type().getService(firebase);
+  var config = model.$fieldConfig[property]; //Validating prior to using
 
-  var _useState = useState([]),
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+
+  var oService = new Type().getService(firebase),
+      _useState = useState([]),
       _useState2 = _slicedToArray(_useState, 2),
       list = _useState2[0],
-      setList = _useState2[1];
-
-  var _useState3 = useState(!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []),
+      setList = _useState2[1],
+      _useState3 = useState(!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []),
       _useState4 = _slicedToArray(_useState3, 2),
       selected = _useState4[0],
-      setSelected = _useState4[1];
-
-  var _useState5 = useState(''),
+      setSelected = _useState4[1],
+      _useState5 = useState(''),
       _useState6 = _slicedToArray(_useState5, 2),
       value = _useState6[0],
       setValue = _useState6[1];
@@ -779,7 +778,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
         });
       }, 200);
     }
-  } else if (!!selected && (!!currentDialogValue || currentDialogValue.length === 0)) {
+  } else if (!!selected && selected instanceof Array && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
     setSelected(currentDialogValue);
     console.log('createIdOfComponent:selected', selected);
     console.log('createIdOfComponent:currentDialogValue', currentDialogValue);

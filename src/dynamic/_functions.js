@@ -225,6 +225,8 @@ const createIdOfComponent = (
 	useOwnTitle = true
 ) => {
 	const config = model.$fieldConfig[property];
+
+	//Validating prior to using
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
 			<div>
@@ -232,12 +234,12 @@ const createIdOfComponent = (
 			</div>
 		);
 
-	const oService = new Type().getService(firebase);
-	const [list, setList] = useState([]);
-	const [selected, setSelected] = useState(
-		!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []
-	);
-	const [value, setValue] = useState('');
+	const oService = new Type().getService(firebase),
+		[list, setList] = useState([]),
+		[selected, setSelected] = useState(
+			!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []
+		),
+		[value, setValue] = useState('');
 
 	if (!selected && values[property]) {
 		if (!(values[property] instanceof Array && singleItem)) {
@@ -255,7 +257,12 @@ const createIdOfComponent = (
 				});
 			}, 200);
 		}
-	} else if (!!selected && (!!currentDialogValue || currentDialogValue.length === 0)) {
+	} else if (
+		!!selected &&
+		selected instanceof Array &&
+		(!currentDialogValue ||
+			(currentDialogValue instanceof Array && currentDialogValue.length === 0))
+	) {
 		setSelected(currentDialogValue);
 		console.log('createIdOfComponent:selected', selected);
 		console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
