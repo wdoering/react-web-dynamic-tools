@@ -1177,7 +1177,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   // }
 
 
-  var save = useCallback(function () {
+  var save = function save() {
     // if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
     // 	setList([...list, .push(...currentDialogValue);
     // } else if (typeof defaultCurrentDialogValue === 'object') {
@@ -1196,8 +1196,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     console.log('save:values[property]', values[property]);
     console.log('save:currentDialogValue', currentDialogValue);
     console.log('save:l', l);
-  }, [values, property]);
-  var remove = useCallback(function (i) {
+  };
+
+  var remove = function remove(i) {
     return function () {
       setCurrentDialogValue(defaultCurrentDialogValue);
       var l = values[property].filter(function (item, index) {
@@ -1209,7 +1210,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       console.log('remove:values[property]', values[property]);
       console.log('remove:l', l);
     };
-  }, [values, property]);
+  };
 
   if (isIdOfModelBase) {
     //Allows overflowing

@@ -140,7 +140,7 @@ const createArrayOfComponent = (
 	// 	setList(values[property]);
 	// }
 
-	const save = useCallback(() => {
+	const save = () => {
 		// if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
 		// 	setList([...list, .push(...currentDialogValue);
 		// } else if (typeof defaultCurrentDialogValue === 'object') {
@@ -161,21 +161,18 @@ const createArrayOfComponent = (
 		console.log('save:values[property]', values[property]);
 		console.log('save:currentDialogValue', currentDialogValue);
 		console.log('save:l', l);
-	}, [values, property]);
+	};
 
-	const remove = useCallback(
-		(i) => () => {
-			setCurrentDialogValue(defaultCurrentDialogValue);
-			let l = values[property].filter((item, index) => index !== i);
-			setOpen(false);
-			handleChange(property, l);
+	const remove = (i) => () => {
+		setCurrentDialogValue(defaultCurrentDialogValue);
+		let l = values[property].filter((item, index) => index !== i);
+		setOpen(false);
+		handleChange(property, l);
 
-			console.log('remove:property', property);
-			console.log('remove:values[property]', values[property]);
-			console.log('remove:l', l);
-		},
-		[values, property]
-	);
+		console.log('remove:property', property);
+		console.log('remove:values[property]', values[property]);
+		console.log('remove:l', l);
+	};
 
 	if (isIdOfModelBase) {
 		//Allows overflowing
