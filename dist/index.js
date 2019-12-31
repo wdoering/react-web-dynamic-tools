@@ -778,6 +778,8 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
         });
       }, 200);
     }
+  } else if (selected) {
+    console.log('createIdOfComponent:selected', selected);
   }
 
   var select = function select(item) {
@@ -1048,20 +1050,8 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       list = _useState2[0],
       setList = _useState2[1],
       currentValues = objectWithProps[property],
-      objectPropIsArray = currentValues instanceof Array; // runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
-  // 	property,
-  // 	Type,
-  // 	objectWithProps,
-  // 	firebase
-  // ]);
-  // const runService = useMemo(() => {
-  // 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
-  // 		setList(result);
-  // 	});
-  // }, []);
+      objectPropIsArray = currentValues instanceof Array;
 
-
-  console.log('useListOfData:currentValues', currentValues);
   useEffect(function () {
     if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
       //And is there a service behind?

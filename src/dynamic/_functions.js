@@ -252,6 +252,8 @@ const createIdOfComponent = (
 				});
 			}, 200);
 		}
+	} else if (selected) {
+		console.log('createIdOfComponent:selected', selected);
 	}
 
 	const select = (item) => () => {

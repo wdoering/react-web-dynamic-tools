@@ -13,19 +13,6 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	const [list, setList] = useState([]),
 		currentValues = objectWithProps[property],
 		objectPropIsArray = currentValues instanceof Array;
-	// runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
-	// 	property,
-	// 	Type,
-	// 	objectWithProps,
-	// 	firebase
-	// ]);
-	// const runService = useMemo(() => {
-	// 	getServiceList(property, Type, objectWithProps, firebase).then((result) => {
-	// 		setList(result);
-	// 	});
-	// }, []);
-
-	console.log('useListOfData:currentValues', currentValues);
 
 	useEffect(() => {
 		if (!list || !list.length || (objectPropIsArray && list.length !== currentValues.length)) {
