@@ -58,7 +58,7 @@ const mergeSets = (set0, setOrObject1, defaultValue = []) => {
 };
 
 const removeFromSet = (set0, itemRemoving, indexRemoving) => {
-	const itemIsObject = item instanceof ModelBase,
+	const itemIsObject = itemRemoving instanceof Object && !!itemRemoving.uid,
 		newList = [
 			...set0.filter(
 				(item, index) =>
