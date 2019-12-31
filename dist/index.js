@@ -518,7 +518,10 @@ var viewInfoStyles = makeStyles$1({
   title: {
     marginBottom: '5px'
   },
-  detail: {}
+  detail: {
+    marginTop: 5,
+    marginBottom: 5
+  }
 });
 var listResultText = makeStyles$1({
   root: {
@@ -540,6 +543,28 @@ var listEmptyStyles = makeStyles$1({
     }
   }
 });
+
+var EmptyRelation = function EmptyRelation(_ref) {
+  var i18n = _ref.i18n;
+  var classes = viewInfoStyles();
+  return React.createElement(Typography, {
+    variant: "body2",
+    className: classes.detail
+  }, i18n('form.idof.not.informed'));
+};
+
+EmptyRelation.propTypes = {
+  i18n: PropTypes.func.isRequired
+};
+
+var ErrorLabel = function ErrorLabel(_ref) {
+  var children = _ref.children;
+  var classes = errorStyles();
+  return children && React.createElement(Typography, {
+    variant: "body2",
+    className: classes.root
+  }, children);
+};
 
 /**
  * Firebase in-array slice limit
@@ -1018,15 +1043,6 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       disabled: !!field.disabled
     })
   });
-};
-
-var ErrorLabel = function ErrorLabel(_ref) {
-  var children = _ref.children;
-  var classes = errorStyles();
-  return children && React.createElement(Typography, {
-    variant: "body2",
-    className: classes.root
-  }, children);
 };
 
 /**
@@ -1900,6 +1916,8 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
     item: selected,
     listItemProperties: config.listItemProperties,
     key: 0
+  }), !selected && React.createElement(EmptyRelation, {
+    i18n: i18n
   })));
 };
 /**

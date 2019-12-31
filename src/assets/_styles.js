@@ -19,7 +19,10 @@ export const viewInfoStyles = makeStyles({
 	title: {
 		marginBottom: '5px'
 	},
-	detail: {}
+	detail: {
+		marginTop: 5,
+		marginBottom: 5
+	}
 });
 
 export const listResultText = makeStyles({

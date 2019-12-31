@@ -23,6 +23,7 @@ import {
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
 import { useListOfData } from './_hooks';
+import { EmptyRelation } from '../components/form';
 
 let searchIdOfTimeout;
 
@@ -67,6 +68,7 @@ const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
 						listItemProperties: config.listItemProperties,
 						key: 0
 					})}
+				{!selected && <EmptyRelation i18n={i18n} />}
 			</div>
 		</div>
 	);
