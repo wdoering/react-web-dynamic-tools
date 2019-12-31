@@ -1187,35 +1187,21 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
 
   var save = function save() {
-    // if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
-    // 	setList([...list, .push(...currentDialogValue);
-    // } else if (typeof defaultCurrentDialogValue === 'object') {
-    // 	list.push(Object.assign({}, currentDialogValue));
-    // } else {
-    // 	list.push(currentDialogValue);
-    // }
-    //resets the dialog
-    setCurrentDialogValue(defaultCurrentDialogValue); //setting the list itself
+    var newList; //setting the list itself
 
-    var l = mergeSets(values[property], currentDialogValue, defaultCurrentDialogValue); //setList(list);
+    newList = mergeSets(values[property], currentDialogValue, defaultCurrentDialogValue); //resets the dialog
 
+    setCurrentDialogValue(defaultCurrentDialogValue);
     setOpen(false);
     handleChange(property, l);
-    console.log('save:property', property);
-    console.log('save:values[property]', values[property]);
-    console.log('save:currentDialogValue', currentDialogValue);
-    console.log('save:l', l);
   };
 
   var remove = function remove(itemRemoving, index) {
     return function () {
+      var newList = removeFromSet(values[property], itemRemoving, index);
       setCurrentDialogValue(defaultCurrentDialogValue);
-      var l = removeFromSet(values[property], itemRemoving, index);
       setOpen(false);
       handleChange(property, l);
-      console.log('remove:property', property);
-      console.log('remove:values[property]', values[property]);
-      console.log('remove:l', l);
     };
   };
 
