@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getServiceList, typeShouldUseService } from './_functions';
 
 /**
@@ -11,7 +11,12 @@ import { getServiceList, typeShouldUseService } from './_functions';
  */
 const useListOfData = (objectWithProps, property, Type, firebase) => {
 	const [list, setList] = useState([]),
-		objectPropIsArray = objectWithProps[property] instanceof Array; //,
+		objectPropIsArray = objectWithProps[property] instanceof Array,
+		currentValues = JSON.stringify(objectWithProps[property]),
+		previousValues = useMemo(() => JSON.stringify(objectWithProps[property]), [
+			objectWithProps,
+			property
+		]); //,
 	// runService = useCallback(() => getServiceList(property, Type, objectWithProps, firebase), [
 	// 	property,
 	// 	Type,
@@ -24,10 +29,11 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	// 	});
 	// }, []);
 
-	console.log('useListOfData:objectWithProps[property]', objectWithProps[property]);
+	console.log('useListOfData:currentValues', currentValues);
+	console.log('useListOfData:previousValues', previousValues);
 
 	useEffect(() => {
-		if (!list || !list.length) {
+		if (!list || !list.length || previousValues !== currentValues) {
 			//And is there a service behind?
 			if (
 				objectPropIsArray &&
