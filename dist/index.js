@@ -1062,7 +1062,6 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
 
 
   console.log('useListOfData:currentValues', currentValues);
-  console.log('useListOfData:previousValues', previousValues);
   useEffect(function () {
     if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
       //And is there a service behind?

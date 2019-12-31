@@ -26,7 +26,6 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	// }, []);
 
 	console.log('useListOfData:currentValues', currentValues);
-	console.log('useListOfData:previousValues', previousValues);
 
 	useEffect(() => {
 		if (!list || !list.length || (objectPropIsArray && list.length !== currentValues.length)) {
