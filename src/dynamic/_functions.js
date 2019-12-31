@@ -60,9 +60,8 @@ const mergeSets = (set0, setOrObject1, defaultValue = []) => {
 const removeFromSet = (set0, itemRemoving, indexRemoving) => {
 	const itemIsObject = itemRemoving instanceof Object && !!itemRemoving.uid,
 		newList = [
-			...set0.filter(
-				(item, index) =>
-					(itemIsObject && itemRemoving.uid !== item) || index !== indexRemoving
+			...set0.filter((item, index) =>
+				itemIsObject ? itemRemoving.uid !== item : index !== indexRemoving
 			)
 		];
 

@@ -606,7 +606,7 @@ var mergeSets = function mergeSets(set0, setOrObject1) {
 var removeFromSet = function removeFromSet(set0, itemRemoving, indexRemoving) {
   var itemIsObject = itemRemoving instanceof Object && !!itemRemoving.uid,
       newList = _toConsumableArray(set0.filter(function (item, index) {
-    return itemIsObject && itemRemoving.uid !== item || index !== indexRemoving;
+    return itemIsObject ? itemRemoving.uid !== item : index !== indexRemoving;
   }));
 
   return newList;
