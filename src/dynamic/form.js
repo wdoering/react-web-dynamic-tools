@@ -149,14 +149,14 @@ const createArrayOfComponent = (
 		//resets the dialog
 		setCurrentDialogValue(defaultCurrentDialogValue);
 		setOpen(false);
-		handleChange(property, l);
+		handleChange(property, newList);
 	};
 
 	const remove = (itemRemoving, index) => () => {
 		let newList = removeFromSet(values[property], itemRemoving, index);
 		setCurrentDialogValue(defaultCurrentDialogValue);
 		setOpen(false);
-		handleChange(property, l);
+		handleChange(property, newList);
 	};
 
 	if (isIdOfModelBase) {

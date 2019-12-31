@@ -1193,7 +1193,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
     setCurrentDialogValue(defaultCurrentDialogValue);
     setOpen(false);
-    handleChange(property, l);
+    handleChange(property, newList);
   };
 
   var remove = function remove(itemRemoving, index) {
@@ -1201,7 +1201,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       var newList = removeFromSet(values[property], itemRemoving, index);
       setCurrentDialogValue(defaultCurrentDialogValue);
       setOpen(false);
-      handleChange(property, l);
+      handleChange(property, newList);
     };
   };
 
