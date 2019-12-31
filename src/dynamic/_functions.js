@@ -220,6 +220,7 @@ const createIdOfComponent = (
 	firebase,
 	i18n,
 	handleChange,
+	currentDialogValue = null,
 	singleItem = true,
 	useOwnTitle = true
 ) => {
@@ -233,7 +234,9 @@ const createIdOfComponent = (
 
 	const oService = new Type().getService(firebase);
 	const [list, setList] = useState([]);
-	const [selected, setSelected] = useState(!!singleItem ? null : []);
+	const [selected, setSelected] = useState(
+		!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []
+	);
 	const [value, setValue] = useState('');
 
 	if (!selected && values[property]) {

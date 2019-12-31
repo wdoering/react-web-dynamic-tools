@@ -741,8 +741,9 @@ var searchIdOfTimeout;
  */
 
 var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
-  var singleItem = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : true;
-  var useOwnTitle = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
+  var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+  var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
+  var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
   var config = model.$fieldConfig[property];
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
   var oService = new Type().getService(firebase);
@@ -752,7 +753,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       list = _useState2[0],
       setList = _useState2[1];
 
-  var _useState3 = useState(!!singleItem ? null : []),
+  var _useState3 = useState(!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []),
       _useState4 = _slicedToArray(_useState3, 2),
       selected = _useState4[0],
       setSelected = _useState4[1];
@@ -1201,7 +1202,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
 
     inputs = createIdOfComponent(model, property, values, Type, firebase, i18n, function (p, uid, item) {
       setCurrentDialogValue(item);
-    });
+    }, currentDialogValue);
   } else if (typeIsFieldType) {
     if (typeIsComplexType) {
       switch (Type.complexType) {
@@ -1219,7 +1220,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
             shouldOverflowListItems = true;
             inputs = createIdOfComponent(model, property, values, Type.Type, firebase, i18n, function (p, uid, item) {
               setCurrentDialogValue([].concat(_toConsumableArray(currentDialogValue), [uid]));
-            }, false, false);
+            }, currentDialogValue, false, false);
             break;
           }
 

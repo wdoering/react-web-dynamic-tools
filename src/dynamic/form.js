@@ -172,7 +172,8 @@ const createArrayOfComponent = (
 			i18n,
 			(p, uid, item) => {
 				setCurrentDialogValue(item);
-			}
+			},
+			currentDialogValue
 		);
 	} else if (typeIsFieldType) {
 		if (typeIsComplexType) {
@@ -204,6 +205,7 @@ const createArrayOfComponent = (
 						(p, uid, item) => {
 							setCurrentDialogValue([...currentDialogValue, uid]);
 						},
+						currentDialogValue,
 						false,
 						false
 					);
