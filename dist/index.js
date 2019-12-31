@@ -1065,7 +1065,7 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
         setList(objectWithProps[property]);
       }
     }
-  }, [list, setList, objectWithProps, property, Type, firebase, runService]);
+  }, [list, objectWithProps, property, Type]);
   return [list, setList];
 };
 
