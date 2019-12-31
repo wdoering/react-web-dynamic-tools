@@ -28,7 +28,8 @@ import {
 	createConfiguredListItem,
 	createIdOfComponent,
 	createFormComponent,
-	mergeSets
+	mergeSets,
+	removeFromSet
 } from './_functions';
 import ErrorLabel from '../components/form/ErrorLabel';
 import { useListOfData } from './_hooks';
@@ -163,9 +164,9 @@ const createArrayOfComponent = (
 		console.log('save:l', l);
 	};
 
-	const remove = (i) => () => {
+	const remove = (itemRemoving, index) => () => {
 		setCurrentDialogValue(defaultCurrentDialogValue);
-		let l = values[property].filter((item, index) => index !== i);
+		let l = removeFromSet(values[property], itemRemoving, index);
 		setOpen(false);
 		handleChange(property, l);
 
@@ -320,7 +321,7 @@ const createArrayOfComponent = (
 										listItemProperties:
 											model.$fieldConfig[property].listItemProperties,
 										key: i,
-										remove: remove(i)
+										remove: remove(item, i)
 									});
 								})}
 							</List>

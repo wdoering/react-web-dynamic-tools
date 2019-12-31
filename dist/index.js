@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
+import { ModelBase, FieldTypes, FieldType, ComplexTypes } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -601,6 +601,15 @@ var mergeSets = function mergeSets(set0, setOrObject1) {
   }
 
   return merged;
+};
+
+var removeFromSet = function removeFromSet(set0, itemRemoving, indexRemoving) {
+  var itemIsObject = item instanceof ModelBase,
+      newList = _toConsumableArray(set0.filter(function (item, index) {
+    return itemIsObject && itemRemoving.uid !== item || index !== indexRemoving;
+  }));
+
+  return newList;
 };
 /**
  * Checks whether a type should use a service
@@ -1198,12 +1207,10 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     console.log('save:l', l);
   };
 
-  var remove = function remove(i) {
+  var remove = function remove(itemRemoving, index) {
     return function () {
       setCurrentDialogValue(defaultCurrentDialogValue);
-      var l = values[property].filter(function (item, index) {
-        return index !== i;
-      });
+      var l = removeFromSet(values[property], itemRemoving, index);
       setOpen(false);
       handleChange(property, l);
       console.log('remove:property', property);
@@ -1336,7 +1343,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       item: item,
       listItemProperties: model.$fieldConfig[property].listItemProperties,
       key: i,
-      remove: remove(i)
+      remove: remove(item, i)
     });
   }))))));
 };

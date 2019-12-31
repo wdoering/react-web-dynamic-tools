@@ -57,6 +57,18 @@ const mergeSets = (set0, setOrObject1, defaultValue = []) => {
 	return merged;
 };
 
+const removeFromSet = (set0, itemRemoving, indexRemoving) => {
+	const itemIsObject = item instanceof ModelBase,
+		newList = [
+			...set0.filter(
+				(item, index) =>
+					(itemIsObject && itemRemoving.uid !== item) || index !== indexRemoving
+			)
+		];
+
+	return newList;
+};
+
 /**
  * Checks whether a type should use a service
  *
@@ -523,5 +535,6 @@ export {
 	createFormComponent,
 	getServiceList,
 	typeShouldUseService,
-	mergeSets
+	mergeSets,
+	removeFromSet
 };
