@@ -1177,7 +1177,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   // }
 
 
-  var save = function save() {
+  var save = useCallback(function () {
     // if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
     // 	setList([...list, .push(...currentDialogValue);
     // } else if (typeof defaultCurrentDialogValue === 'object') {
@@ -1185,30 +1185,31 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     // } else {
     // 	list.push(currentDialogValue);
     // }
-    console.log('save:currentDialogValue', currentDialogValue);
-    console.log('save:property', property);
-    console.log('save:list', list); //resets the dialog
-
+    //resets the dialog
     setCurrentDialogValue(defaultCurrentDialogValue); //setting the list itself
 
-    setList(mergeSets(list, currentDialogValue, defaultCurrentDialogValue)); //setList(list);
+    var l = mergeSets(values[property], currentDialogValue, defaultCurrentDialogValue); //setList(list);
 
     setOpen(false);
-    handleChange(property, list);
-  };
-
-  var remove = function remove(i) {
+    handleChange(property, l);
+    console.log('save:property', property);
+    console.log('save:values[property]', values[property]);
+    console.log('save:currentDialogValue', currentDialogValue);
+    console.log('save:l', l);
+  }, [values, property]);
+  var remove = useCallback(function (i) {
     return function () {
-      console.log('remove:property', property);
-      console.log('remove:list', list);
       setCurrentDialogValue(defaultCurrentDialogValue);
-      setList(list.filter(function (item, index) {
+      var l = values[property].filter(function (item, index) {
         return index !== i;
-      }));
+      });
       setOpen(false);
-      handleChange(property, list);
+      handleChange(property, l);
+      console.log('remove:property', property);
+      console.log('remove:values[property]', values[property]);
+      console.log('remove:l', l);
     };
-  };
+  }, [values, property]);
 
   if (isIdOfModelBase) {
     //Allows overflowing

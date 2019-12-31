@@ -140,7 +140,7 @@ const createArrayOfComponent = (
 	// 	setList(values[property]);
 	// }
 
-	const save = () => {
+	const save = useCallback(() => {
 		// if (defaultCurrentDialogValue instanceof Array && currentDialogValue instanceof Array) {
 		// 	setList([...list, .push(...currentDialogValue);
 		// } else if (typeof defaultCurrentDialogValue === 'object') {
@@ -149,27 +149,33 @@ const createArrayOfComponent = (
 		// 	list.push(currentDialogValue);
 		// }
 
-		console.log('save:currentDialogValue', currentDialogValue);
-		console.log('save:property', property);
-		console.log('save:list', list);
-
 		//resets the dialog
 		setCurrentDialogValue(defaultCurrentDialogValue);
 		//setting the list itself
-		setList(mergeSets(list, currentDialogValue, defaultCurrentDialogValue));
+		let l = mergeSets(values[property], currentDialogValue, defaultCurrentDialogValue);
 		//setList(list);
 		setOpen(false);
-		handleChange(property, list);
-	};
-	const remove = (i) => () => {
-		console.log('remove:property', property);
-		console.log('remove:list', list);
+		handleChange(property, l);
 
-		setCurrentDialogValue(defaultCurrentDialogValue);
-		setList(list.filter((item, index) => index !== i));
-		setOpen(false);
-		handleChange(property, list);
-	};
+		console.log('save:property', property);
+		console.log('save:values[property]', values[property]);
+		console.log('save:currentDialogValue', currentDialogValue);
+		console.log('save:l', l);
+	}, [values, property]);
+
+	const remove = useCallback(
+		(i) => () => {
+			setCurrentDialogValue(defaultCurrentDialogValue);
+			let l = values[property].filter((item, index) => index !== i);
+			setOpen(false);
+			handleChange(property, l);
+
+			console.log('remove:property', property);
+			console.log('remove:values[property]', values[property]);
+			console.log('remove:l', l);
+		},
+		[values, property]
+	);
 
 	if (isIdOfModelBase) {
 		//Allows overflowing
