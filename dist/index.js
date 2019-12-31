@@ -778,7 +778,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
         });
       }, 200);
     }
-  } else if (!!selected && selected instanceof Array && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
+  } else if (!!selected && selected instanceof Array && selected.length > 0 && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
     setSelected(currentDialogValue);
     console.log('createIdOfComponent:selected', selected);
     console.log('createIdOfComponent:currentDialogValue', currentDialogValue);

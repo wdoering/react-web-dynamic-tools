@@ -260,6 +260,7 @@ const createIdOfComponent = (
 	} else if (
 		!!selected &&
 		selected instanceof Array &&
+		selected.length > 0 &&
 		(!currentDialogValue ||
 			(currentDialogValue instanceof Array && currentDialogValue.length === 0))
 	) {
