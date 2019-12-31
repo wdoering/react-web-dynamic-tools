@@ -1262,7 +1262,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18nPropertyLabel, " ", !!list && list.length > 0 && "(".concat(list.length, ")")), React.createElement(ErrorLabel, null, errorMessage)), React.createElement(ExpansionPanelActions, {
+  }, i18nPropertyLabel, " ", !!list && "(".concat(list.length, ")")), React.createElement(ErrorLabel, null, errorMessage)), React.createElement(ExpansionPanelActions, {
     style: {
       padding: '0 25px'
     }
@@ -1955,7 +1955,7 @@ var createArrayOfComponent$2 = function createArrayOfComponent(model, property, 
     expandIcon: React.createElement(ExpandMoreIcon, null)
   }, React.createElement(Typography, {
     variant: "h5"
-  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), ' ', !!list && list.length > 0 && "(".concat(list.length, ")"))), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property)), ' ', !!list && "(".concat(list.length, ")"))), React.createElement(ExpansionPanelDetails, null, React.createElement("div", {
     style: {
       flex: 1
     }

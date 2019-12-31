@@ -257,7 +257,7 @@ const createArrayOfComponent = (
 			<ExpansionPanel defaultExpanded>
 				<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 					<Typography variant="h5">
-						{i18nPropertyLabel} {!!list && list.length > 0 && `(${list.length})`}
+						{i18nPropertyLabel} {!!list && `(${list.length})`}
 					</Typography>
 					<ErrorLabel>{errorMessage}</ErrorLabel>
 				</ExpansionPanelSummary>
