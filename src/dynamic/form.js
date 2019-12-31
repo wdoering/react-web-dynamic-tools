@@ -136,11 +136,6 @@ const createArrayOfComponent = (
 		[open, setOpen] = useState(false),
 		[currentDialogValue, setCurrentDialogValue] = useState(defaultCurrentDialogValue);
 
-	// //Picking array of items from model instance
-	// if (!list.length && values[property] && values[property].length) {
-	// 	setList(values[property]);
-	// }
-
 	const save = () => {
 		let newList;
 
@@ -537,8 +532,6 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 
 			validateTimeout = setTimeout(() => {
 				const validateResult = model.$fieldConfig[prop].validate();
-
-				console.log(`validate[${prop}]`, validateResult);
 
 				setErrors({
 					...errors,

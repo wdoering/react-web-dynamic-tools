@@ -779,8 +779,10 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
         });
       }, 200);
     }
-  } else if (selected) {
+  } else if (!!selected && (!!currentDialogValue || currentDialogValue.length === 0)) {
+    setSelected(currentDialogValue);
     console.log('createIdOfComponent:selected', selected);
+    console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
   }
 
   var select = function select(item) {
@@ -821,15 +823,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
 
       var tend = text.substr(0, text.length - 1) + String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
       searchIdOfTimeout = setTimeout(function () {
-        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]); // console.log([
-        // 	[
-        // 		[config.searchField, '>=', text],
-        // 		[config.searchField, '<', tend],
-        // 		['deleted', '==', false]
-        // 	]
-        // ]);
-
-        oService.limit(5).list().then(function (r) {
+        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]).limit(5).list().then(function (r) {
           setList(r);
         });
       }, 300);
@@ -1171,11 +1165,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       _useState5 = useState(defaultCurrentDialogValue),
       _useState6 = _slicedToArray(_useState5, 2),
       currentDialogValue = _useState6[0],
-      setCurrentDialogValue = _useState6[1]; // //Picking array of items from model instance
-  // if (!list.length && values[property] && values[property].length) {
-  // 	setList(values[property]);
-  // }
-
+      setCurrentDialogValue = _useState6[1];
 
   var save = function save() {
     var newList; //setting the list itself
@@ -1538,7 +1528,6 @@ var DynamicForm = function DynamicForm(_ref3) {
     model[prop] = value;
     validateTimeout = setTimeout(function () {
       var validateResult = model.$fieldConfig[prop].validate();
-      console.log("validate[".concat(prop, "]"), validateResult);
       setErrors(_objectSpread2({}, errors, _defineProperty({}, prop, validateResult)));
     }, 100);
   }, [errors, model]);

@@ -255,8 +255,10 @@ const createIdOfComponent = (
 				});
 			}, 200);
 		}
-	} else if (selected) {
+	} else if (!!selected && (!!currentDialogValue || currentDialogValue.length === 0)) {
+		setSelected(currentDialogValue);
 		console.log('createIdOfComponent:selected', selected);
+		console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
 	}
 
 	const select = (item) => () => {
@@ -291,21 +293,14 @@ const createIdOfComponent = (
 							String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
 
 						searchIdOfTimeout = setTimeout(function() {
-							oService.filter([
-								[
-									[config.searchField, '>=', text],
-									[config.searchField, '<', tend],
-									['deleted', '==', false]
-								]
-							]);
-							// console.log([
-							// 	[
-							// 		[config.searchField, '>=', text],
-							// 		[config.searchField, '<', tend],
-							// 		['deleted', '==', false]
-							// 	]
-							// ]);
 							oService
+								.filter([
+									[
+										[config.searchField, '>=', text],
+										[config.searchField, '<', tend],
+										['deleted', '==', false]
+									]
+								])
 								.limit(5)
 								.list()
 								.then((r) => {
