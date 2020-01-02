@@ -257,7 +257,7 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 	return (
 		<div
 			key={property}
-			className={`${breakField ? 'break-field' : 'sibling-field'} mb-15`}
+			className={breakField ? 'break-field' : 'sibling-field'}
 			style={field.style.wrapper}
 		>
 			{component}

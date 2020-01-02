@@ -1294,7 +1294,7 @@ TitleAndButtons.propTypes = {
 var useStyles$2 = makeStyles$1(function (theme) {
   return {
     root: {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
       display: 'flex',
       flexDirection: 'row',
@@ -2436,7 +2436,7 @@ var createField$1 = function createField(_ref2) {
 
   return React.createElement("div", {
     key: property,
-    className: "".concat(breakField ? 'break-field' : 'sibling-field', " mb-15"),
+    className: breakField ? 'break-field' : 'sibling-field',
     style: field.style.wrapper
   }, component);
 };
