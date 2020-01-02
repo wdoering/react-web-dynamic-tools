@@ -7,6 +7,8 @@ import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/objec
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
+import EmailRounded from '@material-ui/icons/EmailRounded';
+import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
@@ -27,6 +29,10 @@ var validateName = function validateName(name) {
   var nameRegex = /^[a-zA-Z]+$/;
   return nameRegex.test(name);
 };
+var validateWebsite = function validateWebsite(webSite) {
+  var webSiteRegex = /(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  return webSiteRegex.test(webSite);
+};
 var validateEmail = function validateEmail(email) {
   var regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regEmail.test(email);
@@ -39,6 +45,7 @@ var validatePassword = function validatePassword(password) {
 var validations = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	validateName: validateName,
+	validateWebsite: validateWebsite,
 	validateEmail: validateEmail,
 	validatePassword: validatePassword
 });
@@ -316,6 +323,23 @@ var viewInfoStyles = makeStyles({
     marginBottom: 5
   }
 });
+var viewInfoLink = makeStyles(function (theme) {
+  return {
+    root: {
+      color: theme.palette.primary,
+      '&:link, &:visited': {
+        color: theme.palette.primary,
+        textDecoration: 'none'
+      },
+      '&:hover, &:active': {
+        color: 'rgba(0,0,0,.9)',
+        textDecoration: 'none'
+      }
+    }
+  };
+});
+var viewInfoEmail = viewInfoLink();
+var viewInfoWebSite = viewInfoLink();
 var listResultText = makeStyles({
   root: {
     marginTop: 0,
@@ -357,6 +381,51 @@ var inArray = function inArray(property, items) {
   }
 
   return filters;
+};
+
+/**
+ * Renders an email "mailto:" (anchor) for display
+ *
+ * @param {object} param0 props
+ * @param {string} param0.text the text to be rendered
+ */
+
+var EmailInfo = function EmailInfo(_ref) {
+  var text = _ref.text,
+      _ref$external = _ref.external,
+      external = _ref$external === void 0 ? true : _ref$external;
+  var classes = viewInfoEmail();
+  return React.createElement("a", {
+    className: classes.root,
+    href: "mailto:".concat(text),
+    target: external ? '_blank' : '_self'
+  }, "".concat(text, " ").concat(React.createElement(EmailRounded, null)));
+};
+
+EmailInfo.propTypes = {
+  text: PropTypes.string,
+  external: PropTypes.bool
+};
+
+/**
+ * Renders a website link (anchor) for display
+ *
+ * @param {object} param0 props
+ * @param {string} param0.text the text to be rendered
+ */
+
+var WebSiteInfo = function WebSiteInfo(_ref) {
+  var text = _ref.text,
+      _ref$external = _ref.external;
+  var classes = viewInfoWebSite();
+  return React.createElement("a", {
+    className: classes.root,
+    href: text
+  }, "".concat(text, " ").concat(React.createElement(LaunchRounded, null)));
+};
+
+WebSiteInfo.propTypes = {
+  text: PropTypes.string
 };
 
 var protectedFieldValue = '******',
@@ -777,7 +846,7 @@ var createTextComponent = function createTextComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
   var classes = textFieldStyles();
   var component = null;
-  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? TextStyleByType(values[property]) : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
     className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
@@ -820,6 +889,16 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       disabled: !!field.disabled
     })
   });
+};
+
+var TextStyleByType = function TextStyleByType(text) {
+  if (validateEmail(text)) return React.createElement(EmailInfo, {
+    text: text
+  });
+  if (validateWebsite(text)) return React.createElement(WebSiteInfo, {
+    text: text
+  });
+  return text;
 };
 
 /**

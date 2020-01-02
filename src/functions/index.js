@@ -18,6 +18,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
 import { inArray } from '../util/query';
+import { validateEmail, validateWebsite } from '../util/validations';
+import { EmailInfo, WebSiteInfo } from '../components/view/text';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -486,7 +488,7 @@ const createTextComponent = ({
 		!!field.protected ? (
 			protectedFieldValue
 		) : !!values[property] && values[property] !== '' ? (
-			values[property]
+			TextStyleByType(values[property])
 		) : (
 			blankFieldPlaceholder
 		)
@@ -538,6 +540,12 @@ const createBooleanComponent = ({
 			}
 		/>
 	);
+};
+
+const TextStyleByType = (text) => {
+	if (validateEmail(text)) return <EmailInfo text={text} />;
+	if (validateWebsite(text)) return <WebSiteInfo text={text} />;
+	return text;
 };
 
 export {

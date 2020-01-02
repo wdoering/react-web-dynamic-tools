@@ -28,6 +28,24 @@ export const viewInfoStyles = makeStyles({
 	}
 });
 
+export const viewInfoLink = makeStyles((theme) => ({
+	root: {
+		color: theme.palette.primary,
+		'&:link, &:visited': {
+			color: theme.palette.primary,
+			textDecoration: 'none'
+		},
+		'&:hover, &:active': {
+			color: 'rgba(0,0,0,.9)',
+			textDecoration: 'none'
+		}
+	}
+}));
+
+export const viewInfoEmail = viewInfoLink();
+
+export const viewInfoWebSite = viewInfoLink();
+
 export const listResultText = makeStyles({
 	root: {
 		marginTop: 0,
