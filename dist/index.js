@@ -911,7 +911,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     onChange: function onChange(e) {
       handleChange(property, e.target.value); //Field has specific onChange function, runs after manipulation
 
-      if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.value);
+      if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.value, handleChange);
     },
     helperText: error ? i18n("form.error.".concat(error)) : ' ',
     error: !!error

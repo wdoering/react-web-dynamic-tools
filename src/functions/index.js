@@ -502,7 +502,7 @@ const createTextComponent = ({
 
 				//Field has specific onChange function, runs after manipulation
 				if (!!field.onChange && typeof field.onChange === 'function')
-					field.onChange(e, values, property, e.target.value);
+					field.onChange(e, values, property, e.target.value, handleChange);
 			}}
 			helperText={error ? i18n(`form.error.${error}`) : ' '}
 			error={!!error}
