@@ -405,7 +405,7 @@ const createViewComponent = ({ model, property, field, values, label, i18n }) =>
 	const classes = viewInfoStyles();
 
 	return (
-		<div>
+		<div className={classes.root}>
 			<FormLabel className={classes.title}>{i18n(label)}</FormLabel>
 			<div
 				className={classes.detail}

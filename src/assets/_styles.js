@@ -16,6 +16,9 @@ export const textFieldStyles = makeStyles({
 });
 
 export const viewInfoStyles = makeStyles({
+	root: {
+		marginBottom: '15px'
+	},
 	title: {
 		marginBottom: '5px'
 	},

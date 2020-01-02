@@ -305,6 +305,9 @@ var textFieldStyles = makeStyles({
   }
 });
 var viewInfoStyles = makeStyles({
+  root: {
+    marginBottom: '15px'
+  },
   title: {
     marginBottom: '5px'
   },
@@ -697,7 +700,9 @@ var createViewComponent = function createViewComponent(_ref4) {
       label = _ref4.label,
       i18n = _ref4.i18n;
   var classes = viewInfoStyles();
-  return React.createElement("div", null, React.createElement(FormLabel, {
+  return React.createElement("div", {
+    className: classes.root
+  }, React.createElement(FormLabel, {
     className: classes.title
   }, i18n(label)), React.createElement("div", {
     className: classes.detail,
