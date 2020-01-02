@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo as useMemo$1, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Button, Typography, makeStyles as makeStyles$1, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import { Tooltip, Button, useTheme, useMediaQuery, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
+import EditIcon from '@material-ui/icons/EditRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
+import { SaveRounded } from '@material-ui/icons/SaveRounded';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -35,6 +39,27 @@ var validations = /*#__PURE__*/Object.freeze({
 	validateEmail: validateEmail,
 	validatePassword: validatePassword
 });
+
+var AddButton = function AddButton(_ref) {
+  var baseRoute = _ref.baseRoute,
+      i18n = _ref.i18n;
+  var history = useHistory();
+  return React.createElement(Tooltip, {
+    title: i18n('button.add.tooltip'),
+    arrow: true
+  }, React.createElement(Button, {
+    variant: "contained",
+    color: "primary",
+    onClick: function onClick() {
+      history.push("".concat(baseRoute, "/form/"));
+    }
+  }, i18n('button.add')));
+};
+
+AddButton.propTypes = {
+  baseRoute: PropTypes.string.isRequired,
+  i18n: PropTypes.func.isRequired
+};
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -285,6 +310,55 @@ function _nonIterableRest() {
 }
 
 /**
+ * Provides a boolean whether to use mobile icon-buttons, given current window size
+ * @returns {Boolean} true, icons might be rendered; false, may use texts
+ */
+
+function useMobileIconButtons() {
+  var theme = useTheme(),
+      matches = useMediaQuery(theme.breakpoints.down('md'));
+  return matches;
+}
+
+/**
+ * Provides access to the current window size object
+ * @returns {{ width: number, height: number }} object with window size props
+ */
+
+function useWindowSize() {
+  var isClient = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object';
+
+  function getSize() {
+    return {
+      width: isClient ? window.innerWidth : undefined,
+      height: isClient ? window.innerHeight : undefined
+    };
+  }
+
+  var _useState = useState(getSize),
+      _useState2 = _slicedToArray(_useState, 2),
+      windowSize = _useState2[0],
+      setWindowSize = _useState2[1];
+
+  useEffect(function () {
+    if (!isClient) {
+      return false;
+    }
+
+    function handleResize() {
+      setWindowSize(getSize());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return function () {
+      return window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return windowSize;
+}
+
+/**
  * A pattern-follower **cancel-button**
  *
  * @param {function} param0.onClick
@@ -298,21 +372,101 @@ var CancelButton = function CancelButton(_ref) {
       color = _ref$color === void 0 ? 'secondary' : _ref$color,
       other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
 
-  var history = useHistory();
-  return React.createElement(Button, _extends({
+  var history = useHistory(),
+      useIcons = useMobileIconButtons(),
+      buttonText = useMemo$1(function () {
+    return i18n('button.cancel');
+  }, [i18n]);
+  return React.createElement(Tooltip, {
+    title: i18n('button.cancel.tooltip'),
+    arrow: true
+  }, React.createElement(Button, _extends({
     variant: "outlined",
     color: color,
-    children: i18n('button.cancel'),
+    ariaLabel: buttonText,
+    children: useIcons ? React.createElement(KeyboardReturnRounded, null) : buttonText,
     onClick: onClick || function () {
       return history.goBack();
     }
-  }, other));
+  }, other)));
 };
 
 CancelButton.propTypes = {
   onClick: PropTypes.func,
   i18n: PropTypes.func.isRequired,
   color: PropTypes.string
+};
+
+var useStyles = makeStyles(function (theme) {
+  return {
+    root: {
+      marginLeft: 5,
+      color: 'rgba(255,255,255,1) !important',
+      backgrounColor: 'rgba(204, 0, 0, 0.9) !important',
+      '&:hover': {
+        backgrounColor: 'rgba(204, 0, 0, 0.75) !important'
+      }
+    }
+  };
+});
+
+var DeleteButton = function DeleteButton(_ref) {
+  var onClick = _ref.onClick,
+      i18n = _ref.i18n,
+      other = _objectWithoutProperties(_ref, ["onClick", "i18n"]);
+
+  var classes = useStyles(),
+      useIcons = useMobileIconButtons(),
+      buttonText = useMemo$1(function () {
+    return i18n('button.delete');
+  }, [i18n]);
+  return React.createElement(Tooltip, {
+    title: i18n('button.delete.tooltip'),
+    arrow: true
+  }, React.createElement(Button, _extends({
+    variant: "contained",
+    className: classes.root,
+    onClick: onClick,
+    ariaLabel: buttonText
+  }, other), useIcons ? React.createElement(EditIcon, null) : buttonText));
+};
+
+DeleteButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  i18n: PropTypes.func.isRequired
+};
+
+var EditButton = function EditButton(_ref) {
+  var baseRoute = _ref.baseRoute,
+      id = _ref.id,
+      i18n = _ref.i18n,
+      _ref$color = _ref.color,
+      color = _ref$color === void 0 ? 'primary' : _ref$color,
+      other = _objectWithoutProperties(_ref, ["baseRoute", "id", "i18n", "color"]);
+
+  var history = useHistory(),
+      useIcons = useMobileIconButtons(),
+      buttonText = useMemo$1(function () {
+    return i18n('button.edit');
+  }, [i18n]);
+  return React.createElement(Tooltip, {
+    title: i18n('button.edit.tooltip'),
+    arrow: true
+  }, React.createElement(Button, _extends({
+    variant: "contained",
+    color: color,
+    onClick: function onClick() {
+      history.push("".concat(baseRoute, "/form/").concat(id));
+    },
+    ariaLabel: buttonText
+  }, other), useIcons ? React.createElement(DeleteRounded, null) : buttonText));
+};
+
+EditButton.propTypes = {
+  baseRoute: PropTypes.string.isRequired,
+  color: PropTypes.oneOf(['primary', 'secondary']),
+  id: PropTypes.string.isRequired,
+  i18n: PropTypes.func.isRequired
 };
 
 /**
@@ -329,13 +483,21 @@ var SaveButton = function SaveButton(_ref) {
       color = _ref$color === void 0 ? 'primary' : _ref$color,
       other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
 
-  return React.createElement(Button, _extends({
+  var useIcons = useMobileIconButtons(),
+      buttonText = useMemo(function () {
+    return i18n('button.save');
+  }, [i18n]);
+  return React.createElement(Tooltip, {
+    title: i18n('button.save.tooltip'),
+    arrow: true
+  }, React.createElement(Button, _extends({
     variant: "contained",
     color: color // type="submit"
     ,
-    children: i18n('button.save'),
-    onClick: onClick
-  }, other));
+    children: useIcons ? React.createElement(SaveRounded, null) : buttonText,
+    onClick: onClick,
+    ariaLabel: buttonText
+  }, other)));
 };
 
 SaveButton.propTypes = {
@@ -464,7 +626,7 @@ TitleAndButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.element)
 };
 
-var useStyles = makeStyles(function (theme) {
+var useStyles$1 = makeStyles$1(function (theme) {
   return {
     root: {
       marginTop: theme.spacing(2),
@@ -487,7 +649,7 @@ var useStyles = makeStyles(function (theme) {
 
 var BottomButtons = function BottomButtons(_ref) {
   var buttons = _ref.buttons;
-  var classes = useStyles();
+  var classes = useStyles$1();
   return React.createElement("div", {
     className: classes.root
   }, buttons.map(function (button, key) {
@@ -501,7 +663,7 @@ BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
 
-var errorStyles = makeStyles$1({
+var errorStyles = makeStyles({
   root: {
     color: '#f44336',
     alignSelf: 'center',
@@ -509,12 +671,12 @@ var errorStyles = makeStyles$1({
     marginRight: '10px'
   }
 });
-var textFieldStyles = makeStyles$1({
+var textFieldStyles = makeStyles({
   spacer: {
     marginBottom: '10px'
   }
 });
-var viewInfoStyles = makeStyles$1({
+var viewInfoStyles = makeStyles({
   title: {
     marginBottom: '5px'
   },
@@ -523,13 +685,13 @@ var viewInfoStyles = makeStyles$1({
     marginBottom: 5
   }
 });
-var listResultText = makeStyles$1({
+var listResultText = makeStyles({
   root: {
     marginTop: 0,
     marginBottom: 10
   }
 });
-var listEmptyStyles = makeStyles$1({
+var listEmptyStyles = makeStyles({
   root: {
     marginTop: 10,
     marginBottom: 10,
@@ -1821,13 +1983,10 @@ var DynamicList = function DynamicList(_ref) {
   }, [oService, serviceInstance]);
   return React.createElement("div", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".list.$title")),
-    buttons: [React.createElement(Button, {
-      variant: "contained",
-      color: "primary",
-      onClick: function onClick() {
-        history.push("".concat(baseRoute, "/form/"));
-      }
-    }, i18n('button.add'))]
+    buttons: [React.createElement(AddButton, {
+      baseRoute: baseRoute,
+      i18n: i18n
+    })]
   }), React.createElement(Card, {
     className: "mb-15"
   }, React.createElement(CardContent, null, React.createElement("div", {
@@ -2166,19 +2325,16 @@ var DynamicView = function DynamicView(_ref3) {
   });
   return React.createElement("form", null, React.createElement(TitleAndButtons, {
     title: i18n("".concat(model.getModelName(), ".form.$title")),
-    buttons: [React.createElement(Button, {
-      variant: "contained",
-      color: "primary",
-      onClick: function onClick() {
-        history.push("".concat(baseRoute, "/form/").concat(values.uid));
-      }
-    }, i18n('button.edit')), React.createElement(Button, {
-      variant: "contained",
-      className: "ml-5 btn-danger text-white",
+    buttons: [React.createElement(EditButton, {
+      baseRoute: baseRoute,
+      id: values.uid,
+      i18n: i18n
+    }), React.createElement(DeleteButton, {
       onClick: function onClick() {
         deleteConfirmationDialogRef.current.open();
-      }
-    }, i18n('button.delete'))]
+      },
+      i18n: i18n
+    })]
   }), React.createElement(DeleteConfirmationDialog, {
     ref: deleteConfirmationDialogRef,
     title: i18n('dynamic.form.deleteConfirmation'),
@@ -2199,44 +2355,6 @@ DynamicView.propTypes = {
   firebase: PropTypes.object,
   serviceInstance: PropTypes.object
 };
-
-/**
- * Provides access to the current window size object
- * @returns {{ width: number, height: number }} object with window size props
- */
-
-function useWindowSize() {
-  var isClient = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object';
-
-  function getSize() {
-    return {
-      width: isClient ? window.innerWidth : undefined,
-      height: isClient ? window.innerHeight : undefined
-    };
-  }
-
-  var _useState = useState(getSize),
-      _useState2 = _slicedToArray(_useState, 2),
-      windowSize = _useState2[0],
-      setWindowSize = _useState2[1];
-
-  useEffect(function () {
-    if (!isClient) {
-      return false;
-    }
-
-    function handleResize() {
-      setWindowSize(getSize());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return function () {
-      return window.removeEventListener('resize', handleResize);
-    };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
-
-  return windowSize;
-}
 
 export { BottomButtons, CancelButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, SaveButton, TitleAndButtons, useWindowSize, validations };
 //# sourceMappingURL=index.js.map

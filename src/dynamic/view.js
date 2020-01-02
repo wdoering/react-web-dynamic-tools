@@ -24,6 +24,7 @@ import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog
 import { TitleAndButtons } from '../components/title';
 import { useListOfData } from './_hooks';
 import { EmptyRelation } from '../components/form';
+import { EditButton, DeleteButton } from '../components/Button';
 
 let searchIdOfTimeout;
 
@@ -312,24 +313,13 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 			<TitleAndButtons
 				title={i18n(`${model.getModelName()}.form.$title`)}
 				buttons={[
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => {
-							history.push(`${baseRoute}/form/${values.uid}`);
-						}}
-					>
-						{i18n('button.edit')}
-					</Button>,
-					<Button
-						variant="contained"
-						className="ml-5 btn-danger text-white"
+					<EditButton baseRoute={baseRoute} id={values.uid} i18n={i18n} />,
+					<DeleteButton
 						onClick={() => {
 							deleteConfirmationDialogRef.current.open();
 						}}
-					>
-						{i18n('button.delete')}
-					</Button>
+						i18n={i18n}
+					/>
 				]}
 			/>
 			<DeleteConfirmationDialog

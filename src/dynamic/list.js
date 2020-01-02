@@ -7,6 +7,7 @@ import { createConfiguredListItem } from './_functions';
 import { TitleAndButtons } from '../components/title';
 import EmptyList from '../components/list/Empty';
 import ListTotaliser from '../components/list/Totaliser';
+import { AddButton } from '../components/Button';
 
 /**
  * Will create a displayable list of components
@@ -226,17 +227,7 @@ const DynamicList = ({
 		<div>
 			<TitleAndButtons
 				title={i18n(`${model.getModelName()}.list.$title`)}
-				buttons={[
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => {
-							history.push(`${baseRoute}/form/`);
-						}}
-					>
-						{i18n('button.add')}
-					</Button>
-				]}
+				buttons={[<AddButton baseRoute={baseRoute} i18n={i18n} />]}
 			/>
 			<Card className="mb-15">
 				<CardContent>
