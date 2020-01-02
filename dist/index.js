@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Tooltip, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import { makeStyles, Button, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Tooltip, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -326,15 +326,15 @@ var viewInfoStyles = makeStyles({
 var viewInfoLink = makeStyles(function (theme) {
   return {
     root: {
-      color: theme.palette.primary,
-      '&:link, &:visited': {
-        color: theme.palette.primary,
-        textDecoration: 'none'
-      },
-      '&:hover, &:active': {
-        color: 'rgba(0,0,0,.9)',
-        textDecoration: 'none'
-      }
+      textTransform: 'unset' // '&:link, &:visited': {
+      // 	color: theme.palette.primary,
+      // 	textDecoration: 'none'
+      // },
+      // '&:hover, &:active': {
+      // 	color: 'rgba(0,0,0,.9)',
+      // 	textDecoration: 'none'
+      // }
+
     }
   };
 });
@@ -393,7 +393,9 @@ var EmailInfo = function EmailInfo(_ref) {
       _ref$external = _ref.external,
       external = _ref$external === void 0 ? true : _ref$external;
   var classes = viewInfoLink();
-  return React.createElement("a", {
+  return React.createElement(Button, {
+    variant: "text",
+    component: "a",
     className: classes.root,
     href: "mailto:".concat(text),
     target: external ? '_blank' : '_self'
@@ -417,7 +419,9 @@ var WebSiteInfo = function WebSiteInfo(_ref) {
       _ref$external = _ref.external,
       external = _ref$external === void 0 ? true : _ref$external;
   var classes = viewInfoLink();
-  return React.createElement("a", {
+  return React.createElement(Button, {
+    variant: "text",
+    component: "a",
     className: classes.root,
     href: text,
     target: external ? '_blank' : '_self'

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 import EmailRounded from '@material-ui/icons/EmailRounded';
 import { viewInfoLink } from '../../../assets/_styles';
 
@@ -13,9 +14,15 @@ const EmailInfo = ({ text, external = true }) => {
 	const classes = viewInfoLink();
 
 	return (
-		<a className={classes.root} href={`mailto:${text}`} target={external ? '_blank' : '_self'}>
+		<Button
+			variant="text"
+			component="a"
+			className={classes.root}
+			href={`mailto:${text}`}
+			target={external ? '_blank' : '_self'}
+		>
 			{text} <EmailRounded />
-		</a>
+		</Button>
 	);
 };
 

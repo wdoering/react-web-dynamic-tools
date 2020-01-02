@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import { viewInfoLink } from '../../../assets/_styles';
 
@@ -13,9 +14,15 @@ const WebSiteInfo = ({ text, external = true }) => {
 	const classes = viewInfoLink();
 
 	return (
-		<a className={classes.root} href={text} target={external ? '_blank' : '_self'}>
+		<Button
+			variant="text"
+			component="a"
+			className={classes.root}
+			href={text}
+			target={external ? '_blank' : '_self'}
+		>
 			{text} <LaunchRounded />
-		</a>
+		</Button>
 	);
 };
 
