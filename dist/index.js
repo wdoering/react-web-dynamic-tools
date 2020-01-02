@@ -1253,24 +1253,36 @@ var useStyles$1 = makeStyles(function (theme) {
     }
   };
 });
+/**
+ * Will render a default Dynamic title (h4 or any specified);
+ * Based on MUI Typography;
+ *
+ * @param {object} param0 Params
+ * @param {string} param0.title The title to be rendered itself
+ * @param {React.ReactElement|React.ReactNode} param0.children The collection of children to be rendered
+ * @param {Array<React.ReactElement>} param0.button The button collection to be rendered
+ * @param {string} param0.variant The title Typography variant
+ */
 
 var TitleAndButtons = function TitleAndButtons(_ref) {
   var title = _ref.title,
-      children = _ref.children,
-      buttons = _ref.buttons,
+      _ref$children = _ref.children,
+      children = _ref$children === void 0 ? false : _ref$children,
+      _ref$buttons = _ref.buttons,
+      buttons = _ref$buttons === void 0 ? [] : _ref$buttons,
       _ref$variant = _ref.variant,
       variant = _ref$variant === void 0 ? 'h4' : _ref$variant;
   var classes = useStyles$1();
   return React.createElement(Typography, {
     variant: variant,
     className: classes.root
-  }, !!title && title !== '' && title, !!children && children, !!buttons && buttons.length > 0 && React.createElement("div", {
+  }, !!title && title !== '' && title, !!children && children, !!buttons && buttons.length > 0 && React.createElement(React.Fragment, null, React.createElement("div", {
     className: classes.spacer
   }), buttons.map(function (button, index) {
     return React.cloneElement(button, {
       key: index
     });
-  }));
+  })));
 };
 
 TitleAndButtons.propTypes = {
