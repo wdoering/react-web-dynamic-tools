@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@material-ui/core';
-import DeleteRounded from '@material-ui/icons/DeleteRounded';
+import EditIcon from '@material-ui/icons/EditRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 const EditButton = ({ baseRoute, id, i18n, color = 'primary', ...other }) => {
@@ -21,7 +21,7 @@ const EditButton = ({ baseRoute, id, i18n, color = 'primary', ...other }) => {
 				ariaLabel={buttonText}
 				{...other}
 			>
-				{useIcons ? <DeleteRounded /> : buttonText}
+				{useIcons ? <EditRounded /> : buttonText}
 			</Button>
 		</Tooltip>
 	);

@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/AddRounded';
+import { useMobileIconButtons } from '../../hooks';
 
 const AddButton = ({ baseRoute, i18n }) => {
-	const history = useHistory();
+	const history = useHistory(),
+		useIcon = useMobileIconButtons();
 
 	return (
 		<Tooltip title={i18n('button.add.tooltip')} arrow>
@@ -15,7 +18,7 @@ const AddButton = ({ baseRoute, i18n }) => {
 					history.push(`${baseRoute}/form/`);
 				}}
 			>
-				{i18n('button.add')}
+				{useIcon ? <AddIcon /> : i18n('button.add')}
 			</Button>
 		</Tooltip>
 	);

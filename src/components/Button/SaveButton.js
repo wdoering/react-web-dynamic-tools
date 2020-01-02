@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@material-ui/core';
-import { SaveRounded } from '@material-ui/icons/SaveRounded';
+import SaveIcon from '@material-ui/icons/SaveRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 /**
@@ -19,8 +19,7 @@ const SaveButton = ({ onClick, i18n, color = 'primary', ...other }) => {
 			<Button
 				variant="contained"
 				color={color}
-				// type="submit"
-				children={useIcons ? <SaveRounded /> : buttonText}
+				children={useIcons ? <SaveIcon /> : buttonText}
 				onClick={onClick}
 				ariaLabel={buttonText}
 				{...other}

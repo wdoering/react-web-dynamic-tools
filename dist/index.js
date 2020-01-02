@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { Tooltip, Button, useTheme, useMediaQuery, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
-import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
-import EditIcon from '@material-ui/icons/EditRounded';
-import DeleteRounded from '@material-ui/icons/DeleteRounded';
-import { SaveRounded } from '@material-ui/icons/SaveRounded';
+import { useTheme, useMediaQuery, Tooltip, Button, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/AddRounded';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturnRounded';
+import DeleteIcon from '@material-ui/icons/DeleteRounded';
+import '@material-ui/icons/EditRounded';
+import SaveIcon from '@material-ui/icons/SaveRounded';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,7 +16,7 @@ import Button$1 from '@material-ui/core/Button';
 import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon$1 from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/InfoRounded';
@@ -40,26 +41,16 @@ var validations = /*#__PURE__*/Object.freeze({
 	validatePassword: validatePassword
 });
 
-var AddButton = function AddButton(_ref) {
-  var baseRoute = _ref.baseRoute,
-      i18n = _ref.i18n;
-  var history = useHistory();
-  return React.createElement(Tooltip, {
-    title: i18n('button.add.tooltip'),
-    arrow: true
-  }, React.createElement(Button, {
-    variant: "contained",
-    color: "primary",
-    onClick: function onClick() {
-      history.push("".concat(baseRoute, "/form/"));
-    }
-  }, i18n('button.add')));
-};
+/**
+ * Provides a boolean whether to use mobile icon-buttons, given current window size
+ * @returns {Boolean} true, icons might be rendered; false, may use texts
+ */
 
-AddButton.propTypes = {
-  baseRoute: PropTypes.string.isRequired,
-  i18n: PropTypes.func.isRequired
-};
+function useMobileIconButtons() {
+  var theme = useTheme(),
+      matches = useMediaQuery(theme.breakpoints.down('md'));
+  return matches;
+}
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -310,17 +301,6 @@ function _nonIterableRest() {
 }
 
 /**
- * Provides a boolean whether to use mobile icon-buttons, given current window size
- * @returns {Boolean} true, icons might be rendered; false, may use texts
- */
-
-function useMobileIconButtons() {
-  var theme = useTheme(),
-      matches = useMediaQuery(theme.breakpoints.down('md'));
-  return matches;
-}
-
-/**
  * Provides access to the current window size object
  * @returns {{ width: number, height: number }} object with window size props
  */
@@ -358,6 +338,28 @@ function useWindowSize() {
   return windowSize;
 }
 
+var AddButton = function AddButton(_ref) {
+  var baseRoute = _ref.baseRoute,
+      i18n = _ref.i18n;
+  var history = useHistory(),
+      useIcon = useMobileIconButtons();
+  return React.createElement(Tooltip, {
+    title: i18n('button.add.tooltip'),
+    arrow: true
+  }, React.createElement(Button, {
+    variant: "contained",
+    color: "primary",
+    onClick: function onClick() {
+      history.push("".concat(baseRoute, "/form/"));
+    }
+  }, useIcon ? React.createElement(AddIcon, null) : i18n('button.add')));
+};
+
+AddButton.propTypes = {
+  baseRoute: PropTypes.string.isRequired,
+  i18n: PropTypes.func.isRequired
+};
+
 /**
  * A pattern-follower **cancel-button**
  *
@@ -384,7 +386,7 @@ var CancelButton = function CancelButton(_ref) {
     variant: "outlined",
     color: color,
     ariaLabel: buttonText,
-    children: useIcons ? React.createElement(KeyboardReturnRounded, null) : buttonText,
+    children: useIcons ? React.createElement(KeyboardReturnIcon, null) : buttonText,
     onClick: onClick || function () {
       return history.goBack();
     }
@@ -428,7 +430,7 @@ var DeleteButton = function DeleteButton(_ref) {
     className: classes.root,
     onClick: onClick,
     ariaLabel: buttonText
-  }, other), useIcons ? React.createElement(EditIcon, null) : buttonText));
+  }, other), useIcons ? React.createElement(DeleteIcon, null) : buttonText));
 };
 
 DeleteButton.propTypes = {
@@ -459,7 +461,7 @@ var EditButton = function EditButton(_ref) {
       history.push("".concat(baseRoute, "/form/").concat(id));
     },
     ariaLabel: buttonText
-  }, other), useIcons ? React.createElement(DeleteRounded, null) : buttonText));
+  }, other), useIcons ? React.createElement(EditRounded, null) : buttonText));
 };
 
 EditButton.propTypes = {
@@ -492,9 +494,8 @@ var SaveButton = function SaveButton(_ref) {
     arrow: true
   }, React.createElement(Button, _extends({
     variant: "contained",
-    color: color // type="submit"
-    ,
-    children: useIcons ? React.createElement(SaveRounded, null) : buttonText,
+    color: color,
+    children: useIcons ? React.createElement(SaveIcon, null) : buttonText,
     onClick: onClick,
     ariaLabel: buttonText
   }, other)));
@@ -911,7 +912,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
     onClick: function onClick() {
       remove();
     }
-  }, React.createElement(DeleteIcon, null))));
+  }, React.createElement(DeleteIcon$1, null))));
 };
 
 var searchIdOfTimeout;

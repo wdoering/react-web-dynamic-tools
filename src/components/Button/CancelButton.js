@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@material-ui/core';
-import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturnRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 /**
@@ -22,7 +22,7 @@ const CancelButton = ({ onClick, i18n, color = 'secondary', ...other }) => {
 				variant="outlined"
 				color={color}
 				ariaLabel={buttonText}
-				children={useIcons ? <KeyboardReturnRounded /> : buttonText}
+				children={useIcons ? <KeyboardReturnIcon /> : buttonText}
 				onClick={onClick || (() => history.goBack())}
 				{...other}
 			/>
