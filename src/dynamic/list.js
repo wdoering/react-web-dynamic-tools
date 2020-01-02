@@ -8,6 +8,7 @@ import { TitleAndButtons } from '../components/title';
 import EmptyList from '../components/list/Empty';
 import ListTotaliser from '../components/list/Totaliser';
 import { AddButton } from '../components/Button';
+import { FieldGroup } from '../components/form';
 
 /**
  * Will create a displayable list of components
@@ -231,11 +232,11 @@ const DynamicList = ({
 			/>
 			<Card className="mb-15">
 				<CardContent>
-					<div className="field-group">
+					<FieldGroup>
 						{createFilters(model, i18n, (f) => {
 							search(oService, f);
 						})}
-					</div>
+					</FieldGroup>
 				</CardContent>
 			</Card>
 

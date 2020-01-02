@@ -2153,9 +2153,7 @@ var DynamicList = function DynamicList(_ref) {
     })]
   }), React.createElement(Card, {
     className: "mb-15"
-  }, React.createElement(CardContent, null, React.createElement("div", {
-    className: "field-group"
-  }, createFilters(model, i18n, function (f) {
+  }, React.createElement(CardContent, null, React.createElement(FieldGroup, null, createFilters(model, i18n, function (f) {
     search(oService, f);
   })))), React.createElement(Card, {
     className: "mb-15"
