@@ -13,7 +13,7 @@ import { viewInfoLink } from '../../../assets/_styles';
  * @param {string} param0.type the type of the info
  * @param {Boolean} param0.external If it opens an external link
  */
-const InfoWithIcon = ({ text, icon, i18n, type = 'link', external = true }) => {
+const InfoWithIcon = ({ text, icon, i18n, iconProps = null, type = 'link', external = true }) => {
 	const classes = viewInfoLink();
 
 	return (
@@ -22,12 +22,11 @@ const InfoWithIcon = ({ text, icon, i18n, type = 'link', external = true }) => {
 			<Tooltip title={i18n(`view.text.info.${type}`)} arrow>
 				<IconButton
 					variant="text"
-					component="a"
 					className={classes.icon}
-					href={text}
-					target={external ? '_blank' : '_self'}
 					aria-label={text}
 					size="small"
+					target={external ? '_blank' : '_self'}
+					{...iconProps}
 				>
 					{React.cloneElement(icon)}
 				</IconButton>

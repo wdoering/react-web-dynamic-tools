@@ -389,6 +389,8 @@ var InfoWithIcon = function InfoWithIcon(_ref) {
   var text = _ref.text,
       icon = _ref.icon,
       i18n = _ref.i18n,
+      _ref$iconProps = _ref.iconProps,
+      iconProps = _ref$iconProps === void 0 ? null : _ref$iconProps,
       _ref$type = _ref.type,
       type = _ref$type === void 0 ? 'link' : _ref$type,
       _ref$external = _ref.external,
@@ -399,15 +401,13 @@ var InfoWithIcon = function InfoWithIcon(_ref) {
   }, text, React.createElement(Tooltip, {
     title: i18n("view.text.info.".concat(type)),
     arrow: true
-  }, React.createElement(IconButton, {
+  }, React.createElement(IconButton, _extends({
     variant: "text",
-    component: "a",
     className: classes.icon,
-    href: text,
-    target: external ? '_blank' : '_self',
     "aria-label": text,
-    size: "small"
-  }, React.cloneElement(icon))));
+    size: "small",
+    target: external ? '_blank' : '_self'
+  }, iconProps), React.cloneElement(icon))));
 };
 
 InfoWithIcon.propTypes = {
@@ -437,7 +437,11 @@ var EmailInfo = function EmailInfo(_ref) {
     icon: React.createElement(EmailRounded, null),
     i18n: i18n,
     external: external,
-    type: "email"
+    type: "email",
+    iconProps: {
+      component: 'a',
+      href: "mailto:".concat(text)
+    }
   });
 };
 
@@ -465,7 +469,11 @@ var WebSiteInfo = function WebSiteInfo(_ref) {
     icon: React.createElement(LaunchRounded, null),
     i18n: i18n,
     external: external,
-    type: "website"
+    type: "website",
+    iconProps: {
+      component: 'a',
+      href: "".concat(text)
+    }
   });
 };
 

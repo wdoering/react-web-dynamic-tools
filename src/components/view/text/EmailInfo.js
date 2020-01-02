@@ -18,6 +18,7 @@ const EmailInfo = ({ text, i18n, external = true }) => (
 		i18n={i18n}
 		external={external}
 		type="email"
+		iconProps={{ component: 'a', href: `mailto:${text}` }}
 	/>
 );
 
