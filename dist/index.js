@@ -402,9 +402,9 @@ var useStyles = makeStyles(function (theme) {
     root: {
       marginLeft: 5,
       color: 'rgba(255,255,255,1) !important',
-      backgroundColor: 'rgba(204, 0, 0, 0.9) !important',
+      backgroundColor: 'rgba(216, 0, 0, 1) !important',
       '&:hover': {
-        backgroundColor: 'rgba(204, 0, 0, 0.75) !important'
+        backgroundColor: 'rgba(195, 0, 0, 0.85) !important'
       }
     }
   };
