@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EmailRounded from '@material-ui/icons/EmailRounded';
-import { viewInfoEmail } from '../../../assets/_styles';
+import { viewInfoLink } from '../../../assets/_styles';
 
 /**
  * Renders an email "mailto:" (anchor) for display
@@ -10,7 +10,7 @@ import { viewInfoEmail } from '../../../assets/_styles';
  * @param {string} param0.text the text to be rendered
  */
 const EmailInfo = ({ text, external = true }) => {
-	const classes = viewInfoEmail();
+	const classes = viewInfoLink();
 
 	return (
 		<a

@@ -338,8 +338,6 @@ var viewInfoLink = makeStyles(function (theme) {
     }
   };
 });
-var viewInfoEmail = viewInfoLink();
-var viewInfoWebSite = viewInfoLink();
 var listResultText = makeStyles({
   root: {
     marginTop: 0,
@@ -394,7 +392,7 @@ var EmailInfo = function EmailInfo(_ref) {
   var text = _ref.text,
       _ref$external = _ref.external,
       external = _ref$external === void 0 ? true : _ref$external;
-  var classes = viewInfoEmail();
+  var classes = viewInfoLink();
   return React.createElement("a", {
     className: classes.root,
     href: "mailto:".concat(text),
@@ -416,16 +414,19 @@ EmailInfo.propTypes = {
 
 var WebSiteInfo = function WebSiteInfo(_ref) {
   var text = _ref.text,
-      _ref$external = _ref.external;
-  var classes = viewInfoWebSite();
+      _ref$external = _ref.external,
+      external = _ref$external === void 0 ? true : _ref$external;
+  var classes = viewInfoLink();
   return React.createElement("a", {
     className: classes.root,
-    href: text
+    href: text,
+    target: external ? '_blank' : '_self'
   }, "".concat(text, " ").concat(React.createElement(LaunchRounded, null)));
 };
 
 WebSiteInfo.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
+  external: PropTypes.bool
 };
 
 var protectedFieldValue = '******',

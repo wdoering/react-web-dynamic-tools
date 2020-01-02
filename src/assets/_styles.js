@@ -42,10 +42,6 @@ export const viewInfoLink = makeStyles((theme) => ({
 	}
 }));
 
-export const viewInfoEmail = viewInfoLink();
-
-export const viewInfoWebSite = viewInfoLink();
-
 export const listResultText = makeStyles({
 	root: {
 		marginTop: 0,
