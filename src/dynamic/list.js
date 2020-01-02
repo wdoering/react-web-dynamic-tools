@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { TextField, Card, CardContent, List, Button } from '@material-ui/core';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import { createConfiguredListItem } from './_functions';
+import { createConfiguredListItem } from '../functions';
 import { TitleAndButtons } from '../components/title';
 import EmptyList from '../components/list/Empty';
 import ListTotaliser from '../components/list/Totaliser';

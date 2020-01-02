@@ -265,8 +265,13 @@ const createIdOfComponent = (
 			(currentDialogValue instanceof Array && currentDialogValue.length === 0))
 	) {
 		setSelected(currentDialogValue);
-		console.log('createIdOfComponent:selected', selected);
-		console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
+
+		//TODO: remove from here
+		//debugging
+		if (process.env.NODE_ENV === 'development') {
+			console.log('createIdOfComponent:selected', selected);
+			console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
+		}
 	}
 
 	const select = (item) => () => {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { getServiceList, typeShouldUseService } from './_functions';
+import { useState, useEffect } from 'react';
+import { getServiceList, typeShouldUseService } from '../functions';
 
 /**
  * Custom hook for finding a list of data from an object array-prop
@@ -8,6 +8,8 @@ import { getServiceList, typeShouldUseService } from './_functions';
  * @param {string} property Property in question, the name
  * @param {FieldType} Type The type in question (complex should be)
  * @param {object} firebase With connection to a service
+ *
+ * @return {array} with a, array-list and a setList function
  */
 const useListOfData = (objectWithProps, property, Type, firebase) => {
 	const [list, setList] = useState([]),
@@ -35,4 +37,4 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 	return [list, setList];
 };
 
-export { useListOfData };
+export default useListOfData;

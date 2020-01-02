@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useTheme, useMediaQuery, Tooltip, Button, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import { makeStyles, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Tooltip, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
@@ -15,11 +19,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import { makeStyles as makeStyles$1 } from '@material-ui/styles';
+import classNames from 'classnames';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
 var validateName = function validateName(name) {
@@ -289,6 +290,567 @@ function _nonIterableSpread() {
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
+
+var errorStyles = makeStyles({
+  root: {
+    color: '#f44336',
+    alignSelf: 'center',
+    marginLeft: '10px',
+    marginRight: '10px'
+  }
+});
+var textFieldStyles = makeStyles({
+  spacer: {
+    marginBottom: '10px'
+  }
+});
+var viewInfoStyles = makeStyles({
+  title: {
+    marginBottom: '5px'
+  },
+  detail: {
+    marginTop: 5,
+    marginBottom: 5
+  }
+});
+var listResultText = makeStyles({
+  root: {
+    marginTop: 0,
+    marginBottom: 10
+  }
+});
+var listEmptyStyles = makeStyles({
+  root: {
+    marginTop: 10,
+    marginBottom: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& > *': {
+      flex: '0 0 auto',
+      marginBottom: 15
+    }
+  }
+});
+
+/**
+ * Firebase in-array slice limit
+ */
+var arraySliceLength = 10;
+/**
+ * Utility for array slicing up to 10 itens
+ * When building in-array for firebase-basic-service queries
+ *
+ * @param {string} property The property to be compared
+ * @param {array} items List items of string
+ */
+
+var inArray = function inArray(property, items) {
+  var filters = [];
+
+  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
+    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
+  }
+
+  return filters;
+};
+
+var protectedFieldValue = '******',
+    blankFieldPlaceholder = '-';
+/**
+ * TODO: comment/describe
+ */
+
+var DateDetail = function DateDetail(_ref) {
+  var item = _ref.item,
+      _ref$locale = _ref.locale,
+      locale = _ref$locale === void 0 ? 'pt-br' : _ref$locale;
+  var dateString = item.toLocaleDateString(locale),
+      timeString = item.toLocaleTimeString(locale);
+  return React.createElement("div", {
+    key: 0,
+    style: {
+      flexBasis: '100%'
+    }
+  }, React.createElement(Typography, {
+    style: {
+      color: '#111',
+      fontWeight: '700'
+    }
+  }, dateString + (!timeString || " ".concat(timeString))));
+};
+
+var mergeSets = function mergeSets(set0, setOrObject1) {
+  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+  var merged = null;
+
+  if (defaultValue instanceof Array && setOrObject1 instanceof Array) {
+    merged = [].concat(_toConsumableArray(set0), _toConsumableArray(setOrObject1));
+  } else if (_typeof(defaultValue) === 'object') {
+    merged = [].concat(_toConsumableArray(set0), [Object.assign({}, setOrObject1)]);
+  } else {
+    merged = [].concat(_toConsumableArray(set0), [setOrObject1]);
+  }
+
+  return merged;
+};
+
+var removeFromSet = function removeFromSet(set0, itemRemoving, indexRemoving) {
+  var itemIsObject = itemRemoving instanceof Object && !!itemRemoving.uid,
+      newList = _toConsumableArray(set0.filter(function (item, index) {
+    return itemIsObject ? itemRemoving.uid !== item : index !== indexRemoving;
+  }));
+
+  return newList;
+};
+/**
+ * Checks whether a type should use a service
+ *
+ * @param {FieldType} Type The type being checked
+ */
+
+
+var typeShouldUseService = function typeShouldUseService(Type) {
+  var should = false; //Type is a FieldType
+  //And is specific shape
+  //No service will exist behind
+
+  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType !== ComplexTypes.ShapedAs) {
+    should = true;
+  }
+
+  return should;
+};
+
+var typeInstance, typeService;
+/**
+ * Creates a type service based on a Type instance
+ *
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {object} firebase The base object for connections
+ */
+
+var getTypeService = function getTypeService(Type, firebase) {
+  typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
+  return !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
+};
+/**
+ * Will create an instance of Type=>Service, then request a list of objects,
+ * based on a set/array of **uid-strings** specified at **objectWithProps**
+ *
+ * @param {string} property The prop name being used for reference
+ * @param {FieldType} Type The type being used for instance & service
+ * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
+ * @param {object} firebase The base object for connections
+ */
+
+
+var getServiceList = function getServiceList(property, Type, objectWithProps, firebase) {
+  typeService = getTypeService(Type, firebase);
+  if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
+  return typeService.filter(inArray('uid', objectWithProps[property])).list().then(function (result) {
+    //TODO: remove from here
+    console.log('getServiceList:serviceList:result', result);
+    return Promise.resolve(result);
+  }).catch(function (e) {
+    throw e;
+  });
+};
+/**
+ * TODO: comment/describe
+ *
+ * @param {*} param0
+ */
+
+
+var createConfiguredListItem = function createConfiguredListItem(_ref2) {
+  var item = _ref2.item,
+      listItemProperties = _ref2.listItemProperties,
+      key = _ref2.key,
+      onClick = _ref2.onClick,
+      remove = _ref2.remove;
+  var fields = [];
+
+  if (listItemProperties) {
+    listItemProperties.map(function (prop, i) {
+      fields.push(React.createElement("div", {
+        key: i,
+        style: {
+          flexBasis: '100%'
+        }
+      }, React.createElement(Typography, {
+        style: {
+          color: i > 0 ? '#666' : '#111',
+          fontWeight:  '200' 
+        }
+      }, typeof prop === 'function' ? prop(item) : item[prop])));
+    });
+  } else if (_typeof(item) !== 'object') {
+    fields.push(React.createElement("div", {
+      key: 0,
+      style: {
+        flexBasis: '100%'
+      }
+    }, React.createElement(Typography, {
+      style: {
+        color: '#111',
+        fontWeight: '700'
+      }
+    }, item)));
+  } else if (item instanceof Date) {
+    fields.push(React.createElement(DateDetail, {
+      item: item
+    }));
+  }
+
+  return React.createElement(ListItem, {
+    key: key,
+    style: {
+      flexWrap: 'wrap',
+      borderBottom: '1px solid #ddd',
+      cursor: onClick ? 'pointer' : 'normal'
+    },
+    onClick: onClick
+  }, fields, !!remove && React.createElement(ListItemSecondaryAction, null, React.createElement(IconButton, {
+    edge: "end",
+    onClick: function onClick() {
+      remove();
+    }
+  }, React.createElement(DeleteIcon, null))));
+};
+
+var searchIdOfTimeout;
+/**
+ * TODO: comment/describe
+ *
+ * @param {ModelBase} model
+ * @param {string} property
+ * @param {object} values
+ * @param {ModelBase} Type
+ * @param {object} firebase
+ * @param {function} i18n Translation base function. Has to receive an ID
+ * @param {function} handleChange
+ */
+
+var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
+  var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+  var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
+  var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
+  var config = model.$fieldConfig[property]; //Validating prior to using
+
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+
+  var oService = new Type().getService(firebase),
+      _useState = useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      list = _useState2[0],
+      setList = _useState2[1],
+      _useState3 = useState(!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []),
+      _useState4 = _slicedToArray(_useState3, 2),
+      selected = _useState4[0],
+      setSelected = _useState4[1],
+      _useState5 = useState(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      value = _useState6[0],
+      setValue = _useState6[1];
+
+  if (!selected && values[property]) {
+    if (!(values[property] instanceof Array && singleItem)) {
+      clearTimeout(searchIdOfTimeout);
+      searchIdOfTimeout = setTimeout(function () {
+        oService.get(values[property]).then(function (r) {
+          setSelected(r);
+        });
+      }, 200);
+    } else {
+      clearTimeout(searchIdOfTimeout);
+      searchIdOfTimeout = setTimeout(function () {
+        oService.filter([['uid', 'in', values[property]]]).then(function (r) {
+          setSelected(r);
+        });
+      }, 200);
+    }
+  } else if (!!selected && selected instanceof Array && selected.length > 0 && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
+    setSelected(currentDialogValue); //TODO: remove from here
+    //debugging
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('createIdOfComponent:selected', selected);
+      console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
+    }
+  }
+
+  var select = function select(item) {
+    return function () {
+      setSelected(!!singleItem ? item : [].concat(_toConsumableArray(selected), [item]));
+      setList([]);
+      setValue('');
+      handleChange(property, item.uid, item);
+    };
+  };
+
+  return React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, useOwnTitle && React.createElement(Typography, {
+    variant: "h5",
+    className: "mb-10"
+  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, React.createElement(TextField, {
+    variant: "outlined",
+    value: value,
+    style: {
+      width: '100%'
+    },
+    onChange: function onChange(e) {
+      var text = e.target.value;
+      setValue(text);
+      clearTimeout(searchIdOfTimeout);
+
+      if (!text) {
+        setList([]);
+        return;
+      }
+
+      var tend = text.substr(0, text.length - 1) + String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
+      searchIdOfTimeout = setTimeout(function () {
+        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]).limit(5).list().then(function (r) {
+          setList(r);
+        });
+      }, 300);
+    },
+    InputProps: {
+      startAdornment: React.createElement(InputAdornment, {
+        position: "start"
+      }, React.createElement(SearchIcon, null))
+    }
+  })), !!list.length && React.createElement(Paper, {
+    elevation: 10,
+    style: {
+      position: 'absolute',
+      zIndex: 10000,
+      left: 0,
+      right: 0
+    }
+  }, React.createElement(List, {
+    style: {
+      minHeight: 65,
+      maxHeight: 150,
+      overflow: 'scroll'
+    }
+  }, list.map(function (item, i) {
+    return createConfiguredListItem({
+      item: item,
+      listItemProperties: config.searchListItemProperties,
+      key: i,
+      onClick: select(item)
+    });
+  }))), !!selected && React.createElement("div", {
+    className: "mt-10"
+  }, !!singleItem && createConfiguredListItem({
+    item: selected,
+    listItemProperties: config.listItemProperties,
+    key: 0
+  }), !singleItem && selected.map(function (item, index) {
+    return createConfiguredListItem({
+      item: item,
+      listItemProperties: config.listItemProperties,
+      key: index
+    });
+  })));
+};
+
+var createFormComponent = function createFormComponent(_ref3) {
+  var model = _ref3.model,
+      property = _ref3.property,
+      values = _ref3.values,
+      field = _ref3.field,
+      error = _ref3.error,
+      label = _ref3.label,
+      i18n = _ref3.i18n,
+      handleChange = _ref3.handleChange;
+  var component = null;
+  component = createByType({
+    model: model,
+    property: property,
+    values: values,
+    label: label,
+    error: error,
+    i18n: i18n,
+    field: field,
+    handleChange: handleChange,
+    view: false
+  });
+  return component;
+};
+
+var createViewComponent = function createViewComponent(_ref4) {
+  var model = _ref4.model,
+      property = _ref4.property,
+      field = _ref4.field,
+      values = _ref4.values,
+      label = _ref4.label,
+      i18n = _ref4.i18n;
+  var classes = viewInfoStyles();
+  return React.createElement("div", null, React.createElement(FormLabel, {
+    className: classes.title
+  }, i18n(label)), React.createElement("div", {
+    className: classes.detail,
+    style: _objectSpread2({
+      fontSize: 18,
+      fontWeight: '100'
+    }, field.style.field)
+  }, createByType({
+    model: model,
+    property: property,
+    values: values,
+    label: label,
+    i18n: i18n,
+    field: field,
+    handleChange: null,
+    view: true
+  })));
+};
+
+var createByType = function createByType(_ref5) {
+  var model = _ref5.model,
+      property = _ref5.property,
+      values = _ref5.values,
+      label = _ref5.label,
+      error = _ref5.error,
+      i18n = _ref5.i18n,
+      field = _ref5.field,
+      handleChange = _ref5.handleChange,
+      _ref5$view = _ref5.view,
+      view = _ref5$view === void 0 ? false : _ref5$view;
+  var component = null;
+
+  switch (field.type) {
+    case FieldTypes.Boolean:
+      component = createBooleanComponent({
+        property: property,
+        values: values,
+        label: label,
+        i18n: i18n,
+        field: field,
+        handleChange: handleChange,
+        view: view
+      });
+      break;
+
+    default:
+      component = createTextComponent({
+        property: property,
+        values: values,
+        field: field,
+        label: label,
+        i18n: i18n,
+        error: error,
+        handleChange: handleChange,
+        view: view
+      });
+      break;
+  }
+
+  return component;
+};
+
+var createTextComponent = function createTextComponent(_ref6) {
+  var property = _ref6.property,
+      values = _ref6.values,
+      field = _ref6.field,
+      label = _ref6.label,
+      i18n = _ref6.i18n,
+      error = _ref6.error,
+      handleChange = _ref6.handleChange,
+      _ref6$view = _ref6.view,
+      view = _ref6$view === void 0 ? false : _ref6$view;
+  var classes = textFieldStyles();
+  var component = null;
+  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+    className: classes.spacer,
+    style: field.style.field,
+    label: i18n(label),
+    value: values[property],
+    type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
+    onChange: function onChange(e) {
+      return handleChange(property, e.target.value);
+    },
+    helperText: error ? i18n("form.error.".concat(error)) : ' ',
+    error: !!error
+  }));
+  return component;
+};
+
+var createBooleanComponent = function createBooleanComponent(_ref7) {
+  var property = _ref7.property,
+      values = _ref7.values,
+      label = _ref7.label,
+      i18n = _ref7.i18n,
+      field = _ref7.field,
+      handleChange = _ref7.handleChange,
+      _ref7$view = _ref7.view,
+      view = _ref7$view === void 0 ? false : _ref7$view;
+  var classes = textFieldStyles(),
+      usableLabel = i18n(label);
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
+    className: classes.spacer,
+    label: usableLabel,
+    labelPlacement: "start",
+    control: React.createElement(Checkbox, {
+      value: property,
+      color: "primary",
+      checked: values[property],
+      onChange: function onChange(e) {
+        return handleChange(property, e.target.checked);
+      },
+      inputProps: {
+        'aria-label': usableLabel
+      },
+      disabled: !!field.disabled
+    })
+  });
+};
+
+/**
+ * Custom hook for finding a list of data from an object array-prop
+ *
+ * @param {ModelBase} objectWithProps An object as source of data and string-uids
+ * @param {string} property Property in question, the name
+ * @param {FieldType} Type The type in question (complex should be)
+ * @param {object} firebase With connection to a service
+ *
+ * @return {array} with a, array-list and a setList function
+ */
+
+var useListOfData = function useListOfData(objectWithProps, property, Type, firebase) {
+  var _useState = useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      list = _useState2[0],
+      setList = _useState2[1],
+      currentValues = objectWithProps[property],
+      objectPropIsArray = currentValues instanceof Array;
+
+  useEffect(function () {
+    if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
+      //And is there a service behind?
+      if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
+        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
+          setList(result);
+        });
+      } else {
+        //No service at all, sets raw data
+        setList(objectWithProps[property]);
+      }
+    }
+  }, [list, objectWithProps, property, Type]);
+  return [list, setList];
+};
 
 /**
  * Provides a boolean whether to use mobile icon-buttons, given current window size
@@ -677,25 +1239,33 @@ DeleteConfirmationDialog.propTypes = {
   i18n: PropTypes.func.isRequired
 };
 
+var useStyles$1 = makeStyles(function (theme) {
+  return {
+    root: {
+      marginBottom: 15,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignContent: 'center'
+    },
+    spacer: {
+      flex: 1
+    }
+  };
+});
+
 var TitleAndButtons = function TitleAndButtons(_ref) {
   var title = _ref.title,
       children = _ref.children,
       buttons = _ref.buttons,
       _ref$variant = _ref.variant,
       variant = _ref$variant === void 0 ? 'h4' : _ref$variant;
+  var classes = useStyles$1();
   return React.createElement(Typography, {
     variant: variant,
-    className: "mb-15",
-    style: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      alignContent: 'center'
-    }
+    className: classes.root
   }, !!title && title !== '' && title, !!children && children, !!buttons && buttons.length > 0 && React.createElement("div", {
-    style: {
-      flex: 1
-    }
+    className: classes.spacer
   }), buttons.map(function (button, index) {
     return React.cloneElement(button, {
       key: index
@@ -709,7 +1279,7 @@ TitleAndButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.element)
 };
 
-var useStyles$1 = makeStyles$1(function (theme) {
+var useStyles$2 = makeStyles$1(function (theme) {
   return {
     root: {
       marginTop: theme.spacing(2),
@@ -732,7 +1302,7 @@ var useStyles$1 = makeStyles$1(function (theme) {
 
 var BottomButtons = function BottomButtons(_ref) {
   var buttons = _ref.buttons;
-  var classes = useStyles$1();
+  var classes = useStyles$2();
   return React.createElement("div", {
     className: classes.root
   }, buttons.map(function (button, key) {
@@ -745,49 +1315,6 @@ var BottomButtons = function BottomButtons(_ref) {
 BottomButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.node)
 };
-
-var errorStyles = makeStyles({
-  root: {
-    color: '#f44336',
-    alignSelf: 'center',
-    marginLeft: '10px',
-    marginRight: '10px'
-  }
-});
-var textFieldStyles = makeStyles({
-  spacer: {
-    marginBottom: '10px'
-  }
-});
-var viewInfoStyles = makeStyles({
-  title: {
-    marginBottom: '5px'
-  },
-  detail: {
-    marginTop: 5,
-    marginBottom: 5
-  }
-});
-var listResultText = makeStyles({
-  root: {
-    marginTop: 0,
-    marginBottom: 10
-  }
-});
-var listEmptyStyles = makeStyles({
-  root: {
-    marginTop: 10,
-    marginBottom: 10,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '& > *': {
-      flex: '0 0 auto',
-      marginBottom: 15
-    }
-  }
-});
 
 var EmptyRelation = function EmptyRelation(_ref) {
   var i18n = _ref.i18n;
@@ -802,6 +1329,55 @@ EmptyRelation.propTypes = {
   i18n: PropTypes.func.isRequired
 };
 
+var useStyles$3 = makeStyles(function (theme) {
+  return {
+    root: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      alignContent: 'flex-start',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      '& > .sibling-field': {
+        flex: 1,
+        flexGrow: 1,
+        marginRight: '10px',
+        minWidth: '100px',
+        flexBasis: '120px',
+        overflowWrap: 'break-word',
+        '& .MuiFormControl-root': {
+          width: '100%'
+        }
+      },
+      '& > .break-field': {
+        flexBasis: '100%'
+      }
+    },
+    rootWithMarginTop: {
+      marginTop: 15
+    }
+  };
+});
+/**
+ * Renders a default group-wrapper div, with possibility of margin-top-15
+ *
+ * @param {*} param0
+ */
+
+var FieldGroup = function FieldGroup(_ref) {
+  var children = _ref.children,
+      _ref$marginTop = _ref.marginTop,
+      marginTop = _ref$marginTop === void 0 ? false : _ref$marginTop;
+  var classes = useStyles$3();
+  return React.createElement("div", {
+    className: classNames('field-group', classes.root, _defineProperty({}, classes.rootWithMarginTop, marginTop))
+  }, children);
+};
+
+FieldGroup.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.arrayOf(PropTypes.node)]),
+  marginTop: PropTypes.bool
+};
+
 var ErrorLabel = function ErrorLabel(_ref) {
   var children = _ref.children;
   var classes = errorStyles();
@@ -812,515 +1388,22 @@ var ErrorLabel = function ErrorLabel(_ref) {
 };
 
 /**
- * Firebase in-array slice limit
- */
-var arraySliceLength = 10;
-/**
- * Utility for array slicing up to 10 itens
- * When building in-array for firebase-basic-service queries
+ * Renders an empty spacer sibling-field
  *
- * @param {string} property The property to be compared
- * @param {array} items List items of string
+ * @param {object} param0
+ * @param {any} param0.key The key of the current item
  */
 
-var inArray = function inArray(property, items) {
-  var filters = [];
-
-  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
-    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
-  }
-
-  return filters;
-};
-
-var protectedFieldValue = '******',
-    blankFieldPlaceholder = '-';
-/**
- * TODO: comment/describe
- */
-
-var DateDetail = function DateDetail(_ref) {
-  var item = _ref.item,
-      _ref$locale = _ref.locale,
-      locale = _ref$locale === void 0 ? 'pt-br' : _ref$locale;
-  var dateString = item.toLocaleDateString(locale),
-      timeString = item.toLocaleTimeString(locale);
+var SpacerSiblingField = function SpacerSiblingField(_ref) {
+  var _ref$key = _ref.key,
+      key = _ref$key === void 0 ? 0 : _ref$key;
   return React.createElement("div", {
-    key: 0,
+    key: key,
+    className: "sibling-field",
     style: {
       flexBasis: '100%'
     }
-  }, React.createElement(Typography, {
-    style: {
-      color: '#111',
-      fontWeight: '700'
-    }
-  }, dateString + (!timeString || " ".concat(timeString))));
-};
-
-var mergeSets = function mergeSets(set0, setOrObject1) {
-  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-  var merged = null;
-
-  if (defaultValue instanceof Array && setOrObject1 instanceof Array) {
-    merged = [].concat(_toConsumableArray(set0), _toConsumableArray(setOrObject1));
-  } else if (_typeof(defaultValue) === 'object') {
-    merged = [].concat(_toConsumableArray(set0), [Object.assign({}, setOrObject1)]);
-  } else {
-    merged = [].concat(_toConsumableArray(set0), [setOrObject1]);
-  }
-
-  return merged;
-};
-
-var removeFromSet = function removeFromSet(set0, itemRemoving, indexRemoving) {
-  var itemIsObject = itemRemoving instanceof Object && !!itemRemoving.uid,
-      newList = _toConsumableArray(set0.filter(function (item, index) {
-    return itemIsObject ? itemRemoving.uid !== item : index !== indexRemoving;
-  }));
-
-  return newList;
-};
-/**
- * Checks whether a type should use a service
- *
- * @param {FieldType} Type The type being checked
- */
-
-
-var typeShouldUseService = function typeShouldUseService(Type) {
-  var should = false; //Type is a FieldType
-  //And is specific shape
-  //No service will exist behind
-
-  if (!!Type && !!Type.complexType && Type instanceof FieldType && Type.complexType !== ComplexTypes.ShapedAs) {
-    should = true;
-  }
-
-  return should;
-};
-
-var typeInstance, typeService;
-/**
- * Creates a type service based on a Type instance
- *
- * @param {FieldType} Type The type being used for instance & service
- * @param {object} firebase The base object for connections
- */
-
-var getTypeService = function getTypeService(Type, firebase) {
-  typeInstance = !!Type && !!Type.Type && typeof Type.Type === 'function' && new Type.Type();
-  return !!typeInstance && typeInstance instanceof ModelBase && typeInstance.getService(firebase);
-};
-/**
- * Will create an instance of Type=>Service, then request a list of objects,
- * based on a set/array of **uid-strings** specified at **objectWithProps**
- *
- * @param {string} property The prop name being used for reference
- * @param {FieldType} Type The type being used for instance & service
- * @param {ModelBase|object} objectWithProps The object which contains an array-prop with uid-strings
- * @param {object} firebase The base object for connections
- */
-
-
-var getServiceList = function getServiceList(property, Type, objectWithProps, firebase) {
-  typeService = getTypeService(Type, firebase);
-  if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
-  return typeService.filter(inArray('uid', objectWithProps[property])).list().then(function (result) {
-    //TODO: remove from here
-    console.log('getServiceList:serviceList:result', result);
-    return Promise.resolve(result);
-  }).catch(function (e) {
-    throw e;
   });
-};
-/**
- * TODO: comment/describe
- *
- * @param {*} param0
- */
-
-
-var createConfiguredListItem = function createConfiguredListItem(_ref2) {
-  var item = _ref2.item,
-      listItemProperties = _ref2.listItemProperties,
-      key = _ref2.key,
-      onClick = _ref2.onClick,
-      remove = _ref2.remove;
-  var fields = [];
-
-  if (listItemProperties) {
-    listItemProperties.map(function (prop, i) {
-      fields.push(React.createElement("div", {
-        key: i,
-        style: {
-          flexBasis: '100%'
-        }
-      }, React.createElement(Typography, {
-        style: {
-          color: i > 0 ? '#666' : '#111',
-          fontWeight:  '200' 
-        }
-      }, typeof prop === 'function' ? prop(item) : item[prop])));
-    });
-  } else if (_typeof(item) !== 'object') {
-    fields.push(React.createElement("div", {
-      key: 0,
-      style: {
-        flexBasis: '100%'
-      }
-    }, React.createElement(Typography, {
-      style: {
-        color: '#111',
-        fontWeight: '700'
-      }
-    }, item)));
-  } else if (item instanceof Date) {
-    fields.push(React.createElement(DateDetail, {
-      item: item
-    }));
-  }
-
-  return React.createElement(ListItem, {
-    key: key,
-    style: {
-      flexWrap: 'wrap',
-      borderBottom: '1px solid #ddd',
-      cursor: onClick ? 'pointer' : 'normal'
-    },
-    onClick: onClick
-  }, fields, !!remove && React.createElement(ListItemSecondaryAction, null, React.createElement(IconButton, {
-    edge: "end",
-    onClick: function onClick() {
-      remove();
-    }
-  }, React.createElement(DeleteIcon, null))));
-};
-
-var searchIdOfTimeout;
-/**
- * TODO: comment/describe
- *
- * @param {ModelBase} model
- * @param {string} property
- * @param {object} values
- * @param {ModelBase} Type
- * @param {object} firebase
- * @param {function} i18n Translation base function. Has to receive an ID
- * @param {function} handleChange
- */
-
-var createIdOfComponent = function createIdOfComponent(model, property, values, Type, firebase, i18n, handleChange) {
-  var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
-  var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
-  var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
-  var config = model.$fieldConfig[property]; //Validating prior to using
-
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
-
-  var oService = new Type().getService(firebase),
-      _useState = useState([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      list = _useState2[0],
-      setList = _useState2[1],
-      _useState3 = useState(!!currentDialogValue ? currentDialogValue : !!singleItem ? null : []),
-      _useState4 = _slicedToArray(_useState3, 2),
-      selected = _useState4[0],
-      setSelected = _useState4[1],
-      _useState5 = useState(''),
-      _useState6 = _slicedToArray(_useState5, 2),
-      value = _useState6[0],
-      setValue = _useState6[1];
-
-  if (!selected && values[property]) {
-    if (!(values[property] instanceof Array && singleItem)) {
-      clearTimeout(searchIdOfTimeout);
-      searchIdOfTimeout = setTimeout(function () {
-        oService.get(values[property]).then(function (r) {
-          setSelected(r);
-        });
-      }, 200);
-    } else {
-      clearTimeout(searchIdOfTimeout);
-      searchIdOfTimeout = setTimeout(function () {
-        oService.filter([['uid', 'in', values[property]]]).then(function (r) {
-          setSelected(r);
-        });
-      }, 200);
-    }
-  } else if (!!selected && selected instanceof Array && selected.length > 0 && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
-    setSelected(currentDialogValue);
-    console.log('createIdOfComponent:selected', selected);
-    console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
-  }
-
-  var select = function select(item) {
-    return function () {
-      setSelected(!!singleItem ? item : [].concat(_toConsumableArray(selected), [item]));
-      setList([]);
-      setValue('');
-      handleChange(property, item.uid, item);
-    };
-  };
-
-  return React.createElement("div", {
-    style: {
-      position: 'relative'
-    }
-  }, useOwnTitle && React.createElement(Typography, {
-    variant: "h5",
-    className: "mb-10"
-  }, i18n("".concat(model.getModelName(), ".form.").concat(property))), React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, React.createElement(TextField, {
-    variant: "outlined",
-    value: value,
-    style: {
-      width: '100%'
-    },
-    onChange: function onChange(e) {
-      var text = e.target.value;
-      setValue(text);
-      clearTimeout(searchIdOfTimeout);
-
-      if (!text) {
-        setList([]);
-        return;
-      }
-
-      var tend = text.substr(0, text.length - 1) + String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
-      searchIdOfTimeout = setTimeout(function () {
-        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]).limit(5).list().then(function (r) {
-          setList(r);
-        });
-      }, 300);
-    },
-    InputProps: {
-      startAdornment: React.createElement(InputAdornment, {
-        position: "start"
-      }, React.createElement(SearchIcon, null))
-    }
-  })), !!list.length && React.createElement(Paper, {
-    elevation: 10,
-    style: {
-      position: 'absolute',
-      zIndex: 10000,
-      left: 0,
-      right: 0
-    }
-  }, React.createElement(List, {
-    style: {
-      minHeight: 65,
-      maxHeight: 150,
-      overflow: 'scroll'
-    }
-  }, list.map(function (item, i) {
-    return createConfiguredListItem({
-      item: item,
-      listItemProperties: config.searchListItemProperties,
-      key: i,
-      onClick: select(item)
-    });
-  }))), !!selected && React.createElement("div", {
-    className: "mt-10"
-  }, !!singleItem && createConfiguredListItem({
-    item: selected,
-    listItemProperties: config.listItemProperties,
-    key: 0
-  }), !singleItem && selected.map(function (item, index) {
-    return createConfiguredListItem({
-      item: item,
-      listItemProperties: config.listItemProperties,
-      key: index
-    });
-  })));
-};
-
-var createFormComponent = function createFormComponent(_ref3) {
-  var model = _ref3.model,
-      property = _ref3.property,
-      values = _ref3.values,
-      field = _ref3.field,
-      error = _ref3.error,
-      label = _ref3.label,
-      i18n = _ref3.i18n,
-      handleChange = _ref3.handleChange;
-  var component = null;
-  component = createByType({
-    model: model,
-    property: property,
-    values: values,
-    label: label,
-    error: error,
-    i18n: i18n,
-    field: field,
-    handleChange: handleChange,
-    view: false
-  });
-  return component;
-};
-
-var createViewComponent = function createViewComponent(_ref4) {
-  var model = _ref4.model,
-      property = _ref4.property,
-      field = _ref4.field,
-      values = _ref4.values,
-      label = _ref4.label,
-      i18n = _ref4.i18n;
-  var classes = viewInfoStyles();
-  return React.createElement("div", null, React.createElement(FormLabel, {
-    className: classes.title
-  }, i18n(label)), React.createElement("div", {
-    className: classes.detail,
-    style: _objectSpread2({
-      fontSize: 18,
-      fontWeight: '100'
-    }, field.style.field)
-  }, createByType({
-    model: model,
-    property: property,
-    values: values,
-    label: label,
-    i18n: i18n,
-    field: field,
-    handleChange: null,
-    view: true
-  })));
-};
-
-var createByType = function createByType(_ref5) {
-  var model = _ref5.model,
-      property = _ref5.property,
-      values = _ref5.values,
-      label = _ref5.label,
-      error = _ref5.error,
-      i18n = _ref5.i18n,
-      field = _ref5.field,
-      handleChange = _ref5.handleChange,
-      _ref5$view = _ref5.view,
-      view = _ref5$view === void 0 ? false : _ref5$view;
-  var component = null;
-
-  switch (field.type) {
-    case FieldTypes.Boolean:
-      component = createBooleanComponent({
-        property: property,
-        values: values,
-        label: label,
-        i18n: i18n,
-        field: field,
-        handleChange: handleChange,
-        view: view
-      });
-      break;
-
-    default:
-      component = createTextComponent({
-        property: property,
-        values: values,
-        field: field,
-        label: label,
-        i18n: i18n,
-        error: error,
-        handleChange: handleChange,
-        view: view
-      });
-      break;
-  }
-
-  return component;
-};
-
-var createTextComponent = function createTextComponent(_ref6) {
-  var property = _ref6.property,
-      values = _ref6.values,
-      field = _ref6.field,
-      label = _ref6.label,
-      i18n = _ref6.i18n,
-      error = _ref6.error,
-      handleChange = _ref6.handleChange,
-      _ref6$view = _ref6.view,
-      view = _ref6$view === void 0 ? false : _ref6$view;
-  var classes = textFieldStyles();
-  var component = null;
-  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? values[property] : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
-    className: classes.spacer,
-    style: field.style.field,
-    label: i18n(label),
-    value: values[property],
-    type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
-    onChange: function onChange(e) {
-      return handleChange(property, e.target.value);
-    },
-    helperText: error ? i18n("form.error.".concat(error)) : ' ',
-    error: !!error
-  }));
-  return component;
-};
-
-var createBooleanComponent = function createBooleanComponent(_ref7) {
-  var property = _ref7.property,
-      values = _ref7.values,
-      label = _ref7.label,
-      i18n = _ref7.i18n,
-      field = _ref7.field,
-      handleChange = _ref7.handleChange,
-      _ref7$view = _ref7.view,
-      view = _ref7$view === void 0 ? false : _ref7$view;
-  var classes = textFieldStyles(),
-      usableLabel = i18n(label);
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
-    className: classes.spacer,
-    label: usableLabel,
-    labelPlacement: "start",
-    control: React.createElement(Checkbox, {
-      value: property,
-      color: "primary",
-      checked: values[property],
-      onChange: function onChange(e) {
-        return handleChange(property, e.target.checked);
-      },
-      inputProps: {
-        'aria-label': usableLabel
-      },
-      disabled: !!field.disabled
-    })
-  });
-};
-
-/**
- * Custom hook for finding a list of data from an object array-prop
- *
- * @param {ModelBase} objectWithProps An object as source of data and string-uids
- * @param {string} property Property in question, the name
- * @param {FieldType} Type The type in question (complex should be)
- * @param {object} firebase With connection to a service
- */
-
-var useListOfData = function useListOfData(objectWithProps, property, Type, firebase) {
-  var _useState = useState([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      list = _useState2[0],
-      setList = _useState2[1],
-      currentValues = objectWithProps[property],
-      objectPropIsArray = currentValues instanceof Array;
-
-  useEffect(function () {
-    if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
-      //And is there a service behind?
-      if (objectPropIsArray && objectWithProps[property].length > 0 && typeShouldUseService(Type)) {
-        getServiceList(property, Type, objectWithProps, firebase).then(function (result) {
-          setList(result);
-        });
-      } else {
-        //No service at all, sets raw data
-        setList(objectWithProps[property]);
-      }
-    }
-  }, [list, objectWithProps, property, Type]);
-  return [list, setList];
 };
 
 var validateTimeout;
@@ -1605,15 +1688,11 @@ var createFields = function createFields(_ref) {
       firebase: firebase,
       i18n: i18n,
       handleChange: handleChange
-    }));
+    })); //should add a break after the field
 
     if (model.$fieldConfig[property].style && model.$fieldConfig[property].style.break) {
-      fields.push(React.createElement("div", {
-        key: i,
-        className: "sibling-field",
-        style: {
-          flexBasis: '100%'
-        }
+      fields.push(React.createElement(SpacerSiblingField, {
+        key: i
       }));
     }
   });
@@ -1746,6 +1825,7 @@ var DynamicForm = function DynamicForm(_ref3) {
       id = _ref3.id,
       firebase = _ref3.firebase,
       i18n = _ref3.i18n;
+  var oService = null;
 
   var _useState7 = useState(model),
       _useState8 = _slicedToArray(_useState7, 2),
@@ -1754,11 +1834,18 @@ var DynamicForm = function DynamicForm(_ref3) {
       _useState9 = useState({}),
       _useState10 = _slicedToArray(_useState9, 2),
       errors = _useState10[0],
-      setErrors = _useState10[1],
-      oService = model.getService(firebase);
+      setErrors = _useState10[1]; //No dynamic form model service available
+
+
+  if (!model || typeof model.getService !== 'function') {
+    console.warn('dynamic-form-model.getService()-function-not-available');
+  } else {
+    //Creates service instance
+    oService = model.getService(firebase);
+  }
 
   useEffect(function () {
-    if (id && (!model.uid || model.uid !== id)) {
+    if (id && (!model.uid || model.uid !== id) && oService) {
       oService.get(id).then(function (r) {
         model.$fill(r);
         setValues(r);
@@ -1796,8 +1883,10 @@ var DynamicForm = function DynamicForm(_ref3) {
 
   var save = useCallback(function () {
     model.$fill(values);
-    var validation = model.$validate();
-    console.log("validation", validation);
+    var validation = model.$validate(); //Debugging
+    //TODO: remove from here anyways
+
+    if (process.env.NODE_ENV === 'development') console.log("validation", validation);
     setErrors(validation);
 
     if (!Object.keys(validation).length) {
@@ -1820,12 +1909,9 @@ var DynamicForm = function DynamicForm(_ref3) {
   return React.createElement("form", {
     noValidate: true,
     autoComplete: "off"
-  }, React.createElement(Typography, {
-    variant: "h4",
-    className: "mb-15"
-  }, i18n("".concat(model.getModelName(), ".form.$title"))), React.createElement("div", {
-    className: "field-group"
-  }, fields), React.createElement("div", null, React.createElement(BottomButtons, {
+  }, React.createElement(TitleAndButtons, {
+    title: i18n("".concat(model.getModelName(), ".form.$title"))
+  }), React.createElement(FieldGroup, null, fields), React.createElement("div", null, React.createElement(BottomButtons, {
     buttons: [React.createElement(SaveButton, {
       onClick: save,
       i18n: i18n
@@ -2244,7 +2330,7 @@ var createFields$1 = function createFields(_ref) {
       i18n = _ref.i18n,
       firebase = _ref.firebase;
   var fields = [];
-  Object.keys(model.$fieldConfig).map(function (property, i) {
+  Object.keys(model.$fieldConfig).forEach(function (property, i) {
     fields.push(createField$1({
       property: property,
       model: model,
@@ -2255,12 +2341,8 @@ var createFields$1 = function createFields(_ref) {
     }));
 
     if (model.$fieldConfig[property].style && model.$fieldConfig[property].style.break) {
-      fields.push(React.createElement("div", {
-        key: i,
-        className: "sibling-field",
-        style: {
-          flexBasis: '100%'
-        }
+      fields.push(React.createElement(SpacerSiblingField, {
+        key: i
       }));
     }
   });
@@ -2424,8 +2506,8 @@ var DynamicView = function DynamicView(_ref3) {
       return remove();
     },
     i18n: i18n
-  }), React.createElement("div", {
-    className: "field-group mt-15"
+  }), React.createElement(FieldGroup, {
+    marginTop: true
   }, fields));
 };
 

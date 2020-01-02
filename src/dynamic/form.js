@@ -17,7 +17,7 @@ import {
 	List
 } from '@material-ui/core';
 
-import { BottomButtons } from '../components/form';
+import { BottomButtons, FieldGroup } from '../components/form';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
@@ -27,9 +27,11 @@ import {
 	createFormComponent,
 	mergeSets,
 	removeFromSet
-} from './_functions';
+} from '../functions';
 import ErrorLabel from '../components/form/ErrorLabel';
-import { useListOfData } from './_hooks';
+import { useListOfData } from '../hooks';
+import { TitleAndButtons } from '../components/title';
+import { SpacerSiblingField } from './_common';
 
 let validateTimeout;
 
@@ -336,10 +338,10 @@ const createFields = ({ model, baseIntl, errors, values, firebase, i18n, handleC
 				handleChange
 			})
 		);
+
+		//should add a break after the field
 		if (model.$fieldConfig[property].style && model.$fieldConfig[property].style.break) {
-			fields.push(
-				<div key={i} className="sibling-field" style={{ flexBasis: '100%' }}></div>
-			);
+			fields.push(<SpacerSiblingField key={i} />);
 		}
 	});
 	return fields.filter((item) => !!item && item !== '');
@@ -486,12 +488,20 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
  *
  */
 const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
+	let oService = null;
 	const [values, setValues] = useState(model),
-		[errors, setErrors] = useState({}),
+		[errors, setErrors] = useState({});
+
+	//No dynamic form model service available
+	if (!model || typeof model.getService !== 'function') {
+		console.warn('dynamic-form-model.getService()-function-not-available');
+	} else {
+		//Creates service instance
 		oService = model.getService(firebase);
+	}
 
 	useEffect(() => {
-		if (id && (!model.uid || model.uid !== id)) {
+		if (id && (!model.uid || model.uid !== id) && oService) {
 			oService.get(id).then((r) => {
 				model.$fill(r);
 				setValues(r);
@@ -543,7 +553,9 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 		model.$fill(values);
 		let validation = model.$validate();
 
-		console.log(`validation`, validation);
+		//Debugging
+		//TODO: remove from here anyways
+		if (process.env.NODE_ENV === 'development') console.log(`validation`, validation);
 
 		setErrors(validation);
 
@@ -568,10 +580,8 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 
 	return (
 		<form noValidate autoComplete="off">
-			<Typography variant="h4" className="mb-15">
-				{i18n(`${model.getModelName()}.form.$title`)}
-			</Typography>
-			<div className="field-group">{fields}</div>
+			<TitleAndButtons title={i18n(`${model.getModelName()}.form.$title`)} />
+			<FieldGroup>{fields}</FieldGroup>
 			<div>
 				<BottomButtons
 					buttons={[

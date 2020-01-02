@@ -19,12 +19,13 @@ import {
 	createViewComponent,
 	getServiceList,
 	typeShouldUseService
-} from './_functions';
+} from '../functions';
 import { DeleteConfirmationDialog } from '../components/DeleteConfirmationDialog';
 import { TitleAndButtons } from '../components/title';
-import { useListOfData } from './_hooks';
-import { EmptyRelation } from '../components/form';
+import { useListOfData } from '../hooks';
+import { EmptyRelation, FieldGroup } from '../components/form';
 import { EditButton, DeleteButton } from '../components/Button';
+import { SpacerSiblingField } from './_common';
 
 let searchIdOfTimeout;
 
@@ -153,7 +154,7 @@ const createArrayOfComponent = (model, property, values, Type, i18n, firebase) =
 const createFields = ({ model, baseIntl, values, i18n, firebase }) => {
 	let fields = [];
 
-	Object.keys(model.$fieldConfig).map((property, i) => {
+	Object.keys(model.$fieldConfig).forEach((property, i) => {
 		fields.push(
 			createField({
 				property,
@@ -165,9 +166,7 @@ const createFields = ({ model, baseIntl, values, i18n, firebase }) => {
 			})
 		);
 		if (model.$fieldConfig[property].style && model.$fieldConfig[property].style.break) {
-			fields.push(
-				<div key={i} className="sibling-field" style={{ flexBasis: '100%' }}></div>
-			);
+			fields.push(<SpacerSiblingField key={i} />);
 		}
 	});
 	return fields.filter((item) => !!item && item !== '');
@@ -328,7 +327,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 				onConfirm={() => remove()}
 				i18n={i18n}
 			/>
-			<div className="field-group mt-15">{fields}</div>
+			<FieldGroup marginTop>{fields}</FieldGroup>
 		</form>
 	);
 };
