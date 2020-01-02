@@ -3,11 +3,10 @@ import React from 'react';
 /**
  * Renders an empty spacer sibling-field
  *
- * @param {object} param0
- * @param {any} param0.key The key of the current item
+ * @param {object} param0 Object applicable props
  */
-const SpacerSiblingField = ({ key = 0 }) => {
-	return <div key={key} className="sibling-field" style={{ flexBasis: '100%' }}></div>;
+const SpacerSiblingField = (props) => {
+	return <div className="sibling-field" style={{ flexBasis: '100%' }} {...props}></div>;
 };
 
 export { SpacerSiblingField };

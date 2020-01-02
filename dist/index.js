@@ -1390,20 +1390,16 @@ var ErrorLabel = function ErrorLabel(_ref) {
 /**
  * Renders an empty spacer sibling-field
  *
- * @param {object} param0
- * @param {any} param0.key The key of the current item
+ * @param {object} param0 Object applicable props
  */
 
-var SpacerSiblingField = function SpacerSiblingField(_ref) {
-  var _ref$key = _ref.key,
-      key = _ref$key === void 0 ? 0 : _ref$key;
-  return React.createElement("div", {
-    key: key,
+var SpacerSiblingField = function SpacerSiblingField(props) {
+  return React.createElement("div", _extends({
     className: "sibling-field",
     style: {
       flexBasis: '100%'
     }
-  });
+  }, props));
 };
 
 var validateTimeout;
