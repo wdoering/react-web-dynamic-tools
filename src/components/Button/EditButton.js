@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/EditRounded';
+import EditRounded from '@material-ui/icons/EditRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 const EditButton = ({ baseRoute, id, i18n, color = 'primary', ...other }) => {
@@ -18,7 +18,7 @@ const EditButton = ({ baseRoute, id, i18n, color = 'primary', ...other }) => {
 				onClick={() => {
 					history.push(`${baseRoute}/form/${id}`);
 				}}
-				ariaLabel={buttonText}
+				aria-label={buttonText}
 				{...other}
 			>
 				{useIcons ? <EditRounded /> : buttonText}

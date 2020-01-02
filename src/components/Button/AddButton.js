@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, Tooltip } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/AddRounded';
+import AddRounded from '@material-ui/icons/AddRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 const AddButton = ({ baseRoute, i18n }) => {
 	const history = useHistory(),
-		useIcon = useMobileIconButtons();
+		useIcon = useMobileIconButtons(),
+		buttonText = useMemo(() => i18n(button.add), [i18n]);
 
 	return (
 		<Tooltip title={i18n('button.add.tooltip')} arrow>
@@ -17,8 +18,9 @@ const AddButton = ({ baseRoute, i18n }) => {
 				onClick={() => {
 					history.push(`${baseRoute}/form/`);
 				}}
+				aria-label={buttonText}
 			>
-				{useIcon ? <AddIcon /> : i18n('button.add')}
+				{useIcon ? <AddRounded /> : buttonText}
 			</Button>
 		</Tooltip>
 	);

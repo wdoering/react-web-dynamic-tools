@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/DeleteRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,10 +26,10 @@ const DeleteButton = ({ onClick, i18n, ...other }) => {
 				variant="contained"
 				className={classes.root}
 				onClick={onClick}
-				ariaLabel={buttonText}
+				aria-label={buttonText}
 				{...other}
 			>
-				{useIcons ? <DeleteIcon /> : buttonText}
+				{useIcons ? <DeleteRounded /> : buttonText}
 			</Button>
 		</Tooltip>
 	);
