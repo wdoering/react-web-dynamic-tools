@@ -13,9 +13,9 @@ const WebSiteInfo = ({ text, external = true }) => {
 	const classes = viewInfoLink();
 
 	return (
-		<a className={classes.root} href={text} target={external ? '_blank' : '_self'}>{`${text} ${(
-			<LaunchRounded />
-		)}`}</a>
+		<a className={classes.root} href={text} target={external ? '_blank' : '_self'}>
+			{text} <LaunchRounded />
+		</a>
 	);
 };
 

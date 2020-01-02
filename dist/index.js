@@ -397,7 +397,7 @@ var EmailInfo = function EmailInfo(_ref) {
     className: classes.root,
     href: "mailto:".concat(text),
     target: external ? '_blank' : '_self'
-  }, "".concat(text, " ").concat(React.createElement(EmailRounded, null)));
+  }, text, " ", React.createElement(EmailRounded, null));
 };
 
 EmailInfo.propTypes = {
@@ -421,7 +421,7 @@ var WebSiteInfo = function WebSiteInfo(_ref) {
     className: classes.root,
     href: text,
     target: external ? '_blank' : '_self'
-  }, "".concat(text, " ").concat(React.createElement(LaunchRounded, null)));
+  }, text, " ", React.createElement(LaunchRounded, null));
 };
 
 WebSiteInfo.propTypes = {

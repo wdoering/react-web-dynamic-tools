@@ -13,11 +13,9 @@ const EmailInfo = ({ text, external = true }) => {
 	const classes = viewInfoLink();
 
 	return (
-		<a
-			className={classes.root}
-			href={`mailto:${text}`}
-			target={external ? '_blank' : '_self'}
-		>{`${text} ${(<EmailRounded />)}`}</a>
+		<a className={classes.root} href={`mailto:${text}`} target={external ? '_blank' : '_self'}>
+			{text} <EmailRounded />
+		</a>
 	);
 };
 
