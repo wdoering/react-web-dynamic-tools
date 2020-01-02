@@ -349,10 +349,12 @@ function useWindowSize() {
  */
 
 var AddButton = function AddButton(_ref) {
-  var baseRoute = _ref.baseRoute,
-      i18n = _ref.i18n,
+  var i18n = _ref.i18n,
+      _ref$baseRoute = _ref.baseRoute,
+      baseRoute = _ref$baseRoute === void 0 ? null : _ref$baseRoute,
       _ref$onClick = _ref.onClick,
-      other = _objectWithoutProperties(_ref, ["baseRoute", "i18n", "onClick"]);
+      _onClick = _ref$onClick === void 0 ? null : _ref$onClick,
+      other = _objectWithoutProperties(_ref, ["i18n", "baseRoute", "onClick"]);
 
   var history = useHistory(),
       useIcon = useMobileIconButtons(),
@@ -365,15 +367,15 @@ var AddButton = function AddButton(_ref) {
   }, React.createElement(Button, _extends({
     variant: "contained",
     color: "primary",
-    onClick: function onClick() {
-      history.push("".concat(baseRoute, "/form/"));
+    onClick: function onClick(e) {
+      !!_onClick && typeof _onClick === 'function' ? _onClick(e) : history.push("".concat(baseRoute, "/form/"));
     },
     "aria-label": buttonText
   }, other), useIcon ? React.createElement(AddRounded, null) : buttonText));
 };
 
 AddButton.propTypes = {
-  baseRoute: PropTypes.string.isRequired,
+  baseRoute: PropTypes.string,
   i18n: PropTypes.func.isRequired,
   onClick: PropTypes.func
 };

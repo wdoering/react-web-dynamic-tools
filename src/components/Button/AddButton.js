@@ -13,7 +13,7 @@ import { useMobileIconButtons } from '../../hooks';
  * @param {function} param0.i18n
  * @param {function} param0.onClick
  */
-const AddButton = ({ baseRoute, i18n, onClick = null, ...other }) => {
+const AddButton = ({ i18n, baseRoute = null, onClick = null, ...other }) => {
 	const history = useHistory(),
 		useIcon = useMobileIconButtons(),
 		buttonText = useMemo(() => i18n('button.add'), [i18n]);
@@ -23,8 +23,10 @@ const AddButton = ({ baseRoute, i18n, onClick = null, ...other }) => {
 			<Button
 				variant="contained"
 				color="primary"
-				onClick={() => {
-					history.push(`${baseRoute}/form/`);
+				onClick={(e) => {
+					!!onClick && typeof onClick === 'function'
+						? onClick(e)
+						: history.push(`${baseRoute}/form/`);
 				}}
 				aria-label={buttonText}
 				{...other}
@@ -36,7 +38,7 @@ const AddButton = ({ baseRoute, i18n, onClick = null, ...other }) => {
 };
 
 AddButton.propTypes = {
-	baseRoute: PropTypes.string.isRequired,
+	baseRoute: PropTypes.string,
 	i18n: PropTypes.func.isRequired,
 	onClick: PropTypes.func
 };
