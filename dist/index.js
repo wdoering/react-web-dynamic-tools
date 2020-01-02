@@ -320,7 +320,9 @@ var viewInfoStyles = makeStyles({
   },
   detail: {
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
+    fontSize: 18,
+    fontWeight: '100'
   }
 });
 var viewInfoLink = makeStyles(function (theme) {
@@ -829,10 +831,7 @@ var createViewComponent = function createViewComponent(_ref4) {
     className: classes.title
   }, i18n(label)), React.createElement("div", {
     className: classes.detail,
-    style: _objectSpread2({
-      fontSize: 18,
-      fontWeight: '100'
-    }, field.style.field)
+    style: field.style.field
   }, createByType({
     model: model,
     property: property,
@@ -910,7 +909,9 @@ var createTextComponent = function createTextComponent(_ref6) {
     value: values[property],
     type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
     onChange: function onChange(e) {
-      return handleChange(property, e.target.value);
+      handleChange(property, e.target.value); //Field has specific onChange function, runs after manipulation
+
+      if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.value);
     },
     helperText: error ? i18n("form.error.".concat(error)) : ' ',
     error: !!error

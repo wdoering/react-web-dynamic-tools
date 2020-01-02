@@ -24,7 +24,9 @@ export const viewInfoStyles = makeStyles({
 	},
 	detail: {
 		marginTop: 5,
-		marginBottom: 5
+		marginBottom: 5,
+		fontSize: 18,
+		fontWeight: '100'
 	}
 });
 

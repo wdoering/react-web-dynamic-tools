@@ -409,10 +409,7 @@ const createViewComponent = ({ model, property, field, values, label, i18n }) =>
 	return (
 		<div className={classes.root}>
 			<FormLabel className={classes.title}>{i18n(label)}</FormLabel>
-			<div
-				className={classes.detail}
-				style={{ fontSize: 18, fontWeight: '100', ...field.style.field }}
-			>
+			<div className={classes.detail} style={field.style.field}>
 				{createByType({
 					model,
 					property,
@@ -500,7 +497,13 @@ const createTextComponent = ({
 			label={i18n(label)}
 			value={values[property]}
 			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
-			onChange={(e) => handleChange(property, e.target.value)}
+			onChange={(e) => {
+				handleChange(property, e.target.value);
+
+				//Field has specific onChange function, runs after manipulation
+				if (!!field.onChange && typeof field.onChange === 'function')
+					field.onChange(e, values, property, e.target.value);
+			}}
 			helperText={error ? i18n(`form.error.${error}`) : ' '}
 			error={!!error}
 		/>
