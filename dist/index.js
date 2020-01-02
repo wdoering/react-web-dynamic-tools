@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo as useMemo$1, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Tooltip, Button, useTheme, useMediaQuery, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -374,7 +374,7 @@ var CancelButton = function CancelButton(_ref) {
 
   var history = useHistory(),
       useIcons = useMobileIconButtons(),
-      buttonText = useMemo$1(function () {
+      buttonText = useMemo(function () {
     return i18n('button.cancel');
   }, [i18n]);
   return React.createElement(Tooltip, {
@@ -402,9 +402,9 @@ var useStyles = makeStyles(function (theme) {
     root: {
       marginLeft: 5,
       color: 'rgba(255,255,255,1) !important',
-      backgrounColor: 'rgba(204, 0, 0, 0.9) !important',
+      backgroundColor: 'rgba(204, 0, 0, 0.9) !important',
       '&:hover': {
-        backgrounColor: 'rgba(204, 0, 0, 0.75) !important'
+        backgroundColor: 'rgba(204, 0, 0, 0.75) !important'
       }
     }
   };
@@ -417,7 +417,7 @@ var DeleteButton = function DeleteButton(_ref) {
 
   var classes = useStyles(),
       useIcons = useMobileIconButtons(),
-      buttonText = useMemo$1(function () {
+      buttonText = useMemo(function () {
     return i18n('button.delete');
   }, [i18n]);
   return React.createElement(Tooltip, {
@@ -446,7 +446,7 @@ var EditButton = function EditButton(_ref) {
 
   var history = useHistory(),
       useIcons = useMobileIconButtons(),
-      buttonText = useMemo$1(function () {
+      buttonText = useMemo(function () {
     return i18n('button.edit');
   }, [i18n]);
   return React.createElement(Tooltip, {

@@ -8,9 +8,9 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		marginLeft: 5,
 		color: 'rgba(255,255,255,1) !important',
-		backgrounColor: 'rgba(204, 0, 0, 0.9) !important',
+		backgroundColor: 'rgba(204, 0, 0, 0.9) !important',
 		'&:hover': {
-			backgrounColor: 'rgba(204, 0, 0, 0.75) !important'
+			backgroundColor: 'rgba(204, 0, 0, 0.75) !important'
 		}
 	}
 }));
