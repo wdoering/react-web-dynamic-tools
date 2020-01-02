@@ -5,10 +5,12 @@ import SaveRounded from '@material-ui/icons/SaveRounded';
 import { useMobileIconButtons } from '../../hooks';
 
 /**
- * A pattern-follower save-button. Required handler (onClick)
+ * A pattern-follower **save-button**. Required handler (onClick)
  *
+ * @param {object} param0
  * @param {function} param0.onClick
  * @param {function} param0.i18n
+ * @param {string} param0.color
  */
 const SaveButton = ({ onClick, i18n, color = 'primary', ...other }) => {
 	const useIcons = useMobileIconButtons(),

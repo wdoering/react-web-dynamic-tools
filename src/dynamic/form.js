@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// TODO: check whether can be referenced by moduleNameMapper
-// import { SaveButton, CancelButton } from 'Components/Button';
-import { SaveButton, CancelButton } from '../components/Button';
+import { SaveButton, CancelButton, AddButton, CancelReturnButton } from '../components/Button';
 import PropTypes from 'prop-types';
 import {
 	ExpansionPanel,
@@ -12,7 +10,6 @@ import {
 	DialogTitle,
 	DialogContent,
 	DialogActions,
-	Button,
 	TextField,
 	Typography,
 	Card,
@@ -262,9 +259,7 @@ const createArrayOfComponent = (
 					<ErrorLabel>{errorMessage}</ErrorLabel>
 				</ExpansionPanelSummary>
 				<ExpansionPanelActions style={{ padding: '0 25px' }}>
-					<Button variant={'contained'} onClick={() => setOpen(true)} color={'primary'}>
-						{i18n('button.add')}
-					</Button>
+					<AddButton onClick={() => setOpen(true)} i18n={i18n} />
 				</ExpansionPanelActions>
 				<ExpansionPanelDetails>
 					<Dialog
@@ -581,7 +576,7 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 				<BottomButtons
 					buttons={[
 						<SaveButton onClick={save} i18n={i18n} />,
-						<CancelButton i18n={i18n} />
+						<CancelReturnButton i18n={i18n} />
 					]}
 				/>
 			</div>

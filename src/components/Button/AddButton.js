@@ -5,7 +5,15 @@ import { Button, Tooltip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import { useMobileIconButtons } from '../../hooks';
 
-const AddButton = ({ baseRoute, i18n }) => {
+/**
+ * A pattern-follower **add-button**
+ *
+ * @param {object} param0
+ * @param {string} param0.baseRoute
+ * @param {function} param0.i18n
+ * @param {function} param0.onClick
+ */
+const AddButton = ({ baseRoute, i18n, onClick = null, ...other }) => {
 	const history = useHistory(),
 		useIcon = useMobileIconButtons(),
 		buttonText = useMemo(() => i18n('button.add'), [i18n]);
@@ -19,6 +27,7 @@ const AddButton = ({ baseRoute, i18n }) => {
 					history.push(`${baseRoute}/form/`);
 				}}
 				aria-label={buttonText}
+				{...other}
 			>
 				{useIcon ? <AddRounded /> : buttonText}
 			</Button>
@@ -28,7 +37,8 @@ const AddButton = ({ baseRoute, i18n }) => {
 
 AddButton.propTypes = {
 	baseRoute: PropTypes.string.isRequired,
-	i18n: PropTypes.func.isRequired
+	i18n: PropTypes.func.isRequired,
+	onClick: PropTypes.func
 };
 
 export default AddButton;

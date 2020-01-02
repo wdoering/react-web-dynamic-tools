@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useTheme, useMediaQuery, Tooltip, Button, makeStyles, Typography, ListItem, ListItemSecondaryAction, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
+import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
 import EditRounded from '@material-ui/icons/EditRounded';
@@ -40,17 +41,6 @@ var validations = /*#__PURE__*/Object.freeze({
 	validateEmail: validateEmail,
 	validatePassword: validatePassword
 });
-
-/**
- * Provides a boolean whether to use mobile icon-buttons, given current window size
- * @returns {Boolean} true, icons might be rendered; false, may use texts
- */
-
-function useMobileIconButtons() {
-  var theme = useTheme(),
-      matches = useMediaQuery(theme.breakpoints.down('md'));
-  return matches;
-}
 
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -301,6 +291,17 @@ function _nonIterableRest() {
 }
 
 /**
+ * Provides a boolean whether to use mobile icon-buttons, given current window size
+ * @returns {Boolean} true, icons might be rendered; false, may use texts
+ */
+
+function useMobileIconButtons() {
+  var theme = useTheme(),
+      matches = useMediaQuery(theme.breakpoints.down('md'));
+  return matches;
+}
+
+/**
  * Provides access to the current window size object
  * @returns {{ width: number, height: number }} object with window size props
  */
@@ -338,9 +339,21 @@ function useWindowSize() {
   return windowSize;
 }
 
+/**
+ * A pattern-follower **add-button**
+ *
+ * @param {object} param0
+ * @param {string} param0.baseRoute
+ * @param {function} param0.i18n
+ * @param {function} param0.onClick
+ */
+
 var AddButton = function AddButton(_ref) {
   var baseRoute = _ref.baseRoute,
-      i18n = _ref.i18n;
+      i18n = _ref.i18n,
+      _ref$onClick = _ref.onClick,
+      other = _objectWithoutProperties(_ref, ["baseRoute", "i18n", "onClick"]);
+
   var history = useHistory(),
       useIcon = useMobileIconButtons(),
       buttonText = useMemo(function () {
@@ -349,25 +362,28 @@ var AddButton = function AddButton(_ref) {
   return React.createElement(Tooltip, {
     title: i18n('button.add.tooltip'),
     arrow: true
-  }, React.createElement(Button, {
+  }, React.createElement(Button, _extends({
     variant: "contained",
     color: "primary",
     onClick: function onClick() {
       history.push("".concat(baseRoute, "/form/"));
     },
     "aria-label": buttonText
-  }, useIcon ? React.createElement(AddRounded, null) : buttonText));
+  }, other), useIcon ? React.createElement(AddRounded, null) : buttonText));
 };
 
 AddButton.propTypes = {
   baseRoute: PropTypes.string.isRequired,
-  i18n: PropTypes.func.isRequired
+  i18n: PropTypes.func.isRequired,
+  onClick: PropTypes.func
 };
 
 /**
  * A pattern-follower **cancel-button**
  *
+ * @param {object} param0
  * @param {function} param0.onClick
+ * @param {string} param0.color
  * @param {function} param0.i18n
  */
 
@@ -390,7 +406,7 @@ var CancelButton = function CancelButton(_ref) {
     variant: "outlined",
     color: color,
     "aria-label": buttonText,
-    children: useIcons ? React.createElement(KeyboardReturnRounded, null) : buttonText,
+    children: useIcons ? React.createElement(CancelRounded, null) : buttonText,
     onClick: onClick || function () {
       return history.goBack();
     }
@@ -398,6 +414,47 @@ var CancelButton = function CancelButton(_ref) {
 };
 
 CancelButton.propTypes = {
+  onClick: PropTypes.func,
+  i18n: PropTypes.func.isRequired,
+  color: PropTypes.string
+};
+
+/**
+ * A pattern-follower **cancel-and-return-button**
+ *
+ * @param {object} param0
+ * @param {function} param0.onClick
+ * @param {string} param0.color
+ * @param {function} param0.i18n
+ */
+
+var CancelReturnButton = function CancelReturnButton(_ref) {
+  var onClick = _ref.onClick,
+      i18n = _ref.i18n,
+      _ref$color = _ref.color,
+      color = _ref$color === void 0 ? 'secondary' : _ref$color,
+      other = _objectWithoutProperties(_ref, ["onClick", "i18n", "color"]);
+
+  var history = useHistory(),
+      useIcons = useMobileIconButtons(),
+      buttonText = useMemo(function () {
+    return i18n('button.cancel.return');
+  }, [i18n]);
+  return React.createElement(Tooltip, {
+    title: i18n('button.cancel.return.tooltip'),
+    arrow: true
+  }, React.createElement(Button, _extends({
+    variant: "outlined",
+    color: color,
+    "aria-label": buttonText,
+    children: useIcons ? React.createElement(KeyboardReturnRounded, null) : buttonText,
+    onClick: onClick || function () {
+      return history.goBack();
+    }
+  }, other)));
+};
+
+CancelReturnButton.propTypes = {
   onClick: PropTypes.func,
   i18n: PropTypes.func.isRequired,
   color: PropTypes.string
@@ -415,6 +472,13 @@ var useStyles = makeStyles(function (theme) {
     }
   };
 });
+/**
+ * A pattern-follower **delete-button**
+ *
+ * @param {object} param0
+ * @param {function} param0.onClick
+ * @param {function} param0.i18n
+ */
 
 var DeleteButton = function DeleteButton(_ref) {
   var onClick = _ref.onClick,
@@ -441,6 +505,16 @@ DeleteButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   i18n: PropTypes.func.isRequired
 };
+
+/**
+ * A pattern-follower **edit-button**
+ *
+ * @param {object} param0
+ * @param {string} param0.baseRoute
+ * @param {string} param0.id
+ * @param {function} param0.i18n
+ * @param {string} param0.color
+ */
 
 var EditButton = function EditButton(_ref) {
   var baseRoute = _ref.baseRoute,
@@ -471,15 +545,17 @@ var EditButton = function EditButton(_ref) {
 EditButton.propTypes = {
   baseRoute: PropTypes.string.isRequired,
   color: PropTypes.oneOf(['primary', 'secondary']),
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   i18n: PropTypes.func.isRequired
 };
 
 /**
- * A pattern-follower save-button. Required handler (onClick)
+ * A pattern-follower **save-button**. Required handler (onClick)
  *
+ * @param {object} param0
  * @param {function} param0.onClick
  * @param {function} param0.i18n
+ * @param {string} param0.color
  */
 
 var SaveButton = function SaveButton(_ref) {
@@ -1449,13 +1525,12 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
     style: {
       padding: '0 25px'
     }
-  }, React.createElement(Button, {
-    variant: 'contained',
+  }, React.createElement(AddButton, {
     onClick: function onClick() {
       return setOpen(true);
     },
-    color: 'primary'
-  }, i18n('button.add'))), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog$1, {
+    i18n: i18n
+  })), React.createElement(ExpansionPanelDetails, null, React.createElement(Dialog$1, {
     open: open,
     onClose: function onClose() {
       return setOpen(false);
@@ -1752,7 +1827,7 @@ var DynamicForm = function DynamicForm(_ref3) {
     buttons: [React.createElement(SaveButton, {
       onClick: save,
       i18n: i18n
-    }), React.createElement(CancelButton, {
+    }), React.createElement(CancelReturnButton, {
       i18n: i18n
     })]
   })));
@@ -2361,5 +2436,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useMobileIconButtons, useWindowSize, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useMobileIconButtons, useWindowSize, validations };
 //# sourceMappingURL=index.js.map

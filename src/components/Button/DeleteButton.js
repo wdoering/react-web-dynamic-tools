@@ -15,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
+/**
+ * A pattern-follower **delete-button**
+ *
+ * @param {object} param0
+ * @param {function} param0.onClick
+ * @param {function} param0.i18n
+ */
 const DeleteButton = ({ onClick, i18n, ...other }) => {
 	const classes = useStyles(),
 		useIcons = useMobileIconButtons(),

@@ -1,5 +1,12 @@
 import * as validations from './util/validations';
-import { AddButton, CancelButton, DeleteButton, EditButton, SaveButton } from './components/Button';
+import {
+	AddButton,
+	CancelButton,
+	CancelReturnButton,
+	DeleteButton,
+	EditButton,
+	SaveButton
+} from './components/Button';
 import { DeleteConfirmationDialog } from './components/DeleteConfirmationDialog';
 import { TitleAndButtons } from './components/title';
 import { BottomButtons } from './components/form';
@@ -13,6 +20,7 @@ export {
 	validations,
 	AddButton,
 	CancelButton,
+	CancelReturnButton,
 	DeleteButton,
 	EditButton,
 	SaveButton,
