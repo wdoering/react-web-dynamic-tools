@@ -29,16 +29,9 @@ export const viewInfoStyles = makeStyles({
 });
 
 export const viewInfoLink = makeStyles((theme) => ({
-	root: {
-		textTransform: 'unset'
-		// '&:link, &:visited': {
-		// 	color: theme.palette.primary,
-		// 	textDecoration: 'none'
-		// },
-		// '&:hover, &:active': {
-		// 	color: 'rgba(0,0,0,.9)',
-		// 	textDecoration: 'none'
-		// }
+	root: {},
+	icon: {
+		marginLeft: theme.spacing(1)
 	}
 }));
 

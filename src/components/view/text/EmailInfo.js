@@ -1,30 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
 import EmailRounded from '@material-ui/icons/EmailRounded';
-import { viewInfoLink } from '../../../assets/_styles';
+import InfoWithIcon from './InfoWithIcon';
 
 /**
  * Renders an email "mailto:" (anchor) for display
  *
  * @param {object} param0 props
  * @param {string} param0.text the text to be rendered
+ * @param {string} param0.i18n the translation source for tooltip/text
+ * @param {string} param0.external [optional] if it opens an external link
  */
-const EmailInfo = ({ text, external = true }) => {
-	const classes = viewInfoLink();
-
-	return (
-		<Button
-			variant="text"
-			component="a"
-			className={classes.root}
-			href={`mailto:${text}`}
-			target={external ? '_blank' : '_self'}
-		>
-			{text} <EmailRounded />
-		</Button>
-	);
-};
+const EmailInfo = ({ text, i18n, external = true }) => (
+	<InfoWithIcon
+		text={text}
+		icon={<EmailRounded />}
+		i18n={i18n}
+		external={external}
+		type="email"
+	/>
+);
 
 EmailInfo.propTypes = {
 	text: PropTypes.string,

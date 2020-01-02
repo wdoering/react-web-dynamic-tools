@@ -488,7 +488,7 @@ const createTextComponent = ({
 		!!field.protected ? (
 			protectedFieldValue
 		) : !!values[property] && values[property] !== '' ? (
-			TextStyleByType(values[property])
+			<TextStyleByType text={values[property]} i18n={i18n} />
 		) : (
 			blankFieldPlaceholder
 		)
@@ -542,10 +542,10 @@ const createBooleanComponent = ({
 	);
 };
 
-const TextStyleByType = (text) => {
-	if (validateEmail(text)) return <EmailInfo text={text} />;
-	if (validateWebsite(text)) return <WebSiteInfo text={text} />;
-	return text;
+const TextStyleByType = ({ text, i18n }) => {
+	if (validateEmail(text)) return <EmailInfo text={text} i18n={i18n} />;
+	if (validateWebsite(text)) return <WebSiteInfo text={text} i18n={i18n} />;
+	return `${text}`;
 };
 
 export {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, Button, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Tooltip, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import { makeStyles, Tooltip, IconButton, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton$1 from '@material-ui/core/IconButton';
 import EmailRounded from '@material-ui/icons/EmailRounded';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import CancelRounded from '@material-ui/icons/CancelRounded';
@@ -325,16 +325,9 @@ var viewInfoStyles = makeStyles({
 });
 var viewInfoLink = makeStyles(function (theme) {
   return {
-    root: {
-      textTransform: 'unset' // '&:link, &:visited': {
-      // 	color: theme.palette.primary,
-      // 	textDecoration: 'none'
-      // },
-      // '&:hover, &:active': {
-      // 	color: 'rgba(0,0,0,.9)',
-      // 	textDecoration: 'none'
-      // }
-
+    root: {},
+    icon: {
+      marginLeft: theme.spacing(1)
     }
   };
 });
@@ -382,24 +375,70 @@ var inArray = function inArray(property, items) {
 };
 
 /**
+ * Renders a website link (anchor) for display
+ *
+ * @param {object} param0 props
+ * @param {string} param0.text the text to be rendered
+ * @param {Element} param0.icon the icon to be used
+ * @param {Function} param0.i18n the translation source
+ * @param {string} param0.type the type of the info
+ * @param {Boolean} param0.external If it opens an external link
+ */
+
+var InfoWithIcon = function InfoWithIcon(_ref) {
+  var text = _ref.text,
+      icon = _ref.icon,
+      i18n = _ref.i18n,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'link' : _ref$type,
+      _ref$external = _ref.external,
+      external = _ref$external === void 0 ? true : _ref$external;
+  var classes = viewInfoLink();
+  return React.createElement("div", {
+    className: classes.root
+  }, text, React.createElement(Tooltip, {
+    title: i18n("view.text.info.".concat(type)),
+    arrow: true
+  }, React.createElement(IconButton, {
+    variant: "text",
+    component: "a",
+    className: classes.icon,
+    href: text,
+    target: external ? '_blank' : '_self',
+    "aria-label": text,
+    size: "small"
+  }, React.cloneElement(icon))));
+};
+
+InfoWithIcon.propTypes = {
+  text: PropTypes.string,
+  external: PropTypes.bool,
+  i18n: PropTypes.func,
+  type: PropTypes.oneOf(['link', 'website', 'email', 'phone']),
+  icon: PropTypes.element
+};
+
+/**
  * Renders an email "mailto:" (anchor) for display
  *
  * @param {object} param0 props
  * @param {string} param0.text the text to be rendered
+ * @param {string} param0.i18n the translation source for tooltip/text
+ * @param {string} param0.external [optional] if it opens an external link
  */
 
 var EmailInfo = function EmailInfo(_ref) {
   var text = _ref.text,
+      i18n = _ref.i18n,
       _ref$external = _ref.external,
       external = _ref$external === void 0 ? true : _ref$external;
-  var classes = viewInfoLink();
-  return React.createElement(Button, {
-    variant: "text",
-    component: "a",
-    className: classes.root,
-    href: "mailto:".concat(text),
-    target: external ? '_blank' : '_self'
-  }, text, " ", React.createElement(EmailRounded, null));
+  return React.createElement(InfoWithIcon, {
+    text: text,
+    icon: React.createElement(EmailRounded, null),
+    i18n: i18n,
+    external: external,
+    type: "email"
+  });
 };
 
 EmailInfo.propTypes = {
@@ -412,20 +451,22 @@ EmailInfo.propTypes = {
  *
  * @param {object} param0 props
  * @param {string} param0.text the text to be rendered
+ * @param {string} param0.i18n the translation source for tooltip/text
+ * @param {string} param0.external [optional] if it opens an external link
  */
 
 var WebSiteInfo = function WebSiteInfo(_ref) {
   var text = _ref.text,
+      i18n = _ref.i18n,
       _ref$external = _ref.external,
       external = _ref$external === void 0 ? true : _ref$external;
-  var classes = viewInfoLink();
-  return React.createElement(Button, {
-    variant: "text",
-    component: "a",
-    className: classes.root,
-    href: text,
-    target: external ? '_blank' : '_self'
-  }, text, " ", React.createElement(LaunchRounded, null));
+  return React.createElement(InfoWithIcon, {
+    text: text,
+    icon: React.createElement(LaunchRounded, null),
+    i18n: i18n,
+    external: external,
+    type: "website"
+  });
 };
 
 WebSiteInfo.propTypes = {
@@ -589,7 +630,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
       cursor: onClick ? 'pointer' : 'normal'
     },
     onClick: onClick
-  }, fields, !!remove && React.createElement(ListItemSecondaryAction, null, React.createElement(IconButton, {
+  }, fields, !!remove && React.createElement(ListItemSecondaryAction, null, React.createElement(IconButton$1, {
     edge: "end",
     onClick: function onClick() {
       remove();
@@ -851,7 +892,10 @@ var createTextComponent = function createTextComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
   var classes = textFieldStyles();
   var component = null;
-  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? TextStyleByType(values[property]) : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
+    text: values[property],
+    i18n: i18n
+  }) : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
     className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
@@ -896,14 +940,18 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
   });
 };
 
-var TextStyleByType = function TextStyleByType(text) {
+var TextStyleByType = function TextStyleByType(_ref8) {
+  var text = _ref8.text,
+      i18n = _ref8.i18n;
   if (validateEmail(text)) return React.createElement(EmailInfo, {
-    text: text
+    text: text,
+    i18n: i18n
   });
   if (validateWebsite(text)) return React.createElement(WebSiteInfo, {
-    text: text
+    text: text,
+    i18n: i18n
   });
-  return text;
+  return "".concat(text);
 };
 
 /**
