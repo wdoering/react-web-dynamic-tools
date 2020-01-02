@@ -2200,5 +2200,43 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { BottomButtons, CancelButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, SaveButton, TitleAndButtons, validations };
+/**
+ * Provides access to the current window size object
+ * @returns {{ width: number, height: number }} object with window size props
+ */
+
+function useWindowSize() {
+  var isClient = (typeof window === "undefined" ? "undefined" : _typeof(window)) === 'object';
+
+  function getSize() {
+    return {
+      width: isClient ? window.innerWidth : undefined,
+      height: isClient ? window.innerHeight : undefined
+    };
+  }
+
+  var _useState = useState(getSize),
+      _useState2 = _slicedToArray(_useState, 2),
+      windowSize = _useState2[0],
+      setWindowSize = _useState2[1];
+
+  useEffect(function () {
+    if (!isClient) {
+      return false;
+    }
+
+    function handleResize() {
+      setWindowSize(getSize());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return function () {
+      return window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return windowSize;
+}
+
+export { BottomButtons, CancelButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, SaveButton, TitleAndButtons, useWindowSize, validations };
 //# sourceMappingURL=index.js.map

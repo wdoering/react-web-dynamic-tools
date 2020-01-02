@@ -4,6 +4,7 @@ import { DeleteConfirmationDialog } from './components/DeleteConfirmationDialog'
 import { TitleAndButtons } from './components/title';
 import { BottomButtons } from './components/form';
 import { DynamicForm, DynamicList, DynamicView } from './dynamic';
+import { useWindowSize } from './hooks';
 
 export {
 	DynamicForm,
@@ -14,5 +15,6 @@ export {
 	SaveButton,
 	BottomButtons,
 	TitleAndButtons,
-	DeleteConfirmationDialog
+	DeleteConfirmationDialog,
+	useWindowSize
 };
