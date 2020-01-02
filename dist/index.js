@@ -344,7 +344,7 @@ var AddButton = function AddButton(_ref) {
   var history = useHistory(),
       useIcon = useMobileIconButtons(),
       buttonText = useMemo(function () {
-    return i18n(button.add);
+    return i18n('button.add');
   }, [i18n]);
   return React.createElement(Tooltip, {
     title: i18n('button.add.tooltip'),

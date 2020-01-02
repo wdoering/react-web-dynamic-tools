@@ -8,7 +8,7 @@ import { useMobileIconButtons } from '../../hooks';
 const AddButton = ({ baseRoute, i18n }) => {
 	const history = useHistory(),
 		useIcon = useMobileIconButtons(),
-		buttonText = useMemo(() => i18n(button.add), [i18n]);
+		buttonText = useMemo(() => i18n('button.add'), [i18n]);
 
 	return (
 		<Tooltip title={i18n('button.add.tooltip')} arrow>
