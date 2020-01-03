@@ -30,7 +30,7 @@ var validateName = function validateName(name) {
   return nameRegex.test(name);
 };
 var validateWebsite = function validateWebsite(webSite) {
-  var webSiteRegex = /((https?:\/\/)|(https?:\/\/)(www\.)|(www\.))?[a-zA-Z]{1,}[\.\-_]{0,}[a-zA-Z0-9%_\-.\+~#=]{1,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  var webSiteRegex = /^((https?:\/\/)|(https?:\/\/)(www\.)|(www\.))?[a-zA-Z]{1,}[\.\-_]{0,}[a-zA-Z0-9%_\-.\+~#=]{1,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
   return webSiteRegex.test(webSite);
 };
 var validateEmail = function validateEmail(email) {
