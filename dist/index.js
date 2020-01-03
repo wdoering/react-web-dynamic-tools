@@ -2630,7 +2630,11 @@ var DynamicView = function DynamicView(_ref3) {
       setValues = _useState4[1],
       history = useHistory(),
       deleteConfirmationDialogRef = React.createRef(),
-      oService = useCallback(model.getService(firebase), [model, firebase]),
+      oService = useCallback(!!serviceInstance ? serviceInstance : model.getService(firebase), [serviceInstance, model, firebase]),
+      _useState5 = useState(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      serviceRunning = _useState6[0],
+      setServiceRunning = _useState6[1],
       fillData = function fillData(data) {
     model.$fill(data);
     setValues(data);
@@ -2639,19 +2643,25 @@ var DynamicView = function DynamicView(_ref3) {
 
   useEffect(function () {
     //TODO: implement service flexibility
-    if (id && (!model.uid || model.uid !== id)) {
+    if (!!id && (!serviceRunning && !model.uid || model.uid !== id)) {
       //TODO: remove from here
       if (process.env.NODE_ENV === 'development') {
         console.log('DynamicView:useEffect:serviceWillRun');
       }
 
-      if (!!serviceInstance && typeof serviceInstance.get === 'function') {
-        serviceInstance.get(id).then(fillData);
-      } else {
-        oService.get(id).then(fillData);
-      }
+      if (typeof oService.get !== 'function') {
+        throw Error('dynamic-list-service-requires-a-get(id)-method');
+      } //changes the flag
+
+
+      setServiceRunning(true);
+      oService.get(id).then(fillData).finally(function () {
+        return (//changes the flag
+          setServiceRunning(false)
+        );
+      });
     }
-  }, [model, id, oService, setValues, serviceInstance]);
+  }, [model, id, oService, setValues]);
   var remove = useCallback(function () {
     oService.patch(values.uid, {
       deleted: true
