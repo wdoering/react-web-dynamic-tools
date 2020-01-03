@@ -1010,7 +1010,8 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
         setList(objectWithProps[property]);
       }
     }
-  }, [list, objectWithProps, property, Type]);
+  }, [currentValues]); // }, [list, objectWithProps, property, Type]);
+
   return [list, setList];
 };
 

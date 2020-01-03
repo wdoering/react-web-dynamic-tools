@@ -32,7 +32,8 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 				setList(objectWithProps[property]);
 			}
 		}
-	}, [list, objectWithProps, property, Type]);
+	}, [currentValues]);
+	// }, [list, objectWithProps, property, Type]);
 
 	return [list, setList];
 };
