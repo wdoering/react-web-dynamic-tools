@@ -282,7 +282,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 		history = useHistory(),
 		deleteConfirmationDialogRef = React.createRef(),
 		oService = !!serviceInstance ? serviceInstance : model.getService(firebase),
-		[serviceRunning, setServiceRunning] = useState(false),
+		// [serviceRunning, setServiceRunning] = useState(false),
 		fillData = (data) => {
 			model.$fill(data);
 			setValues(data);
@@ -290,9 +290,9 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 			return data;
 		};
 
-	useEffect(() => {
-		//TODO: implement service flexibility
-		if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
+	useEffect(async () => {
+		// if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
+		if (!!id || model.uid !== id) {
 			//TODO: remove from here
 			if (process.env.NODE_ENV === 'development') {
 				console.log('DynamicView:useEffect:serviceWillRun');
@@ -303,16 +303,21 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 			}
 
 			//changes the flag
-			setServiceRunning(true);
+			// setServiceRunning(true);
 			oService
 				.get(id)
 				.then(fillData)
-				.finally(() =>
+				.finally(() => {
 					//changes the flag
-					setServiceRunning(false)
-				);
+					// setServiceRunning(false)
+				});
 		}
-	}, [model, id]);
+	}, [id]);
+
+	// //cleanup useEffect
+	// useEffect(() => {
+	// 	if (process.env.NODE_ENV === 'development') console.log('useEffect:unmount');
+	// }, []);
 
 	const remove = useCallback(() => {
 		oService.patch(values.uid, { deleted: true });
