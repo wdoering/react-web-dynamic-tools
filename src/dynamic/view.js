@@ -290,7 +290,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 			return data;
 		};
 
-	useEffect(async () => {
+	useEffect(() => {
 		// if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
 		if (!!id || model.uid !== id) {
 			//TODO: remove from here
