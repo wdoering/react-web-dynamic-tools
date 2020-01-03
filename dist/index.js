@@ -2632,8 +2632,8 @@ var DynamicView = function DynamicView(_ref3) {
       deleteConfirmationDialogRef = React.createRef(),
       oService = useCallback(model.getService(firebase), [model, firebase]),
       fillData = function fillData(data) {
-    model.$fill(d);
-    setValues(d);
+    model.$fill(data);
+    setValues(data);
     return data;
   };
 
