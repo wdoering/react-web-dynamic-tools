@@ -12,6 +12,7 @@ import { TitleAndButtons } from './components/title';
 import { BottomButtons } from './components/form';
 import { DynamicForm, DynamicList, DynamicView } from './dynamic';
 import { useEnterPress, useWindowSize, useMobileIconButtons } from './hooks';
+import { validateEmail, validateWebsite } from './util/validations';
 
 export {
 	DynamicForm,
@@ -29,5 +30,7 @@ export {
 	DeleteConfirmationDialog,
 	useEnterPress,
 	useWindowSize,
-	useMobileIconButtons
+	useMobileIconButtons,
+	validateEmail,
+	validateWebsite
 };

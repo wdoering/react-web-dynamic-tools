@@ -2688,5 +2688,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
 //# sourceMappingURL=index.js.map
