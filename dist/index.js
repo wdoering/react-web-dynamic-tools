@@ -2630,7 +2630,7 @@ var DynamicView = function DynamicView(_ref3) {
       setValues = _useState4[1],
       history = useHistory(),
       deleteConfirmationDialogRef = React.createRef(),
-      oService = useCallback(!!serviceInstance ? serviceInstance : model.getService(firebase), [serviceInstance, model, firebase]),
+      oService = !!serviceInstance ? serviceInstance : model.getService(firebase),
       _useState5 = useState(false),
       _useState6 = _slicedToArray(_useState5, 2),
       serviceRunning = _useState6[0],
@@ -2643,7 +2643,7 @@ var DynamicView = function DynamicView(_ref3) {
 
   useEffect(function () {
     //TODO: implement service flexibility
-    if (!!id && (!serviceRunning && !model.uid || model.uid !== id)) {
+    if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
       //TODO: remove from here
       if (process.env.NODE_ENV === 'development') {
         console.log('DynamicView:useEffect:serviceWillRun');
@@ -2661,12 +2661,13 @@ var DynamicView = function DynamicView(_ref3) {
         );
       });
     }
-  }, [model, id, oService, setValues]);
+  }, [model, id]);
   var remove = useCallback(function () {
     oService.patch(values.uid, {
       deleted: true
     });
-    deleteConfirmationDialogRef.current.close();
+    deleteConfirmationDialogRef.current.close(); //redirect
+
     history.push("".concat(baseRoute, "/list"));
   }, [oService, values, deleteConfirmationDialogRef, history]);
   var fields = createFields$1({

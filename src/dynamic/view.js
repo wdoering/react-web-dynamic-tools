@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -281,11 +281,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	const [values, setValues] = useState(model),
 		history = useHistory(),
 		deleteConfirmationDialogRef = React.createRef(),
-		oService = useCallback(!!serviceInstance ? serviceInstance : model.getService(firebase), [
-			serviceInstance,
-			model,
-			firebase
-		]),
+		oService = !!serviceInstance ? serviceInstance : model.getService(firebase),
 		[serviceRunning, setServiceRunning] = useState(false),
 		fillData = (data) => {
 			model.$fill(data);
@@ -296,7 +292,7 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 
 	useEffect(() => {
 		//TODO: implement service flexibility
-		if (!!id && ((!serviceRunning && !model.uid) || model.uid !== id)) {
+		if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
 			//TODO: remove from here
 			if (process.env.NODE_ENV === 'development') {
 				console.log('DynamicView:useEffect:serviceWillRun');
@@ -316,11 +312,13 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 					setServiceRunning(false)
 				);
 		}
-	}, [model, id, oService, setValues]);
+	}, [model, id]);
 
 	const remove = useCallback(() => {
 		oService.patch(values.uid, { deleted: true });
 		deleteConfirmationDialogRef.current.close();
+
+		//redirect
 		history.push(`${baseRoute}/list`);
 	}, [oService, values, deleteConfirmationDialogRef, history]);
 
