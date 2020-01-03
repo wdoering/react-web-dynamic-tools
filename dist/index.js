@@ -2630,17 +2630,28 @@ var DynamicView = function DynamicView(_ref3) {
       setValues = _useState4[1],
       history = useHistory(),
       deleteConfirmationDialogRef = React.createRef(),
-      oService = useCallback(model.getService(firebase), [model, firebase]);
+      oService = useCallback(model.getService(firebase), [model, firebase]),
+      fillData = function fillData(data) {
+    model.$fill(d);
+    setValues(d);
+    return data;
+  };
 
   useEffect(function () {
     //TODO: implement service flexibility
     if (id && (!model.uid || model.uid !== id)) {
-      oService.get(id).then(function (r) {
-        model.$fill(r);
-        setValues(r);
-      });
+      //TODO: remove from here
+      if (process.env.NODE_ENV === 'development') {
+        console.log('DynamicView:useEffect:serviceWillRun');
+      }
+
+      if (!!serviceInstance && typeof serviceInstance.get === 'function') {
+        serviceInstance.get(id).then(fillData);
+      } else {
+        oService.get(id).then(fillData);
+      }
     }
-  }, [model, id, oService, setValues]);
+  }, [model, id, oService, setValues, serviceInstance]);
   var remove = useCallback(function () {
     oService.patch(values.uid, {
       deleted: true

@@ -281,17 +281,29 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	const [values, setValues] = useState(model),
 		history = useHistory(),
 		deleteConfirmationDialogRef = React.createRef(),
-		oService = useCallback(model.getService(firebase), [model, firebase]);
+		oService = useCallback(model.getService(firebase), [model, firebase]),
+		fillData = (data) => {
+			model.$fill(d);
+			setValues(d);
+
+			return data;
+		};
 
 	useEffect(() => {
 		//TODO: implement service flexibility
 		if (id && (!model.uid || model.uid !== id)) {
-			oService.get(id).then((r) => {
-				model.$fill(r);
-				setValues(r);
-			});
+			//TODO: remove from here
+			if (process.env.NODE_ENV === 'development') {
+				console.log('DynamicView:useEffect:serviceWillRun');
+			}
+
+			if (!!serviceInstance && typeof serviceInstance.get === 'function') {
+				serviceInstance.get(id).then(fillData);
+			} else {
+				oService.get(id).then(fillData);
+			}
 		}
-	}, [model, id, oService, setValues]);
+	}, [model, id, oService, setValues, serviceInstance]);
 
 	const remove = useCallback(() => {
 		oService.patch(values.uid, { deleted: true });
