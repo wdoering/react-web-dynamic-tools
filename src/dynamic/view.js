@@ -302,14 +302,13 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 				throw Error('dynamic-list-service-requires-a-get(id)-method');
 			}
 
-			//changes the flag
-			// setServiceRunning(true);
+			//runs the service
 			oService
 				.get(id)
 				.then(fillData)
-				.finally(() => {
-					//changes the flag
-					// setServiceRunning(false)
+				.catch((e) => {
+					if (process.env.NODE_ENV === 'development') console.error(e);
+					else throw e;
 				});
 		}
 	}, [id]);

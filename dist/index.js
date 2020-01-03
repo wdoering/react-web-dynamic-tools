@@ -2647,12 +2647,11 @@ var DynamicView = function DynamicView(_ref3) {
 
       if (typeof oService.get !== 'function') {
         throw Error('dynamic-list-service-requires-a-get(id)-method');
-      } //changes the flag
-      // setServiceRunning(true);
+      } //runs the service
 
 
-      oService.get(id).then(fillData).finally(function () {//changes the flag
-        // setServiceRunning(false)
+      oService.get(id).then(fillData).catch(function (e) {
+        if (process.env.NODE_ENV === 'development') console.error(e);else throw e;
       });
     }
   }, [id]); // //cleanup useEffect
