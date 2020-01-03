@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
@@ -297,6 +297,22 @@ function _nonIterableSpread() {
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
+
+/**
+ * Hook for triggering a common enter-key-press action
+ *
+ * @param {Function} callback the function which will be triggered
+ *
+ * @returns {Function} the function to be used with an "onKeyPress" or any trigger
+ */
+
+var useEnterPress = function useEnterPress(callback) {
+  var onEnterPress = useCallback(function (e) {
+    if (e.key === 'Enter' && !!callback && typeof callback === 'function') callback(e);
+    e.stopPropagation();
+  }, [callback]);
+  return onEnterPress;
+};
 
 var errorStyles = makeStyles({
   root: {
@@ -2672,5 +2688,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useMobileIconButtons, useWindowSize, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validations };
 //# sourceMappingURL=index.js.map
