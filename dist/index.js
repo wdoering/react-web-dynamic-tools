@@ -1832,7 +1832,8 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   }, React.createElement(DialogTitle$1, null, i18nPropertyLabel), React.createElement(DialogContent$1, {
     style: {
       height: shouldOverflowListItems ? 300 : '',
-      overflow: shouldOverflowListItems ? 'visible' : ''
+      overflow: shouldOverflowListItems ? 'visible' : '',
+      paddingTop: 0
     }
   }, inputs), React.createElement(DialogActions$1, null, React.createElement(SaveButton, {
     onClick: save,

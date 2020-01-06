@@ -267,7 +267,8 @@ const createArrayOfComponent = (
 						<DialogContent
 							style={{
 								height: shouldOverflowListItems ? 300 : '',
-								overflow: shouldOverflowListItems ? 'visible' : ''
+								overflow: shouldOverflowListItems ? 'visible' : '',
+								paddingTop: 0
 							}}
 						>
 							{inputs}
