@@ -263,7 +263,9 @@ const createArrayOfComponent = (
 						aria-describedby="alert-dialog-description"
 						style={{ root: { overflow: shouldOverflowListItems ? 'visible' : '' } }}
 					>
-						<DialogTitle>{i18nPropertyLabel}</DialogTitle>
+						<DialogTitle style={{ marginBottom: '10px' }}>
+							{i18nPropertyLabel}
+						</DialogTitle>
 						<DialogContent
 							style={{
 								height: shouldOverflowListItems ? 300 : '',
