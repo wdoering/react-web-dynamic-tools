@@ -16,6 +16,7 @@ const useListOfData = (objectWithProps, property, Type, firebase) => {
 		currentValues = objectWithProps[property],
 		objectPropIsArray = currentValues instanceof Array;
 
+	//TODO: URGENT review functionality
 	useEffect(() => {
 		if (!list || !list.length || (objectPropIsArray && list.length !== currentValues.length)) {
 			//And is there a service behind?

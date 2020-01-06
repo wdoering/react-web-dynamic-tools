@@ -10,7 +10,6 @@ import {
 	DialogTitle,
 	DialogContent,
 	DialogActions,
-	TextField,
 	Typography,
 	Card,
 	CardContent,
@@ -28,7 +27,7 @@ import {
 	mergeSets,
 	removeFromSet
 } from '../functions';
-import ErrorLabel from '../components/form/ErrorLabel';
+import { FormInput, ErrorLabel } from '../components/form';
 import { useListOfData } from '../hooks';
 import { TitleAndButtons } from '../components/title';
 import { SpacerSiblingField } from './_common';
@@ -215,19 +214,12 @@ const createArrayOfComponent = (
 	} else if (typeof Type === 'string') {
 		switch (Type) {
 			case FieldTypes.String:
-				inputs = (
-					<TextField
-						label={i18nPropertyLabel}
-						onChange={(e) => {
-							setCurrentDialogValue(e.target.value);
-						}}
-					/>
-				);
+				inputs = <FormInput label={i18nPropertyLabel} onChange={setCurrentDialogValue} />;
 
 				break;
 			case FieldTypes.Date:
 				inputs = (
-					<TextField
+					<FormInput
 						type="date"
 						label={i18nPropertyLabel}
 						onChange={(e) => {
@@ -239,7 +231,7 @@ const createArrayOfComponent = (
 				break;
 			case FieldTypes.Datetime:
 				inputs = (
-					<TextField
+					<FormInput
 						type="datetime"
 						label={i18nPropertyLabel}
 						onChange={(e) => {

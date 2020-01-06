@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, Tooltip, IconButton, ListItem, ListItemSecondaryAction, Typography, FormLabel, TextField, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
+import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -9,6 +9,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import IconButton$1 from '@material-ui/core/IconButton';
 import EmailRounded from '@material-ui/icons/EmailRounded';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
+import { makeStyles as makeStyles$1 } from '@material-ui/styles';
+import classNames from 'classnames';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import DeleteRounded from '@material-ui/icons/DeleteRounded';
@@ -20,8 +22,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
-import { makeStyles as makeStyles$1 } from '@material-ui/styles';
-import classNames from 'classnames';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
@@ -500,6 +500,146 @@ WebSiteInfo.propTypes = {
   external: PropTypes.bool
 };
 
+var useStyles = makeStyles$1(function (theme) {
+  return {
+    root: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      '& > *': {
+        flex: '0 0 auto',
+        marginLeft: theme.spacing(1)
+      }
+    }
+  };
+});
+/**
+ *
+ * @param {React.ReactNodeArray} buttons
+ */
+
+var BottomButtons = function BottomButtons(_ref) {
+  var buttons = _ref.buttons;
+  var classes = useStyles();
+  return React.createElement("div", {
+    className: classes.root
+  }, buttons.map(function (button, key) {
+    return React.cloneElement(button, {
+      key: key
+    });
+  }));
+};
+
+BottomButtons.propTypes = {
+  buttons: PropTypes.arrayOf(PropTypes.node)
+};
+
+var EmptyRelation = function EmptyRelation(_ref) {
+  var i18n = _ref.i18n;
+  var classes = viewInfoStyles();
+  return React.createElement(Typography, {
+    variant: "body2",
+    className: classes.detail
+  }, i18n('form.idof.not.informed'));
+};
+
+EmptyRelation.propTypes = {
+  i18n: PropTypes.func.isRequired
+};
+
+var ErrorLabel = function ErrorLabel(_ref) {
+  var children = _ref.children;
+  var classes = errorStyles();
+  return children && React.createElement(Typography, {
+    variant: "body2",
+    className: classes.root
+  }, children);
+};
+
+var useStyles$1 = makeStyles(function (theme) {
+  return {
+    root: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      alignContent: 'flex-start',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      '& > .sibling-field': {
+        flex: 1,
+        flexGrow: 1,
+        marginRight: '10px',
+        minWidth: '100px',
+        flexBasis: '120px',
+        overflowWrap: 'break-word',
+        '& .MuiFormControl-root': {
+          width: '100%'
+        }
+      },
+      '& > .break-field': {
+        flexBasis: '100%'
+      }
+    },
+    rootWithMarginTop: {
+      marginTop: 15
+    }
+  };
+});
+/**
+ * Renders a default group-wrapper div, with possibility of margin-top-15
+ *
+ * @param {*} param0
+ */
+
+var FieldGroup = function FieldGroup(_ref) {
+  var children = _ref.children,
+      _ref$marginTop = _ref.marginTop,
+      marginTop = _ref$marginTop === void 0 ? false : _ref$marginTop;
+  var classes = useStyles$1();
+  return React.createElement("div", {
+    className: classNames('field-group', classes.root, _defineProperty({}, classes.rootWithMarginTop, marginTop))
+  }, children);
+};
+
+FieldGroup.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.arrayOf(PropTypes.node)]),
+  marginTop: PropTypes.bool
+};
+
+/**
+ * Renders an input with defined type
+ *
+ * @param {Object} param0
+ */
+
+var FormInput = function FormInput(_ref) {
+  var label = _ref.label,
+      _ref$type = _ref.type,
+      type = _ref$type === void 0 ? 'text' : _ref$type,
+      _ref$onChange = _ref.onChange,
+      _onChange = _ref$onChange === void 0 ? function (e) {
+    return console.log('FormInput:value', e.target.value);
+  } : _ref$onChange,
+      otherProps = _objectWithoutProperties(_ref, ["label", "type", "onChange"]);
+
+  return React.createElement(TextField, _extends({
+    variant: "outlined",
+    type: type,
+    label: i18nPropertyLabel,
+    onChange: function onChange(e) {
+      _onChange(e.target.value);
+    }
+  }, otherProps));
+};
+
+FormInput.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string,
+  onChange: PropTypes.func
+};
+
 var protectedFieldValue = '******',
     blankFieldPlaceholder = '-';
 /**
@@ -745,7 +885,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
     style: {
       flex: 1
     }
-  }, React.createElement(TextField, {
+  }, React.createElement(FormInput, {
     variant: "outlined",
     value: value,
     style: {
@@ -918,7 +1058,7 @@ var createTextComponent = function createTextComponent(_ref6) {
   component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
     text: values[property],
     i18n: i18n
-  }) : blankFieldPlaceholder : React.createElement(TextField, _extends({}, field.props, {
+  }) : blankFieldPlaceholder : React.createElement(FormInput, _extends({}, field.props, {
     className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
@@ -996,7 +1136,8 @@ var useListOfData = function useListOfData(objectWithProps, property, Type, fire
       list = _useState2[0],
       setList = _useState2[1],
       currentValues = objectWithProps[property],
-      objectPropIsArray = currentValues instanceof Array;
+      objectPropIsArray = currentValues instanceof Array; //TODO: URGENT review functionality
+
 
   useEffect(function () {
     if (!list || !list.length || objectPropIsArray && list.length !== currentValues.length) {
@@ -1187,7 +1328,7 @@ CancelReturnButton.propTypes = {
   color: PropTypes.string
 };
 
-var useStyles = makeStyles(function (theme) {
+var useStyles$2 = makeStyles(function (theme) {
   return {
     root: {
       marginLeft: 5,
@@ -1212,7 +1353,7 @@ var DeleteButton = function DeleteButton(_ref) {
       i18n = _ref.i18n,
       other = _objectWithoutProperties(_ref, ["onClick", "i18n"]);
 
-  var classes = useStyles(),
+  var classes = useStyles$2(),
       useIcons = useMobileIconButtons(),
       buttonText = useMemo(function () {
     return i18n('button.delete');
@@ -1402,7 +1543,7 @@ DeleteConfirmationDialog.propTypes = {
   i18n: PropTypes.func.isRequired
 };
 
-var useStyles$1 = makeStyles(function (theme) {
+var useStyles$3 = makeStyles(function (theme) {
   return {
     root: {
       marginBottom: 15,
@@ -1435,7 +1576,7 @@ var TitleAndButtons = function TitleAndButtons(_ref) {
       buttons = _ref$buttons === void 0 ? [] : _ref$buttons,
       _ref$variant = _ref.variant,
       variant = _ref$variant === void 0 ? 'h4' : _ref$variant;
-  var classes = useStyles$1();
+  var classes = useStyles$3();
   return React.createElement(Typography, {
     variant: variant,
     className: classes.root
@@ -1452,114 +1593,6 @@ TitleAndButtons.propTypes = {
   title: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
   buttons: PropTypes.arrayOf(PropTypes.element)
-};
-
-var useStyles$2 = makeStyles$1(function (theme) {
-  return {
-    root: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      '& > *': {
-        flex: '0 0 auto',
-        marginLeft: theme.spacing(1)
-      }
-    }
-  };
-});
-/**
- *
- * @param {React.ReactNodeArray} buttons
- */
-
-var BottomButtons = function BottomButtons(_ref) {
-  var buttons = _ref.buttons;
-  var classes = useStyles$2();
-  return React.createElement("div", {
-    className: classes.root
-  }, buttons.map(function (button, key) {
-    return React.cloneElement(button, {
-      key: key
-    });
-  }));
-};
-
-BottomButtons.propTypes = {
-  buttons: PropTypes.arrayOf(PropTypes.node)
-};
-
-var EmptyRelation = function EmptyRelation(_ref) {
-  var i18n = _ref.i18n;
-  var classes = viewInfoStyles();
-  return React.createElement(Typography, {
-    variant: "body2",
-    className: classes.detail
-  }, i18n('form.idof.not.informed'));
-};
-
-EmptyRelation.propTypes = {
-  i18n: PropTypes.func.isRequired
-};
-
-var useStyles$3 = makeStyles(function (theme) {
-  return {
-    root: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      alignContent: 'flex-start',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      '& > .sibling-field': {
-        flex: 1,
-        flexGrow: 1,
-        marginRight: '10px',
-        minWidth: '100px',
-        flexBasis: '120px',
-        overflowWrap: 'break-word',
-        '& .MuiFormControl-root': {
-          width: '100%'
-        }
-      },
-      '& > .break-field': {
-        flexBasis: '100%'
-      }
-    },
-    rootWithMarginTop: {
-      marginTop: 15
-    }
-  };
-});
-/**
- * Renders a default group-wrapper div, with possibility of margin-top-15
- *
- * @param {*} param0
- */
-
-var FieldGroup = function FieldGroup(_ref) {
-  var children = _ref.children,
-      _ref$marginTop = _ref.marginTop,
-      marginTop = _ref$marginTop === void 0 ? false : _ref$marginTop;
-  var classes = useStyles$3();
-  return React.createElement("div", {
-    className: classNames('field-group', classes.root, _defineProperty({}, classes.rootWithMarginTop, marginTop))
-  }, children);
-};
-
-FieldGroup.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.arrayOf(PropTypes.node)]),
-  marginTop: PropTypes.bool
-};
-
-var ErrorLabel = function ErrorLabel(_ref) {
-  var children = _ref.children;
-  var classes = errorStyles();
-  return children && React.createElement(Typography, {
-    variant: "body2",
-    className: classes.root
-  }, children);
 };
 
 /**
@@ -1738,16 +1771,14 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
   } else if (typeof Type === 'string') {
     switch (Type) {
       case FieldTypes.String:
-        inputs = React.createElement(TextField, {
+        inputs = React.createElement(FormInput, {
           label: i18nPropertyLabel,
-          onChange: function onChange(e) {
-            setCurrentDialogValue(e.target.value);
-          }
+          onChange: setCurrentDialogValue
         });
         break;
 
       case FieldTypes.Date:
-        inputs = React.createElement(TextField, {
+        inputs = React.createElement(FormInput, {
           type: "date",
           label: i18nPropertyLabel,
           onChange: function onChange(e) {
@@ -1757,7 +1788,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         break;
 
       case FieldTypes.Datetime:
-        inputs = React.createElement(TextField, {
+        inputs = React.createElement(FormInput, {
           type: "datetime",
           label: i18nPropertyLabel,
           onChange: function onChange(e) {

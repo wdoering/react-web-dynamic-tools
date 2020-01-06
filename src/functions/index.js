@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
 	FormControlLabel,
-	TextField,
 	Typography,
 	List,
 	ListItem,
@@ -20,6 +19,7 @@ import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
 import { inArray } from '../util/query';
 import { validateEmail, validateWebsite } from '../util/validations';
 import { EmailInfo, WebSiteInfo } from '../components/view/text';
+import { FormInput } from '../components/form';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -290,7 +290,7 @@ const createIdOfComponent = (
 				</Typography>
 			)}
 			<div style={{ flex: 1 }}>
-				<TextField
+				<FormInput
 					variant="outlined"
 					value={value}
 					style={{ width: '100%' }}
@@ -490,7 +490,7 @@ const createTextComponent = ({
 			blankFieldPlaceholder
 		)
 	) : (
-		<TextField
+		<FormInput
 			{...field.props}
 			className={classes.spacer}
 			style={field.style.field}
