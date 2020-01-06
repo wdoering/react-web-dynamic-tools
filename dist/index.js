@@ -629,7 +629,7 @@ var FormInput = function FormInput(_ref) {
     type: type,
     label: label,
     onChange: function onChange(e) {
-      _onChange(e.target.value);
+      _onChange(e);
     }
   }, otherProps));
 };
@@ -1776,7 +1776,9 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
       case FieldTypes.String:
         inputs = React.createElement(FormInput, {
           label: i18nPropertyLabel,
-          onChange: setCurrentDialogValue
+          onChange: function onChange(e) {
+            return setCurrentDialogValue(e.target.value);
+          }
         });
         break;
 
@@ -1785,7 +1787,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
           type: "date",
           label: i18nPropertyLabel,
           onChange: function onChange(e) {
-            setCurrentDialogValue(e.target.valueAsDate);
+            return setCurrentDialogValue(e.target.valueAsDate);
           }
         });
         break;
@@ -1795,7 +1797,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
           type: "datetime",
           label: i18nPropertyLabel,
           onChange: function onChange(e) {
-            setCurrentDialogValue(e.target.valueAsDate);
+            return setCurrentDialogValue(e.target.valueAsDate);
           }
         });
         break;

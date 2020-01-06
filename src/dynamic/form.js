@@ -214,7 +214,12 @@ const createArrayOfComponent = (
 	} else if (typeof Type === 'string') {
 		switch (Type) {
 			case FieldTypes.String:
-				inputs = <FormInput label={i18nPropertyLabel} onChange={setCurrentDialogValue} />;
+				inputs = (
+					<FormInput
+						label={i18nPropertyLabel}
+						onChange={(e) => setCurrentDialogValue(e.target.value)}
+					/>
+				);
 
 				break;
 			case FieldTypes.Date:
@@ -222,9 +227,7 @@ const createArrayOfComponent = (
 					<FormInput
 						type="date"
 						label={i18nPropertyLabel}
-						onChange={(e) => {
-							setCurrentDialogValue(e.target.valueAsDate);
-						}}
+						onChange={(e) => setCurrentDialogValue(e.target.valueAsDate)}
 					/>
 				);
 
@@ -234,9 +237,7 @@ const createArrayOfComponent = (
 					<FormInput
 						type="datetime"
 						label={i18nPropertyLabel}
-						onChange={(e) => {
-							setCurrentDialogValue(e.target.valueAsDate);
-						}}
+						onChange={(e) => setCurrentDialogValue(e.target.valueAsDate)}
 					/>
 				);
 

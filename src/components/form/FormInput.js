@@ -19,7 +19,7 @@ const FormInput = ({
 			type={type}
 			label={label}
 			onChange={(e) => {
-				onChange(e.target.value);
+				onChange(e);
 			}}
 			{...otherProps}
 		/>
