@@ -1663,7 +1663,10 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
   return React.createElement("div", {
     className: " mb-15"
   }, React.createElement(Typography, {
-    variant: "h5"
+    variant: "h5",
+    style: {
+      marginBottom: '10px'
+    }
   }, i18n("".concat(model.getModelName(), ".form.").concat(property, ".add"))), React.createElement("div", {
     style: {
       flex: 1
@@ -1829,11 +1832,7 @@ var createArrayOfComponent = function createArrayOfComponent(model, property, va
         overflow: shouldOverflowListItems ? 'visible' : ''
       }
     }
-  }, React.createElement(DialogTitle$1, {
-    style: {
-      marginBottom: '10px'
-    }
-  }, i18nPropertyLabel), React.createElement(DialogContent$1, {
+  }, React.createElement(DialogTitle$1, null, i18nPropertyLabel), React.createElement(DialogContent$1, {
     style: {
       height: shouldOverflowListItems ? 300 : '',
       overflow: shouldOverflowListItems ? 'visible' : '',

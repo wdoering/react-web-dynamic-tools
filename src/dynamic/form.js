@@ -84,7 +84,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 	});
 	return (
 		<div className=" mb-15">
-			<Typography variant="h5">
+			<Typography variant="h5" style={{ marginBottom: '10px' }}>
 				{i18n(`${model.getModelName()}.form.${property}.add`)}
 			</Typography>
 			<div style={{ flex: 1 }}>{fields}</div>
@@ -263,9 +263,7 @@ const createArrayOfComponent = (
 						aria-describedby="alert-dialog-description"
 						style={{ root: { overflow: shouldOverflowListItems ? 'visible' : '' } }}
 					>
-						<DialogTitle style={{ marginBottom: '10px' }}>
-							{i18nPropertyLabel}
-						</DialogTitle>
+						<DialogTitle>{i18nPropertyLabel}</DialogTitle>
 						<DialogContent
 							style={{
 								height: shouldOverflowListItems ? 300 : '',
