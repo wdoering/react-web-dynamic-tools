@@ -17,7 +17,7 @@ const FormInput = ({
 		<TextField
 			variant="outlined"
 			type={type}
-			label={i18nPropertyLabel}
+			label={label}
 			onChange={(e) => {
 				onChange(e.target.value);
 			}}

@@ -627,7 +627,7 @@ var FormInput = function FormInput(_ref) {
   return React.createElement(TextField, _extends({
     variant: "outlined",
     type: type,
-    label: i18nPropertyLabel,
+    label: label,
     onChange: function onChange(e) {
       _onChange(e.target.value);
     }
