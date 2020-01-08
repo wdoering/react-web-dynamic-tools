@@ -1128,7 +1128,9 @@ var createTextComponent = function createTextComponent(_ref6) {
     //TODO: uncomment when usable
     // disabled={!!view}
     className: classes.spacer,
-    style: field.style.field,
+    InputProps: {
+      style: !!field.style.field ? field.style.field : {}
+    },
     label: i18n(label) //TODO: uncomment when usable
     // value={value}
     ,

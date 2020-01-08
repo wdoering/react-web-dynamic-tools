@@ -409,6 +409,7 @@ const createViewComponent = ({ model, property, field, values, label, i18n }) =>
 	return (
 		<div className={classes.root}>
 			<FormLabel className={classes.title}>{i18n(label)}</FormLabel>
+			{/* The below style.field should be passed on to the type */}
 			<div className={classes.detail} style={field.style.field}>
 				{createByType({
 					model,
@@ -510,7 +511,7 @@ const createTextComponent = ({
 			//TODO: uncomment when usable
 			// disabled={!!view}
 			className={classes.spacer}
-			style={field.style.field}
+			InputProps={{ style: !!field.style.field ? field.style.field : {} }}
 			label={i18n(label)}
 			//TODO: uncomment when usable
 			// value={value}
