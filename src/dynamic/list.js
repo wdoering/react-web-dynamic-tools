@@ -239,7 +239,8 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 					throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
 				//Has to be valid
-				return updateFilters(mainFilter);
+				//AS well as composes an AND query (extra outer array)
+				return updateFilters([mainFilter]);
 			},
 			[modelProps]
 		),

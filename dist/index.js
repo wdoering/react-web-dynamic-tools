@@ -2288,8 +2288,9 @@ var SingleFilter = function SingleFilter(_ref) {
     mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
     if (typeof updateFilters !== 'function') throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function'); //Has to be valid
+    //AS well as composes an AND query (extra outer array)
 
-    return updateFilters(mainFilter);
+    return updateFilters([mainFilter]);
   }, [modelProps]),
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
