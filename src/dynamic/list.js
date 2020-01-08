@@ -253,7 +253,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			// value={values[property]}
 			onChange={(e) => handleChange(e.target.value)}
 			InputProps={{
-				endAdornments: (
+				endAdornment: (
 					<InputAdornment position="end">
 						<IconButton
 							edge="end"

@@ -656,7 +656,7 @@ var FieldGroup = function FieldGroup(_ref) {
 };
 
 FieldGroup.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.element), PropTypes.arrayOf(PropTypes.node)]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node, PropTypes.arrayOf(PropTypes.element), PropTypes.arrayOf(PropTypes.node)]),
   marginTop: PropTypes.bool
 };
 
@@ -2360,7 +2360,7 @@ var SingleFilter = function SingleFilter(_ref) {
       return handleChange(e.target.value);
     },
     InputProps: {
-      endAdornments: React.createElement(InputAdornment, {
+      endAdornment: React.createElement(InputAdornment, {
         position: "end"
       }, React.createElement(IconButton, {
         edge: "end",
