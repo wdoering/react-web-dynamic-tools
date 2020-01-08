@@ -36,12 +36,12 @@ const useModelProps = (model) => {
 				);
 			}
 
-			console.log('props', props);
-
 			//Will set props, then
 			setModelProps(props);
 		}
 	}, []); // Empty array ensures that effect is only run on mount and unmount
+
+	console.log('modelProps', modelProps);
 
 	return modelProps;
 };

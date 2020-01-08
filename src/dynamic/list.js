@@ -203,9 +203,11 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			let mainFilter = [];
 
 			modelProps.map((key, i) => {
-				let value = v[key];
+				let currentIndex = `$$index.${key}`;
 
-				mainFilter.push([`$$index.${key}`, '==', value]);
+				console.log('currentIndex', currentIndex);
+
+				mainFilter.push([currentIndex, '==', value]);
 
 				// if (value && typeof value === 'string') {
 				// 	let f = [];

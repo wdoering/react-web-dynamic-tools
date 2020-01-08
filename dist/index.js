@@ -1252,14 +1252,14 @@ var useModelProps = function useModelProps(model) {
         props = Object.keys(model).filter(function (prop) {
           return typeof model[prop] !== 'function' && !['$fieldConfig', '$$index'].includes(prop);
         });
-      }
+      } //Will set props, then
 
-      console.log('props', props); //Will set props, then
 
       setModelProps(props);
     }
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
+  console.log('modelProps', modelProps);
   return modelProps;
 };
 
@@ -2303,8 +2303,9 @@ var SingleFilter = function SingleFilter(_ref) {
             case 0:
               mainFilter = [];
               modelProps.map(function (key, i) {
-                var value = v[key];
-                mainFilter.push(["$$index.".concat(key), '==', value]); // if (value && typeof value === 'string') {
+                var currentIndex = "$$index.".concat(key);
+                console.log('currentIndex', currentIndex);
+                mainFilter.push([currentIndex, '==', value]); // if (value && typeof value === 'string') {
                 // 	let f = [];
                 // 	let tEnd =
                 // 		value.substr(0, value.length - 1) +
