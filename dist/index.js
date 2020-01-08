@@ -1191,7 +1191,8 @@ function useMobileIconButtons() {
  */
 
 var useModelProps = function useModelProps(model) {
-  var _useState = useState([]),
+  var initialState = [],
+      _useState = useState(initialState),
       _useState2 = _slicedToArray(_useState, 2),
       modelProps = _useState2[0],
       setModelProps = _useState2[1]; //TODO: create specific hook
@@ -1215,7 +1216,12 @@ var useModelProps = function useModelProps(model) {
 
 
       setModelProps(props);
-    }
+    } //Resetter function
+
+
+    return function () {
+      return setModelProps(initialState);
+    };
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
   return modelProps;
@@ -2250,8 +2256,9 @@ var SingleFilter = function SingleFilter(_ref) {
   }, []),
       applyFilter = useCallback(function (value) {
     var mainFilter = [];
-    console.log('modelProps', modelProps);
-    modelProps.map(function (key, i) {
+    console.log('modelProps', modelProps); //Applying each filter to the index
+
+    modelProps.forEach(function (key, i) {
       var currentIndex = "$$index.".concat(key);
       console.log('currentIndex', currentIndex);
       mainFilter.push([currentIndex, '==', value]); // if (value && typeof value === 'string') {
@@ -2278,7 +2285,7 @@ var SingleFilter = function SingleFilter(_ref) {
 
     if (typeof updateFilters !== 'function') throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function'); //Has to be valid
 
-    updateFilters(mainFilter);
+    return updateFilters(mainFilter);
   }, []),
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
@@ -2287,6 +2294,7 @@ var SingleFilter = function SingleFilter(_ref) {
   }, []),
       handleEnterPress = useEnterPress(handleSearch);
 
+  console.log('outer:modelProps', modelProps);
   return React.createElement(FormInput, {
     className: classes.textField,
     label: i18n("list.filter.$label"),

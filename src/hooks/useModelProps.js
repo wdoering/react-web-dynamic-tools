@@ -9,7 +9,8 @@ import { ModelBase, PlainObject } from '@zerobytes/object-model-js';
  * @returns {array} of model prop-names
  */
 const useModelProps = (model) => {
-	const [modelProps, setModelProps] = useState([]);
+	const initialState = [],
+		[modelProps, setModelProps] = useState(initialState);
 
 	//TODO: create specific hook
 	useEffect(() => {
@@ -34,6 +35,9 @@ const useModelProps = (model) => {
 			//Will set props, then
 			setModelProps(props);
 		}
+
+		//Resetter function
+		return () => setModelProps(initialState);
 	}, []); // Empty array ensures that effect is only run on mount and unmount
 
 	return modelProps;

@@ -204,7 +204,8 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 
 			console.log('modelProps', modelProps);
 
-			modelProps.map((key, i) => {
+			//Applying each filter to the index
+			modelProps.forEach((key, i) => {
 				let currentIndex = `$$index.${key}`;
 
 				console.log('currentIndex', currentIndex);
@@ -239,7 +240,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
 			//Has to be valid
-			updateFilters(mainFilter);
+			return updateFilters(mainFilter);
 		}, []),
 		handleSearch = useCallback((e) => {
 			//If available, stops propagation of event
@@ -248,6 +249,8 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			return applyFilter(filterText);
 		}, []),
 		handleEnterPress = useEnterPress(handleSearch);
+
+	console.log('outer:modelProps', modelProps);
 
 	return (
 		<FormInput
