@@ -479,33 +479,52 @@ const createTextComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles();
-	let component = null;
+	let component = null,
+		value = null;
 
-	component = !!view ? (
-		!!field.protected ? (
-			protectedFieldValue
-		) : !!values[property] && values[property] !== '' ? (
-			<TextStyleByType text={values[property]} i18n={i18n} />
-		) : (
-			blankFieldPlaceholder
-		)
-	) : (
+	//View mode has a specific type of formatting data
+	if (!!view) {
+		if (!!field.protected) {
+			value = protectedFieldValue;
+		} else if (!!values[property] && values[property] !== '') {
+			value = <TextStyleByType text={values[property]} i18n={i18n} />;
+		} else {
+			value = blankFieldPlaceholder;
+		}
+	} else {
+		//non-view mode
+		value = values[property];
+	}
+
+	// component = !!view ? (
+	// 	!!field.protected ? (
+	// 		protectedFieldValue
+	// 	) : !!values[property] && values[property] !== '' ? (
+	// 		<TextStyleByType text={values[property]} i18n={i18n} />
+	// 	) : (
+	// 		blankFieldPlaceholder
+	// 	)
+	// ) :
+	return (
 		<FormInput
 			{...field.props}
+			disabled={!!view}
 			className={classes.spacer}
 			style={field.style.field}
 			label={i18n(label)}
-			value={values[property]}
+			value={value}
 			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
 			onChange={(e) => {
+				if (!!view) return false;
+
 				handleChange(property, e.target.value);
 
 				//Field has specific onChange function, runs after manipulation
 				if (!!field.onChange && typeof field.onChange === 'function')
 					field.onChange(e, values, property, e.target.value, handleChange);
 			}}
-			helperText={error ? i18n(`form.error.${error}`) : ' '}
-			error={!!error}
+			helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
+			error={!!error && !view}
 		/>
 	);
 
@@ -524,9 +543,10 @@ const createBooleanComponent = ({
 	const classes = textFieldStyles(),
 		usableLabel = i18n(label);
 
-	return !!view ? (
-		i18n(`boolean.view.${values[property].toString()}`)
-	) : (
+	// return !!view ? (
+	// 	i18n(`boolean.view.${values[property].toString()}`)
+	// ) :
+	return (
 		<FormControlLabel
 			className={classes.spacer}
 			label={usableLabel}
@@ -538,7 +558,7 @@ const createBooleanComponent = ({
 					checked={values[property]}
 					onChange={(e) => handleChange(property, e.target.checked)}
 					inputProps={{ 'aria-label': usableLabel }}
-					disabled={!!field.disabled}
+					disabled={!!field.disabled || !!view}
 				/>
 			}
 		/>

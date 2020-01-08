@@ -1069,25 +1069,49 @@ var createTextComponent = function createTextComponent(_ref6) {
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
   var classes = textFieldStyles();
-  var component = null;
-  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
-    text: values[property],
-    i18n: i18n
-  }) : blankFieldPlaceholder : React.createElement(FormInput, _extends({}, field.props, {
+  var value = null; //View mode has a specific type of formatting data
+
+  if (!!view) {
+    if (!!field.protected) {
+      value = protectedFieldValue;
+    } else if (!!values[property] && values[property] !== '') {
+      value = React.createElement(TextStyleByType, {
+        text: values[property],
+        i18n: i18n
+      });
+    } else {
+      value = blankFieldPlaceholder;
+    }
+  } else {
+    //non-view mode
+    value = values[property];
+  } // component = !!view ? (
+  // 	!!field.protected ? (
+  // 		protectedFieldValue
+  // 	) : !!values[property] && values[property] !== '' ? (
+  // 		<TextStyleByType text={values[property]} i18n={i18n} />
+  // 	) : (
+  // 		blankFieldPlaceholder
+  // 	)
+  // ) :
+
+
+  return React.createElement(FormInput, _extends({}, field.props, {
+    disabled: !!view,
     className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
-    value: values[property],
+    value: value,
     type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
     onChange: function onChange(e) {
+      if (!!view) return false;
       handleChange(property, e.target.value); //Field has specific onChange function, runs after manipulation
 
       if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.value, handleChange);
     },
-    helperText: error ? i18n("form.error.".concat(error)) : ' ',
-    error: !!error
+    helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
+    error: !!error && !view
   }));
-  return component;
 };
 
 var createBooleanComponent = function createBooleanComponent(_ref7) {
@@ -1100,8 +1124,11 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
   var classes = textFieldStyles(),
-      usableLabel = i18n(label);
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
+      usableLabel = i18n(label); // return !!view ? (
+  // 	i18n(`boolean.view.${values[property].toString()}`)
+  // ) :
+
+  return React.createElement(FormControlLabel, {
     className: classes.spacer,
     label: usableLabel,
     labelPlacement: "start",
@@ -1115,7 +1142,7 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       inputProps: {
         'aria-label': usableLabel
       },
-      disabled: !!field.disabled
+      disabled: !!field.disabled || !!view
     })
   });
 };
@@ -2259,30 +2286,8 @@ var SingleFilter = function SingleFilter(_ref) {
 
     if (!!value && typeof value === 'string' && value.trim() !== '') {
       var currentIndex = "$$index.".concat(value);
-      console.log('currentIndex', currentIndex);
       mainFilter.push([currentIndex, '==', true]);
-    } //Applying each filter to the index
-    //modelProps.forEach((key, i) => {
-    // if (value && typeof value === 'string') {
-    // 	let f = [];
-    // 	let tEnd =
-    // 		value.substr(0, value.length - 1) +
-    // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-    // 	f.push([key, '>=', value]);
-    // 	f.push([key, '<', tEnd]);
-    // 	f.push(['deleted', '==', false]);
-    // 	mainF.push(f);
-    // } else if (value instanceof Array && value.length) {
-    // 	value.map((s) => {
-    // 		if (!s) return;
-    // 		let f = [];
-    // 		f.push([key, 'array-contains', s]);
-    // 		f.push(['deleted', '==', false]);
-    // 		mainF.push(f);
-    // 	});
-    // }
-    //});
-    //Adding deleted flag filter
+    } //Adding deleted flag filter
 
 
     mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
@@ -2302,8 +2307,7 @@ var SingleFilter = function SingleFilter(_ref) {
   return React.createElement(FormInput, {
     className: classes.textField,
     label: i18n("list.filter.$label"),
-    value: filterText // value={values[property]}
-    ,
+    value: filterText,
     onChange: function onChange(e) {
       return handleChange(e.target.value);
     },
