@@ -194,10 +194,15 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		disabled = !filterText || filterText.trim() === '',
 		modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
+			//This is just in case the text is being cleared
+			if (!!value && value.trim() === '') {
+				applyFilter(value);
+			}
+
 			return setFilterText(value);
 		}, []),
 		applyFilter = useCallback(
-			(value) => {
+			async (value) => {
 				let mainFilter = [];
 
 				//Value was informed
@@ -225,6 +230,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				//If available, stops propagation of event
 				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
 
+				//Avoids triggering a query when the command should be disabled
 				if (disabled) return false;
 
 				return applyFilter(filterText);

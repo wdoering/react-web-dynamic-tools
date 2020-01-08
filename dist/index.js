@@ -23,6 +23,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
 import SearchIcon$1 from '@material-ui/icons/SearchRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
@@ -63,6 +64,42 @@ function _typeof(obj) {
   }
 
   return _typeof(obj);
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
 }
 
 function _classCallCheck(instance, Constructor) {
@@ -1069,8 +1106,8 @@ var createTextComponent = function createTextComponent(_ref6) {
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
   var classes = textFieldStyles();
-  var component = null,
-      value = null; // // View mode has a specific type of formatting data
+  var component = null;
+ // // View mode has a specific type of formatting data
   // if (!!view) {
   // 	if (!!field.protected) {
   // 		value = protectedFieldValue;
@@ -1092,8 +1129,10 @@ var createTextComponent = function createTextComponent(_ref6) {
     // disabled={!!view}
     className: classes.spacer,
     style: field.style.field,
-    label: i18n(label),
-    value: value,
+    label: i18n(label) //TODO: uncomment when usable
+    // value={value}
+    ,
+    value: values[property],
     type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
     onChange: function onChange(e) {
       //TODO: uncomment when usable
@@ -2271,27 +2310,60 @@ var SingleFilter = function SingleFilter(_ref) {
       disabled = !filterText || filterText.trim() === '',
       modelProps = useModelProps(model),
       handleChange = useCallback(function (value) {
+    //This is just in case the text is being cleared
+    if (!!value && value.trim() === '') {
+      applyFilter(value);
+    }
+
     return setFilterText(value);
   }, []),
-      applyFilter = useCallback(function (value) {
-    var mainFilter = []; //Value was informed
+      applyFilter = useCallback(
+  /*#__PURE__*/
+  function () {
+    var _ref2 = _asyncToGenerator(
+    /*#__PURE__*/
+    _regeneratorRuntime.mark(function _callee(value) {
+      var mainFilter, currentIndex;
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              mainFilter = []; //Value was informed
 
-    if (!!value && typeof value === 'string' && value.trim() !== '') {
-      var currentIndex = "$$index.".concat(value);
-      mainFilter.push([currentIndex, '==', true]);
-    } //Adding deleted flag filter
+              if (!!value && typeof value === 'string' && value.trim() !== '') {
+                currentIndex = "$$index.".concat(value);
+                mainFilter.push([currentIndex, '==', true]);
+              } //Adding deleted flag filter
 
 
-    mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
+              mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
-    if (typeof updateFilters !== 'function') throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function'); //Has to be valid
-    //AS well as composes an AND query (extra outer array)
+              if (!(typeof updateFilters !== 'function')) {
+                _context.next = 5;
+                break;
+              }
 
-    return updateFilters([mainFilter]);
-  }, [modelProps]),
+              throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
+
+            case 5:
+              return _context.abrupt("return", updateFilters([mainFilter]));
+
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }(), [modelProps]),
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
-    if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation(); //Avoids triggering a query when the command should be disabled
+
     if (disabled) return false;
     return applyFilter(filterText);
   }, [filterText, applyFilter]),
@@ -2337,15 +2409,15 @@ var search = function search(oService, filters) {
 
 var oService;
 
-var DynamicList = function DynamicList(_ref2) {
-  var reduxList = _ref2.reduxList,
-      model = _ref2.model,
-      configuration = _ref2.configuration,
-      baseRoute = _ref2.baseRoute,
-      i18n = _ref2.i18n,
-      firebase = _ref2.firebase,
-      store = _ref2.store,
-      serviceInstance = _ref2.serviceInstance;
+var DynamicList = function DynamicList(_ref3) {
+  var reduxList = _ref3.reduxList,
+      model = _ref3.model,
+      configuration = _ref3.configuration,
+      baseRoute = _ref3.baseRoute,
+      i18n = _ref3.i18n,
+      firebase = _ref3.firebase,
+      store = _ref3.store,
+      serviceInstance = _ref3.serviceInstance;
   var history = useHistory(); //Checkers of service
 
   if (!oService && !serviceInstance && !!store && !!firebase) {

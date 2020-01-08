@@ -512,7 +512,9 @@ const createTextComponent = ({
 			className={classes.spacer}
 			style={field.style.field}
 			label={i18n(label)}
-			value={value}
+			//TODO: uncomment when usable
+			// value={value}
+			value={values[property]}
 			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
 			onChange={(e) => {
 				//TODO: uncomment when usable
