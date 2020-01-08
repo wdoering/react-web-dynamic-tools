@@ -2311,7 +2311,7 @@ var SingleFilter = function SingleFilter(_ref) {
       modelProps = useModelProps(model),
       handleChange = useCallback(function (value) {
     //This is just in case the text is being cleared
-    if (!!value && value.trim() === '') {
+    if (typeof value === 'string' && value.trim() === '') {
       applyFilter(value);
     }
 

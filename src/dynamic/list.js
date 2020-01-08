@@ -195,7 +195,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
 			//This is just in case the text is being cleared
-			if (!!value && value.trim() === '') {
+			if (typeof value === 'string' && value.trim() === '') {
 				applyFilter(value);
 			}
 
