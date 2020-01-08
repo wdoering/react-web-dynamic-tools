@@ -2255,10 +2255,13 @@ var SingleFilter = function SingleFilter(_ref) {
     return setFilterText(value);
   }, []),
       applyFilter = useCallback(function (value) {
-    var mainFilter = [];
-    var currentIndex = "$$index.".concat(value);
-    console.log('currentIndex', currentIndex);
-    mainFilter.push([currentIndex, '==', true]); //Applying each filter to the index
+    var mainFilter = []; //Value was informed
+
+    if (!!value && typeof value === 'string' && value.trim() !== '') {
+      var currentIndex = "$$index.".concat(value);
+      console.log('currentIndex', currentIndex);
+      mainFilter.push([currentIndex, '==', true]);
+    } //Applying each filter to the index
     //modelProps.forEach((key, i) => {
     // if (value && typeof value === 'string') {
     // 	let f = [];
@@ -2280,6 +2283,7 @@ var SingleFilter = function SingleFilter(_ref) {
     // }
     //});
     //Adding deleted flag filter
+
 
     mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 

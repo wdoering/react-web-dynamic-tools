@@ -199,11 +199,14 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			(value) => {
 				let mainFilter = [];
 
-				let currentIndex = `$$index.${value}`;
+				//Value was informed
+				if (!!value && typeof value === 'string' && value.trim() !== '') {
+					let currentIndex = `$$index.${value}`;
 
-				console.log('currentIndex', currentIndex);
+					console.log('currentIndex', currentIndex);
 
-				mainFilter.push([currentIndex, '==', true]);
+					mainFilter.push([currentIndex, '==', true]);
+				}
 
 				//Applying each filter to the index
 				//modelProps.forEach((key, i) => {
