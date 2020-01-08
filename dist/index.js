@@ -2359,13 +2359,13 @@ var SingleFilter = function SingleFilter(_ref) {
     onChange: function onChange(e) {
       return handleChange(e.target.value);
     },
+    onKeyPressCapture: handleEnterPress,
     InputProps: {
       endAdornment: React.createElement(InputAdornment, {
         position: "end"
       }, React.createElement(IconButton, {
         edge: "end",
-        onClick: handleSearch,
-        onKeyPressCapture: handleEnterPress
+        onClick: handleSearch
       }, React.createElement(SearchIcon$1, null)))
     }
   });

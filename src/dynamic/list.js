@@ -252,14 +252,11 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			value={filterText}
 			// value={values[property]}
 			onChange={(e) => handleChange(e.target.value)}
+			onKeyPressCapture={handleEnterPress}
 			InputProps={{
 				endAdornment: (
 					<InputAdornment position="end">
-						<IconButton
-							edge="end"
-							onClick={handleSearch}
-							onKeyPressCapture={handleEnterPress}
-						>
+						<IconButton edge="end" onClick={handleSearch}>
 							<SearchIcon />
 						</IconButton>
 					</InputAdornment>
