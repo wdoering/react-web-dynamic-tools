@@ -2268,6 +2268,7 @@ var SingleFilter = function SingleFilter(_ref) {
       _useState6 = _slicedToArray(_useState5, 2),
       filterText = _useState6[0],
       setFilterText = _useState6[1],
+      disabled = !filterText || filterText.trim() === '',
       modelProps = useModelProps(model),
       handleChange = useCallback(function (value) {
     return setFilterText(value);
@@ -2307,6 +2308,7 @@ var SingleFilter = function SingleFilter(_ref) {
       endAdornment: React.createElement(InputAdornment, {
         position: "end"
       }, React.createElement(IconButton, {
+        disabled: disabled,
         edge: "end",
         onClick: handleSearch
       }, React.createElement(SearchIcon$1, null)))

@@ -191,6 +191,7 @@ const createFilters = (model, i18n, updateFilters) => {
 const SingleFilter = ({ model, i18n, updateFilters }) => {
 	const classes = filterTextField(),
 		[filterText, setFilterText] = useState(''),
+		disabled = !filterText || filterText.trim() === '',
 		modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
 			return setFilterText(value);
@@ -240,7 +241,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			InputProps={{
 				endAdornment: (
 					<InputAdornment position="end">
-						<IconButton edge="end" onClick={handleSearch}>
+						<IconButton disabled={disabled} edge="end" onClick={handleSearch}>
 							<SearchIcon />
 						</IconButton>
 					</InputAdornment>
