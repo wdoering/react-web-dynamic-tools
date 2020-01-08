@@ -199,55 +199,61 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		handleChange = useCallback((value) => {
 			return setFilterText(value);
 		}, []),
-		applyFilter = (value) => {
-			let mainFilter = [];
+		applyFilter = useCallback(
+			(value) => {
+				let mainFilter = [];
 
-			console.log('modelProps', modelProps);
+				console.log('modelProps', modelProps);
 
-			//Applying each filter to the index
-			modelProps.forEach((key, i) => {
-				let currentIndex = `$$index.${key}`;
+				//Applying each filter to the index
+				modelProps.forEach((key, i) => {
+					let currentIndex = `$$index.${key}`;
 
-				console.log('currentIndex', currentIndex);
+					console.log('currentIndex', currentIndex);
 
-				mainFilter.push([currentIndex, '==', value]);
+					mainFilter.push([currentIndex, '==', value]);
 
-				// if (value && typeof value === 'string') {
-				// 	let f = [];
-				// 	let tEnd =
-				// 		value.substr(0, value.length - 1) +
-				// 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-				// 	f.push([key, '>=', value]);
-				// 	f.push([key, '<', tEnd]);
-				// 	f.push(['deleted', '==', false]);
-				// 	mainF.push(f);
-				// } else if (value instanceof Array && value.length) {
-				// 	value.map((s) => {
-				// 		if (!s) return;
-				// 		let f = [];
-				// 		f.push([key, 'array-contains', s]);
-				// 		f.push(['deleted', '==', false]);
-				// 		mainF.push(f);
-				// 	});
-				// }
-			});
+					// if (value && typeof value === 'string') {
+					// 	let f = [];
+					// 	let tEnd =
+					// 		value.substr(0, value.length - 1) +
+					// 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+					// 	f.push([key, '>=', value]);
+					// 	f.push([key, '<', tEnd]);
+					// 	f.push(['deleted', '==', false]);
+					// 	mainF.push(f);
+					// } else if (value instanceof Array && value.length) {
+					// 	value.map((s) => {
+					// 		if (!s) return;
+					// 		let f = [];
+					// 		f.push([key, 'array-contains', s]);
+					// 		f.push(['deleted', '==', false]);
+					// 		mainF.push(f);
+					// 	});
+					// }
+				});
 
-			//Adding deleted flag filter
-			mainFilter.push(['deleted', '==', false]);
+				//Adding deleted flag filter
+				mainFilter.push(['deleted', '==', false]);
 
-			//Invalid type of updater?
-			if (typeof updateFilters !== 'function')
-				throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
+				//Invalid type of updater?
+				if (typeof updateFilters !== 'function')
+					throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
-			//Has to be valid
-			return updateFilters(mainFilter);
-		},
-		handleSearch = useCallback((e) => {
-			//If available, stops propagation of event
-			if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
+				//Has to be valid
+				return updateFilters(mainFilter);
+			},
+			[modelProps]
+		),
+		handleSearch = useCallback(
+			(e) => {
+				//If available, stops propagation of event
+				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
 
-			return applyFilter(filterText);
-		}, []),
+				return applyFilter(filterText);
+			},
+			[filterText, applyFilter]
+		),
 		handleEnterPress = useEnterPress(handleSearch);
 
 	console.log('outer:modelProps', modelProps);
