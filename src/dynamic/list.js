@@ -190,10 +190,6 @@ const createFilters = (model, i18n, updateFilters) => {
  */
 const SingleFilter = ({ model, i18n, updateFilters }) => {
 	const classes = filterTextField(),
-		// modelName =
-		// 	!!model && typeof model.getModelName === 'function'
-		// 		? model.getModelName()
-		// 		: 'undefined',
 		[filterText, setFilterText] = useState(''),
 		modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
@@ -203,35 +199,34 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			(value) => {
 				let mainFilter = [];
 
-				console.log('modelProps', modelProps);
+				let currentIndex = `$$index.${value}`;
+
+				console.log('currentIndex', currentIndex);
+
+				mainFilter.push([currentIndex, '==', true]);
 
 				//Applying each filter to the index
-				modelProps.forEach((key, i) => {
-					let currentIndex = `$$index.${key}`;
+				//modelProps.forEach((key, i) => {
 
-					console.log('currentIndex', currentIndex);
-
-					mainFilter.push([currentIndex, '==', value]);
-
-					// if (value && typeof value === 'string') {
-					// 	let f = [];
-					// 	let tEnd =
-					// 		value.substr(0, value.length - 1) +
-					// 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-					// 	f.push([key, '>=', value]);
-					// 	f.push([key, '<', tEnd]);
-					// 	f.push(['deleted', '==', false]);
-					// 	mainF.push(f);
-					// } else if (value instanceof Array && value.length) {
-					// 	value.map((s) => {
-					// 		if (!s) return;
-					// 		let f = [];
-					// 		f.push([key, 'array-contains', s]);
-					// 		f.push(['deleted', '==', false]);
-					// 		mainF.push(f);
-					// 	});
-					// }
-				});
+				// if (value && typeof value === 'string') {
+				// 	let f = [];
+				// 	let tEnd =
+				// 		value.substr(0, value.length - 1) +
+				// 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+				// 	f.push([key, '>=', value]);
+				// 	f.push([key, '<', tEnd]);
+				// 	f.push(['deleted', '==', false]);
+				// 	mainF.push(f);
+				// } else if (value instanceof Array && value.length) {
+				// 	value.map((s) => {
+				// 		if (!s) return;
+				// 		let f = [];
+				// 		f.push([key, 'array-contains', s]);
+				// 		f.push(['deleted', '==', false]);
+				// 		mainF.push(f);
+				// 	});
+				// }
+				//});
 
 				//Adding deleted flag filter
 				mainFilter.push(['deleted', '==', false]);
@@ -255,8 +250,6 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			[filterText, applyFilter]
 		),
 		handleEnterPress = useEnterPress(handleSearch);
-
-	console.log('outer:modelProps', modelProps);
 
 	return (
 		<FormInput

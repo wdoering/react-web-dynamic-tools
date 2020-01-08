@@ -2256,30 +2256,30 @@ var SingleFilter = function SingleFilter(_ref) {
   }, []),
       applyFilter = useCallback(function (value) {
     var mainFilter = [];
-    console.log('modelProps', modelProps); //Applying each filter to the index
-
-    modelProps.forEach(function (key, i) {
-      var currentIndex = "$$index.".concat(key);
-      console.log('currentIndex', currentIndex);
-      mainFilter.push([currentIndex, '==', value]); // if (value && typeof value === 'string') {
-      // 	let f = [];
-      // 	let tEnd =
-      // 		value.substr(0, value.length - 1) +
-      // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-      // 	f.push([key, '>=', value]);
-      // 	f.push([key, '<', tEnd]);
-      // 	f.push(['deleted', '==', false]);
-      // 	mainF.push(f);
-      // } else if (value instanceof Array && value.length) {
-      // 	value.map((s) => {
-      // 		if (!s) return;
-      // 		let f = [];
-      // 		f.push([key, 'array-contains', s]);
-      // 		f.push(['deleted', '==', false]);
-      // 		mainF.push(f);
-      // 	});
-      // }
-    }); //Adding deleted flag filter
+    var currentIndex = "$$index.".concat(value);
+    console.log('currentIndex', currentIndex);
+    mainFilter.push([currentIndex, '==', true]); //Applying each filter to the index
+    //modelProps.forEach((key, i) => {
+    // if (value && typeof value === 'string') {
+    // 	let f = [];
+    // 	let tEnd =
+    // 		value.substr(0, value.length - 1) +
+    // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+    // 	f.push([key, '>=', value]);
+    // 	f.push([key, '<', tEnd]);
+    // 	f.push(['deleted', '==', false]);
+    // 	mainF.push(f);
+    // } else if (value instanceof Array && value.length) {
+    // 	value.map((s) => {
+    // 		if (!s) return;
+    // 		let f = [];
+    // 		f.push([key, 'array-contains', s]);
+    // 		f.push(['deleted', '==', false]);
+    // 		mainF.push(f);
+    // 	});
+    // }
+    //});
+    //Adding deleted flag filter
 
     mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
@@ -2294,7 +2294,6 @@ var SingleFilter = function SingleFilter(_ref) {
   }, [filterText, applyFilter]),
       handleEnterPress = useEnterPress(handleSearch);
 
-  console.log('outer:modelProps', modelProps);
   return React.createElement(FormInput, {
     className: classes.textField,
     label: i18n("list.filter.$label"),
