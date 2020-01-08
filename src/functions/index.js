@@ -554,7 +554,7 @@ const createBooleanComponent = ({
 			className={classes.spacer}
 			label={usableLabel}
 			labelPlacement="start"
-			inputProps={{ style: !!field.style.field ? field.style.field : {} }}
+			style={!!field.style.field ? field.style.field : {}}
 			control={
 				<Checkbox
 					value={property}
