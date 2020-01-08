@@ -2254,7 +2254,7 @@ var SingleFilter = function SingleFilter(_ref) {
       handleChange = useCallback(function (value) {
     return setFilterText(value);
   }, []),
-      applyFilter = useCallback(function (value) {
+      applyFilter = function applyFilter(value) {
     var mainFilter = [];
     console.log('modelProps', modelProps); //Applying each filter to the index
 
@@ -2286,7 +2286,7 @@ var SingleFilter = function SingleFilter(_ref) {
     if (typeof updateFilters !== 'function') throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function'); //Has to be valid
 
     return updateFilters(mainFilter);
-  }, [modelProps]),
+  },
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
