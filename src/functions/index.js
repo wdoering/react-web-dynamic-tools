@@ -511,7 +511,7 @@ const createTextComponent = ({
 			//TODO: uncomment when usable
 			// disabled={!!view}
 			className={classes.spacer}
-			InputProps={{ style: !!field.style.field ? field.style.field : {} }}
+			inputProps={{ style: !!field.style.field ? field.style.field : {} }}
 			label={i18n(label)}
 			//TODO: uncomment when usable
 			// value={value}
@@ -554,6 +554,7 @@ const createBooleanComponent = ({
 			className={classes.spacer}
 			label={usableLabel}
 			labelPlacement="start"
+			inputProps={{ style: !!field.style.field ? field.style.field : {} }}
 			control={
 				<Checkbox
 					value={property}

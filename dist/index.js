@@ -1128,7 +1128,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     //TODO: uncomment when usable
     // disabled={!!view}
     className: classes.spacer,
-    InputProps: {
+    inputProps: {
       style: !!field.style.field ? field.style.field : {}
     },
     label: i18n(label) //TODO: uncomment when usable
@@ -1164,6 +1164,9 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
     className: classes.spacer,
     label: usableLabel,
     labelPlacement: "start",
+    inputProps: {
+      style: !!field.style.field ? field.style.field : {}
+    },
     control: React.createElement(Checkbox, {
       value: property,
       color: "primary",
