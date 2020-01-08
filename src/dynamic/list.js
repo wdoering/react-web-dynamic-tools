@@ -199,8 +199,10 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		handleChange = useCallback((value) => {
 			return setFilterText(value);
 		}, []),
-		applyFilter = useCallback(async (value) => {
+		applyFilter = useCallback((value) => {
 			let mainFilter = [];
+
+			console.log('modelProps', modelProps);
 
 			modelProps.map((key, i) => {
 				let currentIndex = `$$index.${key}`;

@@ -23,7 +23,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import _regeneratorRuntime from '@babel/runtime/regenerator';
 import SearchIcon$1 from '@material-ui/icons/SearchRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
@@ -64,42 +63,6 @@ function _typeof(obj) {
   }
 
   return _typeof(obj);
-}
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
 }
 
 function _classCallCheck(instance, Constructor) {
@@ -1238,17 +1201,13 @@ var useModelProps = function useModelProps(model) {
     var props = []; //There are prop-keys to be kept
 
     if (modelProps.length === 0 && !!model) {
-      console.log('model', model);
-      console.log('modelProps', modelProps); //Tries getting a plainObject version of an object
-
+      //Tries getting a plainObject version of an object
       if (model instanceof PlainObject) {
-        console.log('model instanceof PlainObject');
         props = Object.keys(model.$toPlainObject());
       } else {
-        console.log('model instanceof object'); //Keeps default object props
+        //Keeps default object props
         //Removing undesired ones
         //No functions and specifically-reserved name props
-
         props = Object.keys(model).filter(function (prop) {
           return typeof model[prop] !== 'function' && !['$fieldConfig', '$$index'].includes(prop);
         });
@@ -1259,7 +1218,6 @@ var useModelProps = function useModelProps(model) {
     }
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
-  console.log('modelProps', modelProps);
   return modelProps;
 };
 
@@ -2290,66 +2248,38 @@ var SingleFilter = function SingleFilter(_ref) {
       handleChange = useCallback(function (value) {
     return setFilterText(value);
   }, []),
-      applyFilter = useCallback(
-  /*#__PURE__*/
-  function () {
-    var _ref2 = _asyncToGenerator(
-    /*#__PURE__*/
-    _regeneratorRuntime.mark(function _callee(value) {
-      var mainFilter;
-      return _regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              mainFilter = [];
-              modelProps.map(function (key, i) {
-                var currentIndex = "$$index.".concat(key);
-                console.log('currentIndex', currentIndex);
-                mainFilter.push([currentIndex, '==', value]); // if (value && typeof value === 'string') {
-                // 	let f = [];
-                // 	let tEnd =
-                // 		value.substr(0, value.length - 1) +
-                // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-                // 	f.push([key, '>=', value]);
-                // 	f.push([key, '<', tEnd]);
-                // 	f.push(['deleted', '==', false]);
-                // 	mainF.push(f);
-                // } else if (value instanceof Array && value.length) {
-                // 	value.map((s) => {
-                // 		if (!s) return;
-                // 		let f = [];
-                // 		f.push([key, 'array-contains', s]);
-                // 		f.push(['deleted', '==', false]);
-                // 		mainF.push(f);
-                // 	});
-                // }
-              }); //Adding deleted flag filter
+      applyFilter = useCallback(function (value) {
+    var mainFilter = [];
+    console.log('modelProps', modelProps);
+    modelProps.map(function (key, i) {
+      var currentIndex = "$$index.".concat(key);
+      console.log('currentIndex', currentIndex);
+      mainFilter.push([currentIndex, '==', value]); // if (value && typeof value === 'string') {
+      // 	let f = [];
+      // 	let tEnd =
+      // 		value.substr(0, value.length - 1) +
+      // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+      // 	f.push([key, '>=', value]);
+      // 	f.push([key, '<', tEnd]);
+      // 	f.push(['deleted', '==', false]);
+      // 	mainF.push(f);
+      // } else if (value instanceof Array && value.length) {
+      // 	value.map((s) => {
+      // 		if (!s) return;
+      // 		let f = [];
+      // 		f.push([key, 'array-contains', s]);
+      // 		f.push(['deleted', '==', false]);
+      // 		mainF.push(f);
+      // 	});
+      // }
+    }); //Adding deleted flag filter
 
-              mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
+    mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
-              if (!(typeof updateFilters !== 'function')) {
-                _context.next = 5;
-                break;
-              }
+    if (typeof updateFilters !== 'function') throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function'); //Has to be valid
 
-              throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
-
-            case 5:
-              //Has to be valid
-              updateFilters(mainFilter);
-
-            case 6:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function (_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }(), []),
+    updateFilters(mainFilter);
+  }, []),
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
@@ -2397,15 +2327,15 @@ var search = function search(oService, filters) {
 
 var oService;
 
-var DynamicList = function DynamicList(_ref3) {
-  var reduxList = _ref3.reduxList,
-      model = _ref3.model,
-      configuration = _ref3.configuration,
-      baseRoute = _ref3.baseRoute,
-      i18n = _ref3.i18n,
-      firebase = _ref3.firebase,
-      store = _ref3.store,
-      serviceInstance = _ref3.serviceInstance;
+var DynamicList = function DynamicList(_ref2) {
+  var reduxList = _ref2.reduxList,
+      model = _ref2.model,
+      configuration = _ref2.configuration,
+      baseRoute = _ref2.baseRoute,
+      i18n = _ref2.i18n,
+      firebase = _ref2.firebase,
+      store = _ref2.store,
+      serviceInstance = _ref2.serviceInstance;
   var history = useHistory(); //Checkers of service
 
   if (!oService && !serviceInstance && !!store && !!firebase) {

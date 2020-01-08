@@ -17,15 +17,10 @@ const useModelProps = (model) => {
 
 		//There are prop-keys to be kept
 		if (modelProps.length === 0 && !!model) {
-			console.log('model', model);
-			console.log('modelProps', modelProps);
-
 			//Tries getting a plainObject version of an object
 			if (model instanceof PlainObject) {
-				console.log('model instanceof PlainObject');
 				props = Object.keys(model.$toPlainObject());
 			} else {
-				console.log('model instanceof object');
 				//Keeps default object props
 				//Removing undesired ones
 				//No functions and specifically-reserved name props
@@ -40,8 +35,6 @@ const useModelProps = (model) => {
 			setModelProps(props);
 		}
 	}, []); // Empty array ensures that effect is only run on mount and unmount
-
-	console.log('modelProps', modelProps);
 
 	return modelProps;
 };
