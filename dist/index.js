@@ -1069,42 +1069,35 @@ var createTextComponent = function createTextComponent(_ref6) {
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
   var classes = textFieldStyles();
-  var value = null; //View mode has a specific type of formatting data
+  var component = null,
+      value = null; // // View mode has a specific type of formatting data
+  // if (!!view) {
+  // 	if (!!field.protected) {
+  // 		value = protectedFieldValue;
+  // 	} else if (!!values[property] && values[property] !== '') {
+  // 		value = <TextStyleByType text={values[property]} i18n={i18n} />;
+  // 	} else {
+  // 		value = blankFieldPlaceholder;
+  // 	}
+  // } else {
+  // // 	non-view mode
+  // 	value = values[property];
+  // }
 
-  if (!!view) {
-    if (!!field.protected) {
-      value = protectedFieldValue;
-    } else if (!!values[property] && values[property] !== '') {
-      value = React.createElement(TextStyleByType, {
-        text: values[property],
-        i18n: i18n
-      });
-    } else {
-      value = blankFieldPlaceholder;
-    }
-  } else {
-    //non-view mode
-    value = values[property];
-  } // component = !!view ? (
-  // 	!!field.protected ? (
-  // 		protectedFieldValue
-  // 	) : !!values[property] && values[property] !== '' ? (
-  // 		<TextStyleByType text={values[property]} i18n={i18n} />
-  // 	) : (
-  // 		blankFieldPlaceholder
-  // 	)
-  // ) :
-
-
-  return React.createElement(FormInput, _extends({}, field.props, {
-    disabled: !!view,
+  component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
+    text: values[property],
+    i18n: i18n
+  }) : blankFieldPlaceholder : React.createElement(FormInput, _extends({}, field.props, {
+    //TODO: uncomment when usable
+    // disabled={!!view}
     className: classes.spacer,
     style: field.style.field,
     label: i18n(label),
     value: value,
     type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
     onChange: function onChange(e) {
-      if (!!view) return false;
+      //TODO: uncomment when usable
+      // if (!!view) return false;
       handleChange(property, e.target.value); //Field has specific onChange function, runs after manipulation
 
       if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.value, handleChange);
@@ -1112,6 +1105,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
     error: !!error && !view
   }));
+  return component;
 };
 
 var createBooleanComponent = function createBooleanComponent(_ref7) {
@@ -1124,11 +1118,8 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
   var classes = textFieldStyles(),
-      usableLabel = i18n(label); // return !!view ? (
-  // 	i18n(`boolean.view.${values[property].toString()}`)
-  // ) :
-
-  return React.createElement(FormControlLabel, {
+      usableLabel = i18n(label);
+  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
     className: classes.spacer,
     label: usableLabel,
     labelPlacement: "start",

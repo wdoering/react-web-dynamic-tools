@@ -482,40 +482,41 @@ const createTextComponent = ({
 	let component = null,
 		value = null;
 
-	//View mode has a specific type of formatting data
-	if (!!view) {
-		if (!!field.protected) {
-			value = protectedFieldValue;
-		} else if (!!values[property] && values[property] !== '') {
-			value = <TextStyleByType text={values[property]} i18n={i18n} />;
-		} else {
-			value = blankFieldPlaceholder;
-		}
-	} else {
-		//non-view mode
-		value = values[property];
-	}
+	// // View mode has a specific type of formatting data
+	// if (!!view) {
+	// 	if (!!field.protected) {
+	// 		value = protectedFieldValue;
+	// 	} else if (!!values[property] && values[property] !== '') {
+	// 		value = <TextStyleByType text={values[property]} i18n={i18n} />;
+	// 	} else {
+	// 		value = blankFieldPlaceholder;
+	// 	}
+	// } else {
+	// // 	non-view mode
+	// 	value = values[property];
+	// }
 
-	// component = !!view ? (
-	// 	!!field.protected ? (
-	// 		protectedFieldValue
-	// 	) : !!values[property] && values[property] !== '' ? (
-	// 		<TextStyleByType text={values[property]} i18n={i18n} />
-	// 	) : (
-	// 		blankFieldPlaceholder
-	// 	)
-	// ) :
-	return (
+	component = !!view ? (
+		!!field.protected ? (
+			protectedFieldValue
+		) : !!values[property] && values[property] !== '' ? (
+			<TextStyleByType text={values[property]} i18n={i18n} />
+		) : (
+			blankFieldPlaceholder
+		)
+	) : (
 		<FormInput
 			{...field.props}
-			disabled={!!view}
+			//TODO: uncomment when usable
+			// disabled={!!view}
 			className={classes.spacer}
 			style={field.style.field}
 			label={i18n(label)}
 			value={value}
 			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
 			onChange={(e) => {
-				if (!!view) return false;
+				//TODO: uncomment when usable
+				// if (!!view) return false;
 
 				handleChange(property, e.target.value);
 
@@ -543,10 +544,9 @@ const createBooleanComponent = ({
 	const classes = textFieldStyles(),
 		usableLabel = i18n(label);
 
-	// return !!view ? (
-	// 	i18n(`boolean.view.${values[property].toString()}`)
-	// ) :
-	return (
+	return !!view ? (
+		i18n(`boolean.view.${values[property].toString()}`)
+	) : (
 		<FormControlLabel
 			className={classes.spacer}
 			label={usableLabel}
