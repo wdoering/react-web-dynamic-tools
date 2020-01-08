@@ -15,9 +15,18 @@ export const textFieldStyles = makeStyles({
 	}
 });
 
-export const viewInfoStyles = makeStyles({
+export const filterTextField = makeStyles((theme) => ({
+	root: {},
+	textField: {
+		flex: 1,
+		marginTop: theme.spacing(1),
+		marginBottom: theme.spacing(1)
+	}
+}));
+
+export const viewInfoStyles = makeStyles((theme) => ({
 	root: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	},
 	title: {
 		marginBottom: '5px'
@@ -28,7 +37,7 @@ export const viewInfoStyles = makeStyles({
 		fontSize: 18,
 		fontWeight: '100'
 	}
-});
+}));
 
 export const viewInfoLink = makeStyles((theme) => ({
 	root: {},
@@ -44,17 +53,17 @@ export const listResultText = makeStyles({
 	}
 });
 
-export const listEmptyStyles = makeStyles({
+export const listEmptyStyles = makeStyles((theme) => ({
 	root: {
-		marginTop: 10,
-		marginBottom: 10,
+		marginTop: theme.spacing(1),
+		marginBottom: theme.spacing(1),
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
 		'& > *': {
 			flex: '0 0 auto',
-			marginBottom: 15
+			marginBottom: theme.spacing(2)
 		}
 	}
-});
+}));

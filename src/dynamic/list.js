@@ -1,14 +1,23 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { TextField, Card, CardContent, List, Button } from '@material-ui/core';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
+import { TextField, Card, CardContent, List, InputAdornment, IconButton } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/SearchRounded';
+import {
+	FieldTypes,
+	FieldType,
+	ComplexTypes,
+	ModelBase,
+	PlainObject
+} from '@zerobytes/object-model-js';
 import { createConfiguredListItem } from '../functions';
 import { TitleAndButtons } from '../components/title';
 import EmptyList from '../components/list/Empty';
 import ListTotaliser from '../components/list/Totaliser';
 import { AddButton } from '../components/Button';
-import { FieldGroup } from '../components/form';
+import { FieldGroup, FormInput } from '../components/form';
+import { filterTextField } from '../assets/_styles';
+import { useModelProps, useEnterPress } from '../hooks';
 
 /**
  * Will create a displayable list of components
@@ -71,6 +80,7 @@ const createArrayOfComponent = (model, property, Type, i18n, handleChange) => {
 };
 
 /**
+ * Creates the array of inputs for filtering data
  *
  * @param {object} model
  * @param {function} i18n
@@ -166,8 +176,99 @@ const createFilters = (model, i18n, updateFilters) => {
 			</div>
 		);
 	});
+
 	return filterFields;
 };
+
+/**
+ * Creates the array of inputs for filtering data
+ *
+ * @param {object} param0
+ * @param {object} param0.model
+ * @param {function} param0.i18n
+ * @param {function} param0.updateFilters
+ */
+const SingleFilter = ({ model, i18n, updateFilters }) => {
+	const classes = filterTextField(),
+		// modelName =
+		// 	!!model && typeof model.getModelName === 'function'
+		// 		? model.getModelName()
+		// 		: 'undefined',
+		[filterText, setFilterText] = useState(''),
+		modelProps = useModelProps(model),
+		handleChange = useCallback((value) => {
+			return setFilterText(value);
+		}, []),
+		applyFilter = useCallback(async (value) => {
+			let mainFilter = [];
+
+			modelProps.map((key, i) => {
+				let value = v[key];
+
+				mainFilter.push([`$$index.${key}`, '==', value]);
+
+				// if (value && typeof value === 'string') {
+				// 	let f = [];
+				// 	let tEnd =
+				// 		value.substr(0, value.length - 1) +
+				// 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+				// 	f.push([key, '>=', value]);
+				// 	f.push([key, '<', tEnd]);
+				// 	f.push(['deleted', '==', false]);
+				// 	mainF.push(f);
+				// } else if (value instanceof Array && value.length) {
+				// 	value.map((s) => {
+				// 		if (!s) return;
+				// 		let f = [];
+				// 		f.push([key, 'array-contains', s]);
+				// 		f.push(['deleted', '==', false]);
+				// 		mainF.push(f);
+				// 	});
+				// }
+			});
+
+			//Adding deleted flag filter
+			mainFilter.push(['deleted', '==', false]);
+
+			//Invalid type of updater?
+			if (typeof updateFilters !== 'function')
+				throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
+
+			//Has to be valid
+			updateFilters(mainFilter);
+		}, []),
+		handleSearch = useCallback((e) => {
+			//If available, stops propagation of event
+			if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
+
+			return applyFilter(filterText);
+		}, []),
+		handleEnterPress = useEnterPress(handleSearch);
+
+	return (
+		<FormInput
+			className={classes.textField}
+			label={i18n(`list.filter.$label`)}
+			value={filterText}
+			// value={values[property]}
+			onChange={(e) => handleChange(e.target.value)}
+			InputProps={{
+				endAdornments: (
+					<InputAdornment position="end">
+						<IconButton
+							edge="end"
+							onClick={handleSearch}
+							onKeyPressCapture={handleEnterPress}
+						>
+							<SearchIcon />
+						</IconButton>
+					</InputAdornment>
+				)
+			}}
+		/>
+	);
+};
+
 let searchTimeout;
 const search = (oService, filters) => {
 	//removes previous versions of timeout
@@ -233,9 +334,16 @@ const DynamicList = ({
 			<Card className="mb-15">
 				<CardContent>
 					<FieldGroup>
-						{createFilters(model, i18n, (f) => {
+						{/* {createFilters(model, i18n, (f) => {
 							search(oService, f);
-						})}
+						})} */}
+						<SingleFilter
+							model={model}
+							i18n={i18n}
+							updateFilters={(filters) => {
+								return search(oService, filters);
+							}}
+						/>
 					</FieldGroup>
 				</CardContent>
 			</Card>

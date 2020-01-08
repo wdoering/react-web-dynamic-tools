@@ -1,6 +1,6 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [
@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@material-ui/core": "^4.8.3",
 		"@material-ui/icons": "^4.5.1",
-		"@zerobytes/object-model-js": "^0.3.6",
+		"@zerobytes/object-model-js": "^0.3.7",
 		"classnames": "^2.2.6",
 		"prop-types": "^15.7.2",
 		"react": "^16.12.0",
@@ -50,7 +50,7 @@
 		"@babel/plugin-transform-runtime": "^7.7.6",
 		"@babel/preset-env": "^7.7.7",
 		"@babel/preset-react": "^7.7.4",
-		"rollup": "^1.28.0",
+		"rollup": "^1.29.0",
 		"rollup-plugin-babel": "^4.3.3",
 		"rollup-plugin-commonjs": "^10.1.0",
 		"rollup-plugin-node-resolve": "^5.2.0",

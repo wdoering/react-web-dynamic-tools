@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase, PlainObject } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton$1 from '@material-ui/core/IconButton';
@@ -23,6 +23,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
+import SearchIcon$1 from '@material-ui/icons/SearchRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
 var validateName = function validateName(name) {
@@ -62,6 +64,42 @@ function _typeof(obj) {
   }
 
   return _typeof(obj);
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
 }
 
 function _classCallCheck(instance, Constructor) {
@@ -327,19 +365,31 @@ var textFieldStyles = makeStyles({
     marginBottom: '10px'
   }
 });
-var viewInfoStyles = makeStyles({
-  root: {
-    marginBottom: '15px'
-  },
-  title: {
-    marginBottom: '5px'
-  },
-  detail: {
-    marginTop: 5,
-    marginBottom: 5,
-    fontSize: 18,
-    fontWeight: '100'
-  }
+var filterTextField = makeStyles(function (theme) {
+  return {
+    root: {},
+    textField: {
+      flex: 1,
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1)
+    }
+  };
+});
+var viewInfoStyles = makeStyles(function (theme) {
+  return {
+    root: {
+      marginBottom: theme.spacing(2)
+    },
+    title: {
+      marginBottom: '5px'
+    },
+    detail: {
+      marginTop: 5,
+      marginBottom: 5,
+      fontSize: 18,
+      fontWeight: '100'
+    }
+  };
 });
 var viewInfoLink = makeStyles(function (theme) {
   return {
@@ -355,19 +405,21 @@ var listResultText = makeStyles({
     marginBottom: 10
   }
 });
-var listEmptyStyles = makeStyles({
-  root: {
-    marginTop: 10,
-    marginBottom: 10,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '& > *': {
-      flex: '0 0 auto',
-      marginBottom: 15
+var listEmptyStyles = makeStyles(function (theme) {
+  return {
+    root: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      '& > *': {
+        flex: '0 0 auto',
+        marginBottom: theme.spacing(2)
+      }
     }
-  }
+  };
 });
 
 /**
@@ -620,7 +672,7 @@ var FormInput = function FormInput(_ref) {
       type = _ref$type === void 0 ? 'text' : _ref$type,
       _ref$onChange = _ref.onChange,
       _onChange = _ref$onChange === void 0 ? function (e) {
-    return console.log('FormInput:value', e.target.value);
+    return console.error('FormInput:value:onChangeNotImplemented', e.target.value);
   } : _ref$onChange,
       otherProps = _objectWithoutProperties(_ref, ["label", "type", "onChange"]);
 
@@ -1166,6 +1218,45 @@ function useMobileIconButtons() {
       matches = useMediaQuery(theme.breakpoints.down('md'));
   return matches;
 }
+
+/**
+ * Will map all specific model props to an array of names
+ *
+ * @param {ModelBase|PlainObject} model the model to be mapped
+ *
+ * @returns {array} of model prop-names
+ */
+
+var useModelProps = function useModelProps(model) {
+  var _useState = useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      modelProps = _useState2[0],
+      setModelProps = _useState2[1]; //TODO: create specific hook
+
+
+  useEffect(function () {
+    var props = []; //There are prop-keys to be kept
+
+    if (modelProps.length === 0 && !!model) {
+      //Tries getting a plainObject version of an object
+      if (model instanceof PlainObject) {
+        props = Object.keys(model.$toPlainObject());
+      } else {
+        //Keeps default object props
+        //Removing undesired ones
+        //No functions and specifically-reserved name props
+        props = Object.keys(model).filter(function (prop) {
+          return typeof model[prop] !== 'function' && !['$fieldConfig', '$$index'].includes(prop);
+        });
+      } //Will set props, then
+
+
+      setModelProps(props);
+    }
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return modelProps;
+};
 
 /**
  * Provides access to the current window size object
@@ -2171,144 +2262,113 @@ ListTotaliser.propTypes = {
 };
 
 /**
- * Will create a displayable list of components
+ * Creates the array of inputs for filtering data
  *
- * @param {*} model
- * @param {*} property
- * @param {*} Type
- * @param {function} i18n
- * @param {function} handleChange
- */
-
-var createArrayOfComponent$1 = function createArrayOfComponent(model, property, Type, i18n, handleChange) {
-  var _useState = useState([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      items = _useState2[0],
-      setItems = _useState2[1];
-
-  var component = '';
-  var isIdOfModelBase = typeof Type === 'function' && Type.name !== 'Object' && new Type() instanceof ModelBase;
-
-  if (isIdOfModelBase) ; else if (Type instanceof FieldType) ; else {
-    switch (Type) {
-      //Array of string
-      case FieldTypes.String:
-        component = React.createElement(TextField, {
-          label: i18n("".concat(model.getModelName(), ".form.").concat(property)),
-          onChange: function onChange(e) {
-            var v = !e.target.value ? [] : e.target.value.split(';');
-            setItems(v.filter(function (s) {
-              return !!s;
-            }));
-            handleChange(property, v.filter(function (s) {
-              return !!s;
-            }));
-          },
-          helperText: React.createElement("span", null, items.map(function (item, i) {
-            return React.createElement("span", {
-              key: i,
-              className: "rounded bg-primary p-1 mr-5 text-white"
-            }, item);
-          }))
-        });
-        break;
-    }
-  }
-
-  return React.createElement("div", null, React.createElement("div", null, component));
-};
-/**
- *
- * @param {object} model
- * @param {function} i18n
- * @param {function} updateFilters
+ * @param {object} param0
+ * @param {object} param0.model
+ * @param {function} param0.i18n
+ * @param {function} param0.updateFilters
  */
 
 
-var createFilters = function createFilters(model, i18n, updateFilters) {
-  var newModel = {};
-  var filterFields = [];
-  Object.keys(model).map(function (key) {
-    if (key == '$fieldConfig') return;
-    newModel[key] = '';
-  });
+var SingleFilter = function SingleFilter(_ref) {
+  var model = _ref.model,
+      i18n = _ref.i18n,
+      updateFilters = _ref.updateFilters;
 
-  var _useState3 = useState(newModel),
-      _useState4 = _slicedToArray(_useState3, 2),
-      values = _useState4[0],
-      setValues = _useState4[1];
+  var classes = filterTextField(),
+      _useState5 = useState(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filterText = _useState6[0],
+      setFilterText = _useState6[1],
+      modelProps = useModelProps(model),
+      handleChange = useCallback(function (value) {
+    return setFilterText(value);
+  }, []),
+      applyFilter = useCallback(
+  /*#__PURE__*/
+  function () {
+    var _ref2 = _asyncToGenerator(
+    /*#__PURE__*/
+    _regeneratorRuntime.mark(function _callee(value) {
+      var mainFilter;
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              mainFilter = [];
+              modelProps.map(function (key, i) {
+                var value = v[key];
+                mainFilter.push(["$$index.".concat(key), '==', value]); // if (value && typeof value === 'string') {
+                // 	let f = [];
+                // 	let tEnd =
+                // 		value.substr(0, value.length - 1) +
+                // 		String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
+                // 	f.push([key, '>=', value]);
+                // 	f.push([key, '<', tEnd]);
+                // 	f.push(['deleted', '==', false]);
+                // 	mainF.push(f);
+                // } else if (value instanceof Array && value.length) {
+                // 	value.map((s) => {
+                // 		if (!s) return;
+                // 		let f = [];
+                // 		f.push([key, 'array-contains', s]);
+                // 		f.push(['deleted', '==', false]);
+                // 		mainF.push(f);
+                // 	});
+                // }
+              }); //Adding deleted flag filter
 
-  var handleChange = useCallback(function (property, value) {
-    var v = _objectSpread2({}, values, _defineProperty({}, property, value));
+              mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
-    setValues(v);
-    var mainF = [];
-    Object.keys(v).map(function (key, i) {
-      var value = v[key];
+              if (!(typeof updateFilters !== 'function')) {
+                _context.next = 5;
+                break;
+              }
 
-      if (value && typeof value === 'string') {
-        var f = [];
-        var tEnd = value.substr(0, value.length - 1) + String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
-        f.push([key, '>=', value]);
-        f.push([key, '<', tEnd]);
-        f.push(['deleted', '==', false]);
-        mainF.push(f);
-      } else if (value instanceof Array && value.length) {
-        value.map(function (s) {
-          if (!s) return;
-          var f = [];
-          f.push([key, 'array-contains', s]);
-          f.push(['deleted', '==', false]);
-          mainF.push(f);
-        });
-      }
-    });
-    updateFilters(mainF);
-  });
-  model.$fieldConfig.style = model.$fieldConfig.style || {
-    field: {},
-    wrapper: {}
-  };
-  Object.keys(model.$fieldConfig).map(function (property, i) {
-    var fieldConfig = model.$fieldConfig[property];
-    var label = "".concat(model.getModelName(), ".form.").concat(property);
-    var component = null;
+              throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
-    if (fieldConfig.type instanceof FieldType) {
-      switch (fieldConfig.type.complexType) {
-        case ComplexTypes.IdOf:
-          break;
+            case 5:
+              //Has to be valid
+              updateFilters(mainFilter);
 
-        case ComplexTypes.ArrayOf:
-          component = createArrayOfComponent$1(model, property, fieldConfig.type.Type, i18n, handleChange);
-          break;
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
 
-        case ComplexTypes.ShapedAs:
-          break;
-      }
-    } else {
-      switch (fieldConfig.type) {
-        case FieldTypes.String:
-        case FieldTypes.Integer:
-        case FieldTypes.Float:
-          component = React.createElement(TextField, {
-            style: model.$fieldConfig.style.field,
-            label: i18n(label),
-            value: values[property],
-            onChange: function onChange(e) {
-              return handleChange(property, e.target.value);
-            }
-          });
-          break;
-      }
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }(), []),
+      handleSearch = useCallback(function (e) {
+    //If available, stops propagation of event
+    if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    return applyFilter(filterText);
+  }, []),
+      handleEnterPress = useEnterPress(handleSearch);
+
+  return React.createElement(FormInput, {
+    className: classes.textField,
+    label: i18n("list.filter.$label"),
+    value: filterText // value={values[property]}
+    ,
+    onChange: function onChange(e) {
+      return handleChange(e.target.value);
+    },
+    InputProps: {
+      endAdornments: React.createElement(InputAdornment, {
+        position: "end"
+      }, React.createElement(IconButton, {
+        edge: "end",
+        onClick: handleSearch,
+        onKeyPressCapture: handleEnterPress
+      }, React.createElement(SearchIcon$1, null)))
     }
-
-    filterFields.push(React.createElement("div", {
-      key: i,
-      className: 'mr-10'
-    }, component));
   });
-  return filterFields;
 };
 
 var searchTimeout;
@@ -2331,15 +2391,15 @@ var search = function search(oService, filters) {
 
 var oService;
 
-var DynamicList = function DynamicList(_ref) {
-  var reduxList = _ref.reduxList,
-      model = _ref.model,
-      configuration = _ref.configuration,
-      baseRoute = _ref.baseRoute,
-      i18n = _ref.i18n,
-      firebase = _ref.firebase,
-      store = _ref.store,
-      serviceInstance = _ref.serviceInstance;
+var DynamicList = function DynamicList(_ref3) {
+  var reduxList = _ref3.reduxList,
+      model = _ref3.model,
+      configuration = _ref3.configuration,
+      baseRoute = _ref3.baseRoute,
+      i18n = _ref3.i18n,
+      firebase = _ref3.firebase,
+      store = _ref3.store,
+      serviceInstance = _ref3.serviceInstance;
   var history = useHistory(); //Checkers of service
 
   if (!oService && !serviceInstance && !!store && !!firebase) {
@@ -2365,8 +2425,12 @@ var DynamicList = function DynamicList(_ref) {
     })]
   }), React.createElement(Card, {
     className: "mb-15"
-  }, React.createElement(CardContent, null, React.createElement(FieldGroup, null, createFilters(model, i18n, function (f) {
-    search(oService, f);
+  }, React.createElement(CardContent, null, React.createElement(FieldGroup, null, React.createElement(SingleFilter, {
+    model: model,
+    i18n: i18n,
+    updateFilters: function updateFilters(filters) {
+      return search(oService, filters);
+    }
   })))), React.createElement(Card, {
     className: "mb-15"
   }, React.createElement(CardContent, null, !!reduxList && React.createElement(ListTotaliser, {
@@ -2491,7 +2555,7 @@ var createShapedAsComponent$1 = function createShapedAsComponent(model, property
  */
 
 
-var createArrayOfComponent$2 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
+var createArrayOfComponent$1 = function createArrayOfComponent(model, property, values, Type, i18n, firebase) {
   //will use a hook which maps the list of data
   var _useListOfData = useListOfData(values, property, Type, firebase),
       _useListOfData2 = _slicedToArray(_useListOfData, 1),
@@ -2607,7 +2671,7 @@ var createField$1 = function createField(_ref2) {
 
       case ComplexTypes.ArrayOf:
         breakField = true;
-        component = createArrayOfComponent$2(model, property, values, field.type.Type, i18n, firebase);
+        component = createArrayOfComponent$1(model, property, values, field.type.Type, i18n, firebase);
         break;
 
       case ComplexTypes.ShapedAs:

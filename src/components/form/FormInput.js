@@ -10,7 +10,7 @@ import { TextField } from '@material-ui/core';
 const FormInput = ({
 	label,
 	type = 'text',
-	onChange = (e) => console.log('FormInput:value', e.target.value),
+	onChange = (e) => console.error('FormInput:value:onChangeNotImplemented', e.target.value),
 	...otherProps
 }) => {
 	return (
