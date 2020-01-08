@@ -2297,6 +2297,7 @@ var SingleFilter = function SingleFilter(_ref) {
           switch (_context.prev = _context.next) {
             case 0:
               mainFilter = [];
+              console.log('modelProps', modelProps);
               modelProps.map(function (key, i) {
                 var value = v[key];
                 mainFilter.push(["$$index.".concat(key), '==', value]); // if (value && typeof value === 'string') {
@@ -2322,17 +2323,17 @@ var SingleFilter = function SingleFilter(_ref) {
               mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
               if (!(typeof updateFilters !== 'function')) {
-                _context.next = 5;
+                _context.next = 6;
                 break;
               }
 
               throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
-            case 5:
+            case 6:
               //Has to be valid
               updateFilters(mainFilter);
 
-            case 6:
+            case 7:
             case "end":
               return _context.stop();
           }
