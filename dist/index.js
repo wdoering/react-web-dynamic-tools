@@ -2292,6 +2292,7 @@ var SingleFilter = function SingleFilter(_ref) {
       handleSearch = useCallback(function (e) {
     //If available, stops propagation of event
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    if (disabled) return false;
     return applyFilter(filterText);
   }, [filterText, applyFilter]),
       handleEnterPress = useEnterPress(handleSearch);

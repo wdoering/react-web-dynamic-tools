@@ -225,6 +225,8 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				//If available, stops propagation of event
 				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
 
+				if (disabled) return false;
+
 				return applyFilter(filterText);
 			},
 			[filterText, applyFilter]
