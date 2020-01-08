@@ -202,8 +202,6 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		applyFilter = useCallback(async (value) => {
 			let mainFilter = [];
 
-			console.log('modelProps', modelProps);
-
 			modelProps.map((key, i) => {
 				let value = v[key];
 

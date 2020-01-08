@@ -15,6 +15,9 @@ const useModelProps = (model) => {
 	useEffect(() => {
 		let props = [];
 
+		console.log('model', model);
+		console.log('modelProps', modelProps);
+
 		//There are prop-keys to be kept
 		if (modelProps.length === 0 && !!model) {
 			//Tries getting a plainObject version of an object
