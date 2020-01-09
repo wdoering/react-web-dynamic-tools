@@ -9,7 +9,8 @@ import {
 	Paper,
 	Checkbox,
 	FormLabel,
-	FormControl
+	FormControl,
+	Tooltip
 } from '@material-ui/core';
 import { ComplexTypes, FieldTypes, ModelBase, FieldType } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
@@ -520,15 +521,26 @@ const createTextComponent = ({
 			// disabled={!!view}
 			className={classes.spacer}
 			InputProps={
-				!!field.protected && {
-					endAdornment: (
-						<InputAdornment position="end">
-							<IconButton edge="end" onClick={handleVisibilityClick}>
-								{inputVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-							</IconButton>
-						</InputAdornment>
-					)
-				}
+				!!field.protected
+					? {
+							endAdornment: (
+								<InputAdornment position="end">
+									<Tooltip
+										title={i18n('button.password.showOrHide.tooltip')}
+										arrow
+									>
+										<IconButton edge="end" onClick={handleVisibilityClick}>
+											{inputVisible ? (
+												<VisibilityOffIcon />
+											) : (
+												<VisibilityIcon />
+											)}
+										</IconButton>
+									</Tooltip>
+								</InputAdornment>
+							)
+					  }
+					: {}
 			}
 			inputProps={{ style: !!field.style.field ? field.style.field : {} }}
 			label={i18n(label)}

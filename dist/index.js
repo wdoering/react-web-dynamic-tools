@@ -1138,14 +1138,17 @@ var createTextComponent = function createTextComponent(_ref6) {
     //TODO: uncomment when usable
     // disabled={!!view}
     className: classes.spacer,
-    InputProps: !!field.protected && {
+    InputProps: !!field.protected ? {
       endAdornment: React.createElement(InputAdornment, {
         position: "end"
+      }, React.createElement(Tooltip, {
+        title: i18n('button.password.showOrHide.tooltip'),
+        arrow: true
       }, React.createElement(IconButton$1, {
         edge: "end",
         onClick: handleVisibilityClick
-      }, inputVisible ? React.createElement(VisibilityOffIcon, null) : React.createElement(VisibilityIcon, null)))
-    },
+      }, inputVisible ? React.createElement(VisibilityOffIcon, null) : React.createElement(VisibilityIcon, null))))
+    } : {},
     inputProps: {
       style: !!field.style.field ? field.style.field : {}
     },
