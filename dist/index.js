@@ -1427,7 +1427,11 @@ var CancelReturnButton = function CancelReturnButton(_ref) {
       useIcons = useMobileIconButtons(),
       buttonText = useMemo(function () {
     return i18n('button.cancel.return');
-  }, [i18n]);
+  }, [i18n]),
+      handleClick = function handleClick(e) {
+    return !!onClick && typeof onClick === 'function' ? onClick(e) : history.goBack();
+  };
+
   return React.createElement(Tooltip, {
     title: i18n('button.cancel.return.tooltip'),
     arrow: true
@@ -1436,9 +1440,7 @@ var CancelReturnButton = function CancelReturnButton(_ref) {
     color: color,
     "aria-label": buttonText,
     children: useIcons ? React.createElement(KeyboardReturnRounded, null) : buttonText,
-    onClick: onClick || function () {
-      return history.goBack();
-    }
+    onClick: handleClick
   }, other)));
 };
 
@@ -2140,6 +2142,7 @@ var createField = function createField(_ref2) {
  * @param {object} param0
  * @param {function} param0.model model instance for reference purposes
  * @param {function} param0.handleSave saving function to be invoked
+ * @param {function} param0.handleCancel cancelling function to be invoked
  * @param {string} param0.id register/item ID
  * @param {object} param0.firebase firebase API instance
  * @param {function} param0.i18n Translation base function. Has to receive an ID
@@ -2150,6 +2153,7 @@ var createField = function createField(_ref2) {
 var DynamicForm = function DynamicForm(_ref3) {
   var model = _ref3.model,
       handleSave = _ref3.handleSave,
+      handleCancel = _ref3.handleCancel,
       id = _ref3.id,
       firebase = _ref3.firebase,
       i18n = _ref3.i18n;
@@ -2244,6 +2248,7 @@ var DynamicForm = function DynamicForm(_ref3) {
       onClick: save,
       i18n: i18n
     }), React.createElement(CancelReturnButton, {
+      onClick: handleCancel,
       i18n: i18n
     })]
   })));

@@ -16,7 +16,9 @@ import { useMobileIconButtons } from '../../hooks';
 const CancelReturnButton = ({ onClick, i18n, color = 'secondary', ...other }) => {
 	const history = useHistory(),
 		useIcons = useMobileIconButtons(),
-		buttonText = useMemo(() => i18n('button.cancel.return'), [i18n]);
+		buttonText = useMemo(() => i18n('button.cancel.return'), [i18n]),
+		handleClick = (e) =>
+			!!onClick && typeof onClick === 'function' ? onClick(e) : history.goBack();
 
 	return (
 		<Tooltip title={i18n('button.cancel.return.tooltip')} arrow>
@@ -25,7 +27,7 @@ const CancelReturnButton = ({ onClick, i18n, color = 'secondary', ...other }) =>
 				color={color}
 				aria-label={buttonText}
 				children={useIcons ? <KeyboardReturnRounded /> : buttonText}
-				onClick={onClick || (() => history.goBack())}
+				onClick={handleClick}
 				{...other}
 			/>
 		</Tooltip>

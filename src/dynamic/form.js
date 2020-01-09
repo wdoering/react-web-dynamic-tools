@@ -476,12 +476,13 @@ const createField = ({ model, property, label, values, errors, firebase, i18n, h
  * @param {object} param0
  * @param {function} param0.model model instance for reference purposes
  * @param {function} param0.handleSave saving function to be invoked
+ * @param {function} param0.handleCancel cancelling function to be invoked
  * @param {string} param0.id register/item ID
  * @param {object} param0.firebase firebase API instance
  * @param {function} param0.i18n Translation base function. Has to receive an ID
  *
  */
-const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
+const DynamicForm = ({ model, handleSave, handleCancel, id, firebase, i18n }) => {
 	let oService = null;
 	const [values, setValues] = useState(model),
 		[errors, setErrors] = useState({});
@@ -580,7 +581,7 @@ const DynamicForm = ({ model, handleSave, id, firebase, i18n }) => {
 				<BottomButtons
 					buttons={[
 						<SaveButton onClick={save} i18n={i18n} />,
-						<CancelReturnButton i18n={i18n} />
+						<CancelReturnButton onClick={handleCancel} i18n={i18n} />
 					]}
 				/>
 			</div>
