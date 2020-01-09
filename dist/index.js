@@ -352,6 +352,28 @@ var useEnterPress = function useEnterPress(callback) {
   return onEnterPress;
 };
 
+/**
+ * Firebase in-array slice limit
+ */
+var arraySliceLength = 10;
+/**
+ * Utility for array slicing up to 10 itens
+ * When building in-array for firebase-basic-service queries
+ *
+ * @param {string} property The property to be compared
+ * @param {array} items List items of string
+ */
+
+var inArray = function inArray(property, items) {
+  var filters = [];
+
+  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
+    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
+  }
+
+  return filters;
+};
+
 var errorStyles = makeStyles({
   root: {
     color: '#f44336',

@@ -18,6 +18,7 @@ import VisibilityIcon from '@material-ui/icons/VisibilityRounded';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOffRounded';
 
 import IconButton from '@material-ui/core/IconButton';
+import { inArray } from '../util/query';
 import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
 import { EmailInfo, WebSiteInfo } from '../components/view/text';
 import { FormInput } from '../components/form';
