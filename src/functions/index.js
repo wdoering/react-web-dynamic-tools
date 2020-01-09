@@ -12,12 +12,13 @@ import {
 	FormControl
 } from '@material-ui/core';
 import { ComplexTypes, FieldTypes, ModelBase, FieldType } from '@zerobytes/object-model-js';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
+import DeleteIcon from '@material-ui/icons/DeleteRounded';
+import SearchIcon from '@material-ui/icons/SearchRounded';
+import VisibilityIcon from '@material-ui/icons/VisibilityRounded';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOffRounded';
+
 import IconButton from '@material-ui/core/IconButton';
 import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
-import { inArray } from '../util/query';
-import { validateEmail, validateWebsite } from '../util/validations';
 import { EmailInfo, WebSiteInfo } from '../components/view/text';
 import { FormInput } from '../components/form';
 
@@ -479,7 +480,12 @@ const createTextComponent = ({
 	handleChange,
 	view = false
 }) => {
-	const classes = textFieldStyles();
+	const classes = textFieldStyles(),
+		[inputVisible, setInputVisible] = useState(false),
+		handleVisibilityClick = (e) => {
+			//Toggling visibility
+			return setInputVisible(!inputVisible);
+		};
 	let component = null,
 		value = null;
 
@@ -511,12 +517,31 @@ const createTextComponent = ({
 			//TODO: uncomment when usable
 			// disabled={!!view}
 			className={classes.spacer}
+			InputProps={
+				!!field.protected && {
+					endAdornment: (
+						<InputAdornment position="end">
+							<IconButton edge="end" onClick={handleVisibilityClick}>
+								{inputVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+							</IconButton>
+						</InputAdornment>
+					)
+				}
+			}
 			inputProps={{ style: !!field.style.field ? field.style.field : {} }}
 			label={i18n(label)}
 			//TODO: uncomment when usable
 			// value={value}
 			value={values[property]}
-			type={!!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text'}
+			type={
+				!!field.protected
+					? inputVisible
+						? 'text'
+						: 'password'
+					: !!field.props.type
+					? field.props.type
+					: 'text'
+			}
 			onChange={(e) => {
 				//TODO: uncomment when usable
 				// if (!!view) return false;

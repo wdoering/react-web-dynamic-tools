@@ -4,8 +4,10 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase, PlainObject } from '@zerobytes/object-model-js';
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
+import DeleteIcon from '@material-ui/icons/DeleteRounded';
+import SearchIcon from '@material-ui/icons/SearchRounded';
+import VisibilityIcon from '@material-ui/icons/VisibilityRounded';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOffRounded';
 import IconButton$1 from '@material-ui/core/IconButton';
 import EmailRounded from '@material-ui/icons/EmailRounded';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
@@ -13,7 +15,6 @@ import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import classNames from 'classnames';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
-import DeleteRounded from '@material-ui/icons/DeleteRounded';
 import EditRounded from '@material-ui/icons/EditRounded';
 import SaveRounded from '@material-ui/icons/SaveRounded';
 import Dialog from '@material-ui/core/Dialog';
@@ -24,18 +25,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
-import SearchIcon$1 from '@material-ui/icons/SearchRounded';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
 var validateName = function validateName(name) {
   var nameRegex = /^[a-zA-Z]+$/;
   return nameRegex.test(name);
 };
-var validateWebsite = function validateWebsite(webSite) {
+var validateWebsite$1 = function validateWebsite(webSite) {
   var webSiteRegex = /^((https?:\/\/)|(https?:\/\/)(www\.)|(www\.))?[a-zA-Z]{1,}[\.\-_]{0,}[a-zA-Z0-9%_\-.\+~#=]{1,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
   return webSiteRegex.test(webSite);
 };
-var validateEmail = function validateEmail(email) {
+var validateEmail$1 = function validateEmail(email) {
   var regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regEmail.test(email);
 };
@@ -47,8 +47,8 @@ var validatePassword = function validatePassword(password) {
 var validations = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	validateName: validateName,
-	validateWebsite: validateWebsite,
-	validateEmail: validateEmail,
+	validateWebsite: validateWebsite$1,
+	validateEmail: validateEmail$1,
 	validatePassword: validatePassword
 });
 
@@ -421,28 +421,6 @@ var listEmptyStyles = makeStyles(function (theme) {
     }
   };
 });
-
-/**
- * Firebase in-array slice limit
- */
-var arraySliceLength = 10;
-/**
- * Utility for array slicing up to 10 itens
- * When building in-array for firebase-basic-service queries
- *
- * @param {string} property The property to be compared
- * @param {array} items List items of string
- */
-
-var inArray = function inArray(property, items) {
-  var filters = [];
-
-  for (var i = 0; i < items.length / arraySliceLength; i += arraySliceLength) {
-    filters.push(["".concat(property), 'in', items.slice(i, i + arraySliceLength)]);
-  }
-
-  return filters;
-};
 
 /**
  * Renders a website link (anchor) for display
@@ -1105,7 +1083,17 @@ var createTextComponent = function createTextComponent(_ref6) {
       handleChange = _ref6.handleChange,
       _ref6$view = _ref6.view,
       view = _ref6$view === void 0 ? false : _ref6$view;
-  var classes = textFieldStyles();
+
+  var classes = textFieldStyles(),
+      _useState7 = useState(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      inputVisible = _useState8[0],
+      setInputVisible = _useState8[1],
+      handleVisibilityClick = function handleVisibilityClick(e) {
+    //Toggling visibility
+    return setInputVisible(!inputVisible);
+  };
+
   var component = null;
  // // View mode has a specific type of formatting data
   // if (!!view) {
@@ -1128,6 +1116,14 @@ var createTextComponent = function createTextComponent(_ref6) {
     //TODO: uncomment when usable
     // disabled={!!view}
     className: classes.spacer,
+    InputProps: !!field.protected && {
+      endAdornment: React.createElement(InputAdornment, {
+        position: "end"
+      }, React.createElement(IconButton$1, {
+        edge: "end",
+        onClick: handleVisibilityClick
+      }, inputVisible ? React.createElement(VisibilityOffIcon, null) : React.createElement(VisibilityIcon, null)))
+    },
     inputProps: {
       style: !!field.style.field ? field.style.field : {}
     },
@@ -1135,7 +1131,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     // value={value}
     ,
     value: values[property],
-    type: !!field.protected ? 'password' : !!field.props.type ? field.props.type : 'text',
+    type: !!field.protected ? inputVisible ? 'text' : 'password' : !!field.props.type ? field.props.type : 'text',
     onChange: function onChange(e) {
       //TODO: uncomment when usable
       // if (!!view) return false;
@@ -1488,7 +1484,7 @@ var DeleteButton = function DeleteButton(_ref) {
     className: classes.root,
     onClick: onClick,
     "aria-label": buttonText
-  }, other), useIcons ? React.createElement(DeleteRounded, null) : buttonText));
+  }, other), useIcons ? React.createElement(DeleteIcon, null) : buttonText));
 };
 
 DeleteButton.propTypes = {
@@ -2392,7 +2388,7 @@ var SingleFilter = function SingleFilter(_ref) {
         disabled: disabled,
         edge: "end",
         onClick: handleSearch
-      }, React.createElement(SearchIcon$1, null)))
+      }, React.createElement(SearchIcon, null)))
     }
   });
 };
@@ -2835,5 +2831,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail$1 as validateEmail, validateWebsite$1 as validateWebsite, validations };
 //# sourceMappingURL=index.js.map
