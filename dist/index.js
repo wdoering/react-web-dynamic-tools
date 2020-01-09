@@ -31,11 +31,11 @@ var validateName = function validateName(name) {
   var nameRegex = /^[a-zA-Z]+$/;
   return nameRegex.test(name);
 };
-var validateWebsite$1 = function validateWebsite(webSite) {
+var validateWebsite = function validateWebsite(webSite) {
   var webSiteRegex = /^((https?:\/\/)|(https?:\/\/)(www\.)|(www\.))?[a-zA-Z]{1,}[\.\-_]{0,}[a-zA-Z0-9%_\-.\+~#=]{1,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
   return webSiteRegex.test(webSite);
 };
-var validateEmail$1 = function validateEmail(email) {
+var validateEmail = function validateEmail(email) {
   var regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regEmail.test(email);
 };
@@ -47,8 +47,8 @@ var validatePassword = function validatePassword(password) {
 var validations = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	validateName: validateName,
-	validateWebsite: validateWebsite$1,
-	validateEmail: validateEmail$1,
+	validateWebsite: validateWebsite,
+	validateEmail: validateEmail,
 	validatePassword: validatePassword
 });
 
@@ -2831,5 +2831,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail$1 as validateEmail, validateWebsite$1 as validateWebsite, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
 //# sourceMappingURL=index.js.map

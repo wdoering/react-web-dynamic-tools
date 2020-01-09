@@ -21,6 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { textFieldStyles, viewInfoStyles } from '../assets/_styles';
 import { EmailInfo, WebSiteInfo } from '../components/view/text';
 import { FormInput } from '../components/form';
+import { validateEmail, validateWebsite } from '../util/validations';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
