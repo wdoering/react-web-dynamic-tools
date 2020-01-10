@@ -72,7 +72,7 @@ var removeSpecialChars = function removeSpecialChars(text) {
  * @return {Boolean}
  */
 
-var textIsKnownType$1 = function textIsKnownType(text) {
+var textIsKnownType = function textIsKnownType(text) {
   return typeof text === 'string' && (validateEmail(text) || validateWebsite(text));
 };
 
@@ -83,7 +83,7 @@ var validations = /*#__PURE__*/Object.freeze({
 	validateEmail: validateEmail,
 	validatePassword: validatePassword,
 	removeSpecialChars: removeSpecialChars,
-	textIsKnownType: textIsKnownType$1
+	textIsKnownType: textIsKnownType
 });
 
 function _typeof(obj) {
@@ -2861,5 +2861,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, removeSpecialChars, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, removeSpecialChars, textIsKnownType, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
 //# sourceMappingURL=index.js.map

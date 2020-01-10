@@ -18,7 +18,12 @@ import { AddButton } from '../components/Button';
 import { FieldGroup, FormInput } from '../components/form';
 import { filterTextField } from '../assets/_styles';
 import { useModelProps, useEnterPress } from '../hooks';
-import { removeSpecialChars, validateEmail, validateWebsite } from '../util/validations';
+import {
+	removeSpecialChars,
+	validateEmail,
+	validateWebsite,
+	textIsKnownType
+} from '../util/validations';
 
 /**
  * Will create a displayable list of components
