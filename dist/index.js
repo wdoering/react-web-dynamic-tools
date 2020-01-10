@@ -43,13 +43,30 @@ var validatePassword = function validatePassword(password) {
   var pwdRegex = /^.{6,}$/;
   return !pwdRegex.test(password);
 };
+/**
+ * Will apply two things:
+ * * normalize()ing to NFD Unicode normal form decomposes combined
+ * 	 graphemes into the combination of simple ones. The è of Crème ends up expressed as e + ̀.
+ * * Using a regex character class to match the U+0300 → U+036F range,
+ * 	 it is now trivial to globally get rid of the diacritics,
+ *   which the Unicode standard conveniently groups as the Combining Diacritical Marks Unicode block.
+ *
+ * @param {string} text The text to be cleansed
+ *
+ * @returns {string}
+ */
+
+var removeSpecialChars = function removeSpecialChars(text) {
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : text;
+};
 
 var validations = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	validateName: validateName,
 	validateWebsite: validateWebsite,
 	validateEmail: validateEmail,
-	validatePassword: validatePassword
+	validatePassword: validatePassword,
+	removeSpecialChars: removeSpecialChars
 });
 
 function _typeof(obj) {
@@ -2339,12 +2356,15 @@ var SingleFilter = function SingleFilter(_ref) {
       disabled = !filterText || filterText.trim() === '',
       modelProps = useModelProps(model),
       handleChange = useCallback(function (value) {
-    //This is just in case the text is being cleared
+    var clearedText; //This is just in case the text is being cleared
+
     if (typeof value === 'string' && value.trim() === '') {
       applyFilter(value);
-    }
+    } //Will clear for any special character
 
-    return setFilterText(value);
+
+    clearedText = removeSpecialCharshars(value);
+    return setFilterText(clearedText);
   }, []),
       applyFilter = useCallback(
   /*#__PURE__*/
@@ -2856,5 +2876,5 @@ DynamicView.propTypes = {
   serviceInstance: PropTypes.object
 };
 
-export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
+export { AddButton, BottomButtons, CancelButton, CancelReturnButton, DeleteButton, DeleteConfirmationDialog, DynamicForm, DynamicList, DynamicView, EditButton, SaveButton, TitleAndButtons, removeSpecialChars, useEnterPress, useMobileIconButtons, useWindowSize, validateEmail, validateWebsite, validations };
 //# sourceMappingURL=index.js.map

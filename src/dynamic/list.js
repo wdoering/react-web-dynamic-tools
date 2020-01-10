@@ -18,6 +18,7 @@ import { AddButton } from '../components/Button';
 import { FieldGroup, FormInput } from '../components/form';
 import { filterTextField } from '../assets/_styles';
 import { useModelProps, useEnterPress } from '../hooks';
+import { removeSpecialChars } from '../util/validations';
 
 /**
  * Will create a displayable list of components
@@ -194,12 +195,17 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		disabled = !filterText || filterText.trim() === '',
 		modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
+			let clearedText;
+
 			//This is just in case the text is being cleared
 			if (typeof value === 'string' && value.trim() === '') {
 				applyFilter(value);
 			}
 
-			return setFilterText(value);
+			//Will clear for any special character
+			clearedText = removeSpecialCharshars(value);
+
+			return setFilterText(clearedText);
 		}, []),
 		applyFilter = useCallback(
 			async (value) => {
