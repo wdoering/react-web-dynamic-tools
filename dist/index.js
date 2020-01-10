@@ -2314,20 +2314,20 @@ var SingleFilter = function SingleFilter(_ref) {
       setFilterText = _useState6[1],
       disabled = !filterText || filterText.trim() === '',
       handleChange = useCallback(function (value) {
-    var clearedText; //This is just in case the text is being cleared
+    var provableText = value; //This is just in case the text is being cleared
 
-    if (typeof value === 'string' && value.trim() === '') {
-      applyFilter(value);
+    if (typeof provableText === 'string' && provableText.trim() === '') {
+      applyFilter(provableText);
     } //If data is not a known format, removes special chars
 
 
-    if (!validateEmail(value) && !validateWebsite(value)) {
+    if (!validateEmail(provableText) && !validateWebsite(provableText)) {
       //Will clear for any special character
       //As well as lower case the text
-      clearedText = removeSpecialChars(value).toLowerCase();
+      provableText = removeSpecialChars(provableText).toLowerCase();
     }
 
-    return setFilterText(clearedText);
+    return setFilterText(provableText);
   }, []),
       applyFilter = useCallback(
   /*#__PURE__*/

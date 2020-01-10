@@ -195,21 +195,21 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		disabled = !filterText || filterText.trim() === '',
 		// modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
-			let clearedText;
+			let provableText = value;
 
 			//This is just in case the text is being cleared
-			if (typeof value === 'string' && value.trim() === '') {
-				applyFilter(value);
+			if (typeof provableText === 'string' && provableText.trim() === '') {
+				applyFilter(provableText);
 			}
 
 			//If data is not a known format, removes special chars
-			if (!validateEmail(value) && !validateWebsite(value)) {
+			if (!validateEmail(provableText) && !validateWebsite(provableText)) {
 				//Will clear for any special character
 				//As well as lower case the text
-				clearedText = removeSpecialChars(value).toLowerCase();
+				provableText = removeSpecialChars(provableText).toLowerCase();
 			}
 
-			return setFilterText(clearedText);
+			return setFilterText(provableText);
 		}, []),
 		applyFilter = useCallback(async (value) => {
 			let mainFilter = [];
