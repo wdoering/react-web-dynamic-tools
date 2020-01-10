@@ -61,7 +61,7 @@ var validatePassword = function validatePassword(password) {
  */
 
 var removeSpecialChars = function removeSpecialChars(text) {
-  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s@_\.-\/]/g, '') : text;
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '') : text;
 };
 
 var validations = /*#__PURE__*/Object.freeze({
@@ -2318,11 +2318,15 @@ var SingleFilter = function SingleFilter(_ref) {
 
     if (typeof value === 'string' && value.trim() === '') {
       applyFilter(value);
-    } //Will clear for any special character
-    //As well as lower case the text
+    } //If data is not a known format, removes special chars
 
 
-    clearedText = removeSpecialChars(value).toLowerCase();
+    if (!validateEmail(value) && !validateWebsite(value)) {
+      //Will clear for any special character
+      //As well as lower case the text
+      clearedText = removeSpecialChars(value).toLowerCase();
+    }
+
     return setFilterText(clearedText);
   }, []),
       applyFilter = useCallback(

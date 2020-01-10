@@ -18,7 +18,7 @@ import { AddButton } from '../components/Button';
 import { FieldGroup, FormInput } from '../components/form';
 import { filterTextField } from '../assets/_styles';
 import { useModelProps, useEnterPress } from '../hooks';
-import { removeSpecialChars } from '../util/validations';
+import { removeSpecialChars, validateEmail, validateWebsite } from '../util/validations';
 
 /**
  * Will create a displayable list of components
@@ -202,9 +202,12 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				applyFilter(value);
 			}
 
-			//Will clear for any special character
-			//As well as lower case the text
-			clearedText = removeSpecialChars(value).toLowerCase();
+			//If data is not a known format, removes special chars
+			if (!validateEmail(value) && !validateWebsite(value)) {
+				//Will clear for any special character
+				//As well as lower case the text
+				clearedText = removeSpecialChars(value).toLowerCase();
+			}
 
 			return setFilterText(clearedText);
 		}, []),
