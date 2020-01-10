@@ -13,8 +13,8 @@ export const validateEmail = (email) => {
 	return regEmail.test(email);
 };
 
-export const validatePassword = (password) => {
-	const pwdRegex = /^.{6,}$/;
+export const validatePassword = (password, minLength = 6) => {
+	const pwdRegex = new RegExp(`^.{${minLength},}$`);
 	return !pwdRegex.test(password);
 };
 
@@ -42,3 +42,13 @@ export const removeSpecialChars = (text) => {
 				.replace(/[^a-zA-Z0-9\s]/g, '')
 		: text;
 };
+
+/**
+ * Tests whether the text itself is a valid e-mail or website; Known-types then
+ *
+ * @param {string} text The text to be tested
+ *
+ * @return {Boolean}
+ */
+export const textIsKnownType = (text) =>
+	typeof text === 'string' && (validateEmail(text) || validateWebsite(text));

@@ -203,7 +203,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			}
 
 			//If data is not a known format, removes special chars
-			if (!validateEmail(provableText) && !validateWebsite(provableText)) {
+			if (!textIsKnownType(provableText)) {
 				//Will clear for any special character
 				//As well as lower case the text
 				provableText = removeSpecialChars(provableText).toLowerCase();
@@ -234,7 +234,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		}, []),
 		handleSearch = useCallback(
 			(e) => {
-				let clearedText;
+				let provableText = filterText;
 
 				//If available, stops propagation of event
 				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
@@ -242,11 +242,16 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				//Avoids triggering a query when the command should be disabled
 				if (disabled) return false;
 
-				//Clearing the filter text again, ensuring it's clear os specials
-				clearedText = removeSpecialChars(filterText);
-				setFilterText(clearedText);
+				//If data is not a known format, removes special chars
+				if (!textIsKnownType(provableText)) {
+					//Will clear for any special character
+					//As well as lower case the text
+					provableText = removeSpecialChars(provableText).toLowerCase();
+				}
 
-				return applyFilter(clearedText);
+				setFilterText(provableText);
+
+				return applyFilter(provableText);
 			},
 			[filterText, applyFilter]
 		),

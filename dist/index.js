@@ -40,7 +40,8 @@ var validateEmail = function validateEmail(email) {
   return regEmail.test(email);
 };
 var validatePassword = function validatePassword(password) {
-  var pwdRegex = /^.{6,}$/;
+  var minLength = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 6;
+  var pwdRegex = new RegExp("^.{".concat(minLength, ",}$"));
   return !pwdRegex.test(password);
 };
 /**
@@ -63,6 +64,17 @@ var validatePassword = function validatePassword(password) {
 var removeSpecialChars = function removeSpecialChars(text) {
   return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '') : text;
 };
+/**
+ * Tests whether the text itself is a valid e-mail or website; Known-types then
+ *
+ * @param {string} text The text to be tested
+ *
+ * @return {Boolean}
+ */
+
+var textIsKnownType$1 = function textIsKnownType(text) {
+  return typeof text === 'string' && (validateEmail(text) || validateWebsite(text));
+};
 
 var validations = /*#__PURE__*/Object.freeze({
 	__proto__: null,
@@ -70,7 +82,8 @@ var validations = /*#__PURE__*/Object.freeze({
 	validateWebsite: validateWebsite,
 	validateEmail: validateEmail,
 	validatePassword: validatePassword,
-	removeSpecialChars: removeSpecialChars
+	removeSpecialChars: removeSpecialChars,
+	textIsKnownType: textIsKnownType$1
 });
 
 function _typeof(obj) {
@@ -2321,7 +2334,7 @@ var SingleFilter = function SingleFilter(_ref) {
     } //If data is not a known format, removes special chars
 
 
-    if (!validateEmail(provableText) && !validateWebsite(provableText)) {
+    if (!textIsKnownType(provableText)) {
       //Will clear for any special character
       //As well as lower case the text
       provableText = removeSpecialChars(provableText).toLowerCase();
@@ -2373,15 +2386,20 @@ var SingleFilter = function SingleFilter(_ref) {
     };
   }(), []),
       handleSearch = useCallback(function (e) {
-    var clearedText; //If available, stops propagation of event
+    var provableText = filterText; //If available, stops propagation of event
 
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation(); //Avoids triggering a query when the command should be disabled
 
-    if (disabled) return false; //Clearing the filter text again, ensuring it's clear os specials
+    if (disabled) return false; //If data is not a known format, removes special chars
 
-    clearedText = removeSpecialChars(filterText);
-    setFilterText(clearedText);
-    return applyFilter(clearedText);
+    if (!textIsKnownType(provableText)) {
+      //Will clear for any special character
+      //As well as lower case the text
+      provableText = removeSpecialChars(provableText).toLowerCase();
+    }
+
+    setFilterText(provableText);
+    return applyFilter(provableText);
   }, [filterText, applyFilter]),
       handleEnterPress = useEnterPress(handleSearch);
 
