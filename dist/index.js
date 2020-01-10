@@ -61,7 +61,7 @@ var validatePassword = function validatePassword(password) {
  */
 
 var removeSpecialChars = function removeSpecialChars(text) {
-  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s@_\.-]/g, '') : text;
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s@_\.-\/]/g, '') : text;
 };
 
 var validations = /*#__PURE__*/Object.freeze({
