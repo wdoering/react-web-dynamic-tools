@@ -44,12 +44,14 @@ var validatePassword = function validatePassword(password) {
   return !pwdRegex.test(password);
 };
 /**
- * Will apply two things:
+ * Will apply **three** rules:
+ *
  * * normalize()ing to NFD Unicode normal form decomposes combined
  * 	 graphemes into the combination of simple ones. The è of Crème ends up expressed as e + ̀.
  * * Using a regex character class to match the U+0300 → U+036F range,
  * 	 it is now trivial to globally get rid of the diacritics,
  *   which the Unicode standard conveniently groups as the Combining Diacritical Marks Unicode block.
+ * * Removes any non-text/non-number char;
  *
  * @param {string} text The text to be cleansed
  *
@@ -57,7 +59,7 @@ var validatePassword = function validatePassword(password) {
  */
 
 var removeSpecialChars = function removeSpecialChars(text) {
-  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : text;
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u0360]/g, '').replace(/[^a-zA-Z0-9]/g, '') : text;
 };
 
 var validations = /*#__PURE__*/Object.freeze({
@@ -2315,10 +2317,10 @@ var SingleFilter = function SingleFilter(_ref) {
     if (typeof value === 'string' && value.trim() === '') {
       applyFilter(value);
     } //Will clear for any special character
+    //As well as lower case the text
 
 
-    clearedText = removeSpecialChars(value);
-    console.log('clearedText', clearedText);
+    clearedText = removeSpecialChars(value).toLowerCase();
     return setFilterText(clearedText);
   }, []),
       applyFilter = useCallback(

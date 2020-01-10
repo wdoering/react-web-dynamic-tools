@@ -203,9 +203,8 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			}
 
 			//Will clear for any special character
-			clearedText = removeSpecialChars(value);
-
-			console.log('clearedText', clearedText);
+			//As well as lower case the text
+			clearedText = removeSpecialChars(value).toLowerCase();
 
 			return setFilterText(clearedText);
 		}, []),
