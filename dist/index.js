@@ -57,12 +57,15 @@ var validatePassword = function validatePassword(password) {
  * * Removes any non-text/non-number char;
  *
  * @param {string} text The text to be cleansed
+ * @param {Boolean} removeSpaces [optional] If spaces shold be removed
  *
  * @returns {string}
  */
 
 var removeSpecialChars = function removeSpecialChars(text) {
-  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '') : text;
+  var removeSpaces = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var alphaNumericRegex = !removeSpaces ? /[^a-zA-Z0-9\s@]/g : /[^a-zA-Z0-9@]/g;
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(alphaNumericRegex, '') : text;
 };
 /**
  * Tests whether the text itself is a valid e-mail or website; Known-types then
@@ -2386,20 +2389,15 @@ var SingleFilter = function SingleFilter(_ref) {
     };
   }(), []),
       handleSearch = useCallback(function (e) {
-    var provableText = filterText; //If available, stops propagation of event
+    var indexableText = filterText; //If available, stops propagation of event
 
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation(); //Avoids triggering a query when the command should be disabled
 
-    if (disabled) return false; //If data is not a known format, removes special chars
+    if (disabled) return false; //Will clear for any special character
+    //As well as lower case the text
 
-    if (!textIsKnownType(provableText)) {
-      //Will clear for any special character
-      //As well as lower case the text
-      provableText = removeSpecialChars(provableText).toLowerCase();
-    }
-
-    setFilterText(provableText);
-    return applyFilter(provableText);
+    indexableText = removeSpecialChars(indexableText, true).toLowerCase();
+    return applyFilter(indexableText);
   }, [filterText, applyFilter]),
       handleEnterPress = useEnterPress(handleSearch);
 

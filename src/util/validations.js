@@ -31,15 +31,18 @@ export const validatePassword = (password, minLength = 6) => {
  * * Removes any non-text/non-number char;
  *
  * @param {string} text The text to be cleansed
+ * @param {Boolean} removeSpaces [optional] If spaces shold be removed
  *
  * @returns {string}
  */
-export const removeSpecialChars = (text) => {
+export const removeSpecialChars = (text, removeSpaces = false) => {
+	const alphaNumericRegex = !removeSpaces ? /[^a-zA-Z0-9\s@]/g : /[^a-zA-Z0-9@]/g;
+
 	return typeof text === 'string'
 		? text
 				.normalize('NFD')
 				.replace(/[\u0300-\u036f]/g, '')
-				.replace(/[^a-zA-Z0-9\s]/g, '')
+				.replace(alphaNumericRegex, '')
 		: text;
 };
 

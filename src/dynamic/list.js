@@ -239,7 +239,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 		}, []),
 		handleSearch = useCallback(
 			(e) => {
-				let provableText = filterText;
+				let indexableText = filterText;
 
 				//If available, stops propagation of event
 				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
@@ -247,16 +247,11 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				//Avoids triggering a query when the command should be disabled
 				if (disabled) return false;
 
-				//If data is not a known format, removes special chars
-				if (!textIsKnownType(provableText)) {
-					//Will clear for any special character
-					//As well as lower case the text
-					provableText = removeSpecialChars(provableText).toLowerCase();
-				}
+				//Will clear for any special character
+				//As well as lower case the text
+				indexableText = removeSpecialChars(indexableText, true).toLowerCase();
 
-				setFilterText(provableText);
-
-				return applyFilter(provableText);
+				return applyFilter(indexableText);
 			},
 			[filterText, applyFilter]
 		),
