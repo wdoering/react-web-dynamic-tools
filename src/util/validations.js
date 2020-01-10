@@ -36,7 +36,7 @@ export const removeSpecialChars = (text) => {
 	return typeof text === 'string'
 		? text
 				.normalize('NFD')
-				.replace(/[\u0300-\u0360]/g, '')
+				.replace(/[\u0300-\u036f]/g, '')
 				.replace(/[^a-zA-Z0-9]/g, '')
 		: text;
 };
