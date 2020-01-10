@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
-import { FieldTypes, FieldType, ComplexTypes, ModelBase, PlainObject } from '@zerobytes/object-model-js';
+import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import VisibilityIcon from '@material-ui/icons/VisibilityRounded';
@@ -1281,51 +1281,6 @@ function useMobileIconButtons() {
 }
 
 /**
- * Will map all specific model props to an array of names
- *
- * @param {ModelBase|PlainObject} model the model to be mapped
- *
- * @returns {array} of model prop-names
- */
-
-var useModelProps = function useModelProps(model) {
-  var initialState = [],
-      _useState = useState(initialState),
-      _useState2 = _slicedToArray(_useState, 2),
-      modelProps = _useState2[0],
-      setModelProps = _useState2[1]; //TODO: create specific hook
-
-
-  useEffect(function () {
-    var props = []; //There are prop-keys to be kept
-
-    if (modelProps.length === 0 && !!model) {
-      //Tries getting a plainObject version of an object
-      if (model instanceof PlainObject) {
-        props = Object.keys(model.$toPlainObject());
-      } else {
-        //Keeps default object props
-        //Removing undesired ones
-        //No functions and specifically-reserved name props
-        props = Object.keys(model).filter(function (prop) {
-          return typeof model[prop] !== 'function' && !['$fieldConfig', '$$index'].includes(prop);
-        });
-      } //Will set props, then
-
-
-      setModelProps(props);
-    } //Resetter function
-
-
-    return function () {
-      return setModelProps(initialState);
-    };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
-
-  return modelProps;
-};
-
-/**
  * Provides access to the current window size object
  * @returns {{ width: number, height: number }} object with window size props
  */
@@ -2354,7 +2309,6 @@ var SingleFilter = function SingleFilter(_ref) {
       filterText = _useState6[0],
       setFilterText = _useState6[1],
       disabled = !filterText || filterText.trim() === '',
-      modelProps = useModelProps(model),
       handleChange = useCallback(function (value) {
     var clearedText; //This is just in case the text is being cleared
 
@@ -2364,6 +2318,7 @@ var SingleFilter = function SingleFilter(_ref) {
 
 
     clearedText = removeSpecialChars(value);
+    console.log('clearedText', clearedText);
     return setFilterText(clearedText);
   }, []),
       applyFilter = useCallback(
@@ -2408,13 +2363,17 @@ var SingleFilter = function SingleFilter(_ref) {
     return function (_x) {
       return _ref2.apply(this, arguments);
     };
-  }(), [modelProps]),
+  }(), []),
       handleSearch = useCallback(function (e) {
-    //If available, stops propagation of event
+    var clearedText; //If available, stops propagation of event
+
     if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation(); //Avoids triggering a query when the command should be disabled
 
-    if (disabled) return false;
-    return applyFilter(filterText);
+    if (disabled) return false; //Clearing the filter text again, ensuring it's clear os specials
+
+    clearedText = removeSpecialChars(filterText);
+    setFilterText(clearedText);
+    return applyFilter(clearedText);
   }, [filterText, applyFilter]),
       handleEnterPress = useEnterPress(handleSearch);
 

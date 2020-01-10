@@ -193,7 +193,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 	const classes = filterTextField(),
 		[filterText, setFilterText] = useState(''),
 		disabled = !filterText || filterText.trim() === '',
-		modelProps = useModelProps(model),
+		// modelProps = useModelProps(model),
 		handleChange = useCallback((value) => {
 			let clearedText;
 
@@ -205,41 +205,46 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			//Will clear for any special character
 			clearedText = removeSpecialChars(value);
 
+			console.log('clearedText', clearedText);
+
 			return setFilterText(clearedText);
 		}, []),
-		applyFilter = useCallback(
-			async (value) => {
-				let mainFilter = [];
+		applyFilter = useCallback(async (value) => {
+			let mainFilter = [];
 
-				//Value was informed
-				if (!!value && typeof value === 'string' && value.trim() !== '') {
-					let currentIndex = `$$index.${value}`;
+			//Value was informed
+			if (!!value && typeof value === 'string' && value.trim() !== '') {
+				let currentIndex = `$$index.${value}`;
 
-					mainFilter.push([currentIndex, '==', true]);
-				}
+				mainFilter.push([currentIndex, '==', true]);
+			}
 
-				//Adding deleted flag filter
-				mainFilter.push(['deleted', '==', false]);
+			//Adding deleted flag filter
+			mainFilter.push(['deleted', '==', false]);
 
-				//Invalid type of updater?
-				if (typeof updateFilters !== 'function')
-					throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
+			//Invalid type of updater?
+			if (typeof updateFilters !== 'function')
+				throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
-				//Has to be valid
-				//AS well as composes an AND query (extra outer array)
-				return updateFilters([mainFilter]);
-			},
-			[modelProps]
-		),
+			//Has to be valid
+			//AS well as composes an AND query (extra outer array)
+			return updateFilters([mainFilter]);
+		}, []),
 		handleSearch = useCallback(
 			(e) => {
+				let clearedText;
+
 				//If available, stops propagation of event
 				if (!!e && typeof e.stopPropagation === 'function') e.stopPropagation();
 
 				//Avoids triggering a query when the command should be disabled
 				if (disabled) return false;
 
-				return applyFilter(filterText);
+				//Clearing the filter text again, ensuring it's clear os specials
+				clearedText = removeSpecialChars(filterText);
+				setFilterText(clearedText);
+
+				return applyFilter(clearedText);
 			},
 			[filterText, applyFilter]
 		),
