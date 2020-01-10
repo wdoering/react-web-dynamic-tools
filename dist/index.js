@@ -44,6 +44,8 @@ var validatePassword = function validatePassword(password) {
   return !pwdRegex.test(password);
 };
 /**
+ * Based on: https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+ *
  * Will apply **three** rules:
  *
  * * normalize()ing to NFD Unicode normal form decomposes combined
@@ -59,7 +61,7 @@ var validatePassword = function validatePassword(password) {
  */
 
 var removeSpecialChars = function removeSpecialChars(text) {
-  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '') : text;
+  return typeof text === 'string' ? text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s@_\.-]/g, '') : text;
 };
 
 var validations = /*#__PURE__*/Object.freeze({
