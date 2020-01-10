@@ -203,7 +203,7 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 			}
 
 			//Will clear for any special character
-			clearedText = removeSpecialCharshars(value);
+			clearedText = removeSpecialChars(value);
 
 			return setFilterText(clearedText);
 		}, []),

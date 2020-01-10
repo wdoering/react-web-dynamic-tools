@@ -2363,7 +2363,7 @@ var SingleFilter = function SingleFilter(_ref) {
     } //Will clear for any special character
 
 
-    clearedText = removeSpecialCharshars(value);
+    clearedText = removeSpecialChars(value);
     return setFilterText(clearedText);
   }, []),
       applyFilter = useCallback(
