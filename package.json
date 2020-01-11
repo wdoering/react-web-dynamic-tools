@@ -1,6 +1,6 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.3.44",
+	"version": "0.3.45",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [
@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@material-ui/core": "^4.8.3",
 		"@material-ui/icons": "^4.5.1",
-		"@zerobytes/object-model-js": "^0.3.11",
+		"@zerobytes/object-model-js": "^0.3.12",
 		"classnames": "^2.2.6",
 		"prop-types": "^15.7.2",
 		"react": "^16.12.0",
