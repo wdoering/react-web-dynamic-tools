@@ -1217,8 +1217,9 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       _ref7$view = _ref7.view,
       view = _ref7$view === void 0 ? false : _ref7$view;
   var classes = textFieldStyles(),
-      usableLabel = i18n(label);
-  return !!view ? i18n("boolean.view.".concat(values[property].toString())) : React.createElement(FormControlLabel, {
+      usableLabel = i18n(label),
+      propValue = values[property];
+  return !!view ? i18n("boolean.view.".concat(undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined')) : React.createElement(FormControlLabel, {
     className: classes.spacer,
     label: usableLabel,
     labelPlacement: "start",

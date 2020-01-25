@@ -584,10 +584,15 @@ const createBooleanComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		usableLabel = i18n(label);
+		usableLabel = i18n(label),
+		propValue = values[property];
 
 	return !!view ? (
-		i18n(`boolean.view.${values[property].toString()}`)
+		i18n(
+			`boolean.view.${
+				undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined'
+			}`
+		)
 	) : (
 		<FormControlLabel
 			className={classes.spacer}
