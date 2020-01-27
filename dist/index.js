@@ -1153,26 +1153,14 @@ var createTextComponent = function createTextComponent(_ref6) {
     return setInputVisible(!inputVisible);
   };
 
-  var component = null; // // View mode has a specific type of formatting data
-  // if (!!view) {
-  // 	if (!!field.protected) {
-  // 		value = protectedFieldValue;
-  // 	} else if (!!values[property] && values[property] !== '') {
-  // 		value = <TextStyleByType text={values[property]} i18n={i18n} />;
-  // 	} else {
-  // 		value = blankFieldPlaceholder;
-  // 	}
-  // } else {
-  // // 	non-view mode
-  // 	value = values[property];
-  // }
-
+  var component = null;
+  console.log('createTextComponent:field', field);
   component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
     text: values[property],
     i18n: i18n
-  }) : blankFieldPlaceholder : React.createElement(FormInput, _extends({}, field.props, {
-    //TODO: uncomment when usable
-    // disabled={!!view}
+  }) : blankFieldPlaceholder : React.createElement(FormInput //TODO: uncomment when usable
+  // disabled={!!view}
+  , _extends({
     className: classes.spacer,
     InputProps: !!field.protected ? {
       endAdornment: React.createElement(InputAdornment, {
@@ -1192,14 +1180,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     // value={value}
     ,
     value: values[property],
-    type: fieldTypeByName(!!field.prop ? field.prop.type : FieldTypes.String, field.protected, inputVisible) // !!field.protected
-    // 	? inputVisible
-    // 		? 'text'
-    // 		: 'password'
-    // 	: !!field.props.type
-    // 	? field.props.type
-    // : fieldTypeByName(field.prop.type, field.protected, inputVisible)
-    ,
+    type: fieldTypeByName(!!field.type ? field.type : FieldTypes.String, field.protected, inputVisible),
     onChange: function onChange(e) {
       //TODO: uncomment when usable
       // if (!!view) return false;
@@ -1209,7 +1190,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     },
     helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
     error: !!error && !view
-  }));
+  }, field.props));
   return component;
 };
 
@@ -1256,15 +1237,7 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
     } else {
       return 'password';
     }
-  } // else if ()
-  // !!field.protected
-  // ? inputVisible
-  // 	? 'text'
-  // 	: 'password'
-  // : !!field.props.type
-  // ? field.props.type
-  // : fieldTypeByName('text', field.protected)
-
+  }
 
   switch (fieldType) {
     case FieldTypes.Time:
@@ -1279,7 +1252,7 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
         break;
       }
 
-    case FieldTypes.DateTime:
+    case FieldTypes.Datetime:
       {
         fieldTypeName = 'datetime-local';
         break;

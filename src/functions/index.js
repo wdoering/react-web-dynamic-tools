@@ -491,19 +491,7 @@ const createTextComponent = ({
 		};
 	let component = null;
 
-	// // View mode has a specific type of formatting data
-	// if (!!view) {
-	// 	if (!!field.protected) {
-	// 		value = protectedFieldValue;
-	// 	} else if (!!values[property] && values[property] !== '') {
-	// 		value = <TextStyleByType text={values[property]} i18n={i18n} />;
-	// 	} else {
-	// 		value = blankFieldPlaceholder;
-	// 	}
-	// } else {
-	// // 	non-view mode
-	// 	value = values[property];
-	// }
+	console.log('createTextComponent:field', field);
 
 	component = !!view ? (
 		!!field.protected ? (
@@ -515,7 +503,6 @@ const createTextComponent = ({
 		)
 	) : (
 		<FormInput
-			{...field.props}
 			//TODO: uncomment when usable
 			// disabled={!!view}
 			className={classes.spacer}
@@ -546,20 +533,11 @@ const createTextComponent = ({
 			//TODO: uncomment when usable
 			// value={value}
 			value={values[property]}
-			type={
-				fieldTypeByName(
-					!!field.prop ? field.prop.type : FieldTypes.String,
-					field.protected,
-					inputVisible
-				)
-				// !!field.protected
-				// 	? inputVisible
-				// 		? 'text'
-				// 		: 'password'
-				// 	: !!field.props.type
-				// 	? field.props.type
-				// : fieldTypeByName(field.prop.type, field.protected, inputVisible)
-			}
+			type={fieldTypeByName(
+				!!field.type ? field.type : FieldTypes.String,
+				field.protected,
+				inputVisible
+			)}
 			onChange={(e) => {
 				//TODO: uncomment when usable
 				// if (!!view) return false;
@@ -572,6 +550,7 @@ const createTextComponent = ({
 			}}
 			helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
 			error={!!error && !view}
+			{...field.props}
 		/>
 	);
 
@@ -627,14 +606,6 @@ const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible =
 			return 'password';
 		}
 	}
-	// else if ()
-	// !!field.protected
-	// ? inputVisible
-	// 	? 'text'
-	// 	: 'password'
-	// : !!field.props.type
-	// ? field.props.type
-	// : fieldTypeByName('text', field.protected)
 
 	switch (fieldType) {
 		case FieldTypes.Time: {
@@ -645,7 +616,7 @@ const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible =
 			fieldTypeName = 'date';
 			break;
 		}
-		case FieldTypes.DateTime: {
+		case FieldTypes.Datetime: {
 			fieldTypeName = 'datetime-local';
 			break;
 		}
