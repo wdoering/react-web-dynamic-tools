@@ -1153,8 +1153,7 @@ var createTextComponent = function createTextComponent(_ref6) {
     return setInputVisible(!inputVisible);
   };
 
-  var component = null;
- // // View mode has a specific type of formatting data
+  var component = null; // // View mode has a specific type of formatting data
   // if (!!view) {
   // 	if (!!field.protected) {
   // 		value = protectedFieldValue;
@@ -1193,7 +1192,14 @@ var createTextComponent = function createTextComponent(_ref6) {
     // value={value}
     ,
     value: values[property],
-    type: !!field.protected ? inputVisible ? 'text' : 'password' : !!field.props.type ? field.props.type : 'text',
+    type: fieldTypeByName(!!field.prop ? field.prop.type : FieldTypes.String, field.protected, inputVisible) // !!field.protected
+    // 	? inputVisible
+    // 		? 'text'
+    // 		: 'password'
+    // 	: !!field.props.type
+    // 	? field.props.type
+    // : fieldTypeByName(field.prop.type, field.protected, inputVisible)
+    ,
     onChange: function onChange(e) {
       //TODO: uncomment when usable
       // if (!!view) return false;
@@ -1239,9 +1245,68 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
   });
 };
 
+var fieldTypeByName = function fieldTypeByName(fieldType) {
+  var fieldIsProtected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var inputDataVisible = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var fieldTypeName = '';
+
+  if (fieldIsProtected) {
+    if (inputDataVisible) {
+      return 'text';
+    } else {
+      return 'password';
+    }
+  } // else if ()
+  // !!field.protected
+  // ? inputVisible
+  // 	? 'text'
+  // 	: 'password'
+  // : !!field.props.type
+  // ? field.props.type
+  // : fieldTypeByName('text', field.protected)
+
+
+  switch (fieldType) {
+    case FieldTypes.Time:
+      {
+        fieldTypeName = 'time';
+        break;
+      }
+
+    case FieldTypes.Date:
+      {
+        fieldTypeName = 'date';
+        break;
+      }
+
+    case FieldTypes.DateTime:
+      {
+        fieldTypeName = 'datetime-local';
+        break;
+      }
+
+    case FieldTypes.Integer:
+    case FieldTypes.Float:
+      {
+        fieldTypeName = 'number';
+        break;
+      }
+
+    case FieldTypes.String:
+    default:
+      {
+        fieldTypeName = 'text';
+        break;
+      }
+  }
+
+  return fieldTypeName;
+};
+
 var TextStyleByType = function TextStyleByType(_ref8) {
   var text = _ref8.text,
       i18n = _ref8.i18n;
+  console.log('TextStyleByType(text)', text);
   if (validateEmail(text)) return React.createElement(EmailInfo, {
     text: text,
     i18n: i18n
@@ -1250,6 +1315,7 @@ var TextStyleByType = function TextStyleByType(_ref8) {
     text: text,
     i18n: i18n
   });
+  if (typeof text.toDate === 'function') return "".concat(text.toDate().toLocaleDateString());
   return "".concat(text);
 };
 

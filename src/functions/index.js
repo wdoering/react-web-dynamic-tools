@@ -489,8 +489,7 @@ const createTextComponent = ({
 			//Toggling visibility
 			return setInputVisible(!inputVisible);
 		};
-	let component = null,
-		value = null;
+	let component = null;
 
 	// // View mode has a specific type of formatting data
 	// if (!!view) {
@@ -548,13 +547,18 @@ const createTextComponent = ({
 			// value={value}
 			value={values[property]}
 			type={
-				!!field.protected
-					? inputVisible
-						? 'text'
-						: 'password'
-					: !!field.props.type
-					? field.props.type
-					: 'text'
+				fieldTypeByName(
+					!!field.prop ? field.prop.type : FieldTypes.String,
+					field.protected,
+					inputVisible
+				)
+				// !!field.protected
+				// 	? inputVisible
+				// 		? 'text'
+				// 		: 'password'
+				// 	: !!field.props.type
+				// 	? field.props.type
+				// : fieldTypeByName(field.prop.type, field.protected, inputVisible)
 			}
 			onChange={(e) => {
 				//TODO: uncomment when usable
@@ -613,9 +617,59 @@ const createBooleanComponent = ({
 	);
 };
 
+const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible = false) => {
+	let fieldTypeName = '';
+
+	if (fieldIsProtected) {
+		if (inputDataVisible) {
+			return 'text';
+		} else {
+			return 'password';
+		}
+	}
+	// else if ()
+	// !!field.protected
+	// ? inputVisible
+	// 	? 'text'
+	// 	: 'password'
+	// : !!field.props.type
+	// ? field.props.type
+	// : fieldTypeByName('text', field.protected)
+
+	switch (fieldType) {
+		case FieldTypes.Time: {
+			fieldTypeName = 'time';
+			break;
+		}
+		case FieldTypes.Date: {
+			fieldTypeName = 'date';
+			break;
+		}
+		case FieldTypes.DateTime: {
+			fieldTypeName = 'datetime-local';
+			break;
+		}
+		case FieldTypes.Integer:
+		case FieldTypes.Float: {
+			fieldTypeName = 'number';
+			break;
+		}
+		case FieldTypes.String:
+		default: {
+			fieldTypeName = 'text';
+			break;
+		}
+	}
+
+	return fieldTypeName;
+};
+
 const TextStyleByType = ({ text, i18n }) => {
+	console.log('TextStyleByType(text)', text);
+
 	if (validateEmail(text)) return <EmailInfo text={text} i18n={i18n} />;
 	if (validateWebsite(text)) return <WebSiteInfo text={text} i18n={i18n} />;
+	if (typeof text.toDate === 'function') return `${text.toDate().toLocaleDateString()}`;
 	return `${text}`;
 };
 
