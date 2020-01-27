@@ -41,6 +41,13 @@ let searchIdOfTimeout;
  */
 const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
 	const config = model.$fieldConfig[property];
+
+	if (process.env.NODE_ENV === 'development') {
+		console.log('createIdOfComponent:property', property);
+		console.log('createIdOfComponent:model', model);
+		console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
+	}
+
 	if (!config.listItemProperties) {
 		return (
 			<div style={{ fontWeight: 'bold', color: 'red' }}>

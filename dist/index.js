@@ -2573,6 +2573,12 @@ var searchIdOfTimeout$1;
 var createIdOfComponent$1 = function createIdOfComponent(model, property, values, Type, i18n, firebase) {
   var config = model.$fieldConfig[property];
 
+  if (process.env.NODE_ENV === 'development') {
+    console.log('createIdOfComponent:property', property);
+    console.log('createIdOfComponent:model', model);
+    console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
+  }
+
   if (!config.listItemProperties) {
     return React.createElement("div", {
       style: {
