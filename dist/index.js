@@ -2621,15 +2621,18 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
  * @param {ModelBase} Type Model type literally
  * @param {object} values Values for a sequence selector
  * @param {function} i18n Translation source function
+ * @param {object} firebase Firebase source object
  */
 
 
-var createShapedAsComponent$1 = function createShapedAsComponent(model, property, Type, values, i18n) {
+var createShapedAsComponent$1 = function createShapedAsComponent(model, property, Type, values, i18n, firebase) {
   var fields = createFields$1({
-    model: model.hasOwnProperty(property) || model[property] instanceof Type ? model[property] : new Type(model[property]),
+    // model: model.hasOwnProperty(property) ? model[property] : new Type(model[property]),
+    model: new Type(model[property]),
     baseIntl: "".concat(model.getModelName(), ".form.").concat(property),
     values: values,
-    i18n: i18n
+    i18n: i18n,
+    firebase: firebase
   });
   return React.createElement("div", {
     className: " mb-15"
@@ -2759,13 +2762,7 @@ var createField$1 = function createField(_ref2) {
         breakField = true;
 
         if (!model[property]) {
-          //debugger;
-          // if (process.env.NODE_ENV === 'development') {
-          // 	console.log('createField:model', model);
-          // 	console.log('createField:property', property);
-          // 	console.log('createField:field', field);
-          // }
-          model[property] = new field.type.Type(); // model[property] = new field.type.Type();
+          model[property] = '';
         }
 
         component = React.createElement(Card, {
@@ -2791,7 +2788,7 @@ var createField$1 = function createField(_ref2) {
         component = React.createElement(Card, {
           className: "mb-15"
         }, React.createElement(CardContent, null, createShapedAsComponent$1(model, property, field.type.Type, //new field.type.Type(),
-        values[property], i18n)));
+        values[property], i18n, firebase)));
         break;
     }
   } else {

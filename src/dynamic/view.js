@@ -97,16 +97,16 @@ const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
  * @param {ModelBase} Type Model type literally
  * @param {object} values Values for a sequence selector
  * @param {function} i18n Translation source function
+ * @param {object} firebase Firebase source object
  */
-const createShapedAsComponent = (model, property, Type, values, i18n) => {
+const createShapedAsComponent = (model, property, Type, values, i18n, firebase) => {
 	let fields = createFields({
-		model:
-			model.hasOwnProperty(property) || model[property] instanceof Type
-				? model[property]
-				: new Type(model[property]),
+		// model: model.hasOwnProperty(property) ? model[property] : new Type(model[property]),
+		model: new Type(model[property]),
 		baseIntl: `${model.getModelName()}.form.${property}`,
 		values,
-		i18n
+		i18n,
+		firebase
 	});
 	return (
 		<div className=" mb-15">
@@ -219,14 +219,7 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 			case ComplexTypes.IdOf:
 				breakField = true;
 				if (!model[property]) {
-					//debugger;
-					// if (process.env.NODE_ENV === 'development') {
-					// 	console.log('createField:model', model);
-					// 	console.log('createField:property', property);
-					// 	console.log('createField:field', field);
-					// }
-					model[property] = new field.type.Type();
-					// model[property] = new field.type.Type();
+					model[property] = '';
 				}
 
 				component = (
@@ -270,7 +263,8 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 								property,
 								field.type.Type, //new field.type.Type(),
 								values[property],
-								i18n
+								i18n,
+								firebase
 							)}
 						</CardContent>
 					</Card>
