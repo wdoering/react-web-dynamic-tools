@@ -40,16 +40,16 @@ let validateTimeout;
  * @param {object} Type the field type for usage on construction
  * @param {array} values values set for the field for rendering
  * @param {function} i18n Translation base function. Has to receive an ID
- * @param {function} handleChange Firebase instance for service purposes
+ * @param {function} handleChg Firebase instance for service purposes
  */
-const createShapedAsComponent = (model, property, Type, values, i18n, handleChange) => {
+const createShapedAsComponent = (model, property, Type, values, i18n, handleChg) => {
 	const newModel = {};
 	Object.keys(Type).forEach((key, index) => {
 		if (key == '$fieldConfig') return;
 		newModel[key] = '';
 	});
 	if (!Object.keys(values).length) {
-		handleChange(property, Object.assign({}, newModel));
+		handleChg(property, Object.assign({}, newModel));
 	}
 	const [errors, setErrors] = useState([]);
 	const validate = (prop, value) => {
@@ -79,7 +79,7 @@ const createShapedAsComponent = (model, property, Type, values, i18n, handleChan
 				[prop]: value
 			};
 			validate(prop, value);
-			handleChange(property, v);
+			handleChg(property, v);
 		}
 	});
 	return (

@@ -42,23 +42,29 @@ let searchIdOfTimeout;
 const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
 	const config = model.$fieldConfig[property];
 
-	if (process.env.NODE_ENV === 'development') {
-		console.log('createIdOfComponent:property', property);
-		console.log('createIdOfComponent:model', model);
-		console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
-	}
-
 	if (!config.listItemProperties) {
 		return (
 			<div style={{ fontWeight: 'bold', color: 'red' }}>
-				NEED_TO_CONFIGURE_FIELD: {property} | FieldType:IdOf{`<${Type.name}>`}
+				NEED_TO_CONFIGURE_FIELD: {property} | FieldType:IdOf
+				{`<${!!Type ? Type.name : 'undefined'}>`}
+				<p>MODEL: {JSON.stringify(model)}</p>
 			</div>
 		);
 	}
-	const oService = new Type().getService(firebase);
+
+	if (process.env.NODE_ENV === 'development') {
+		console.log('===========================');
+		console.log('==> createIdOfComponent:model', model);
+		console.log('==> createIdOfComponent:property', property);
+		console.log('==> createIdOfComponent:Type', Type);
+		console.log('==> createIdOfComponent:values[property]', values[property]);
+	}
+
 	const [selected, setSelected] = useState(null);
 
-	if (!selected && values[property]) {
+	if (!selected && undefined !== values[property] && values[property] !== '') {
+		const oService = new Type().getService(firebase);
+
 		clearTimeout(searchIdOfTimeout);
 		searchIdOfTimeout = setTimeout(() => {
 			oService.get(values[property]).then((r) => {
@@ -94,7 +100,10 @@ const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
  */
 const createShapedAsComponent = (model, property, Type, values, i18n) => {
 	let fields = createFields({
-		model: Type,
+		model:
+			model.hasOwnProperty(property) || model[property] instanceof Type
+				? model[property]
+				: new Type(model[property]),
 		baseIntl: `${model.getModelName()}.form.${property}`,
 		values,
 		i18n
@@ -209,6 +218,17 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 		switch (field.type.complexType) {
 			case ComplexTypes.IdOf:
 				breakField = true;
+				if (!model[property]) {
+					//debugger;
+					// if (process.env.NODE_ENV === 'development') {
+					// 	console.log('createField:model', model);
+					// 	console.log('createField:property', property);
+					// 	console.log('createField:field', field);
+					// }
+					model[property] = new field.type.Type();
+					// model[property] = new field.type.Type();
+				}
+
 				component = (
 					<Card className="mb-15" style={{ overflow: 'visible' }}>
 						<CardContent>
@@ -248,7 +268,7 @@ const createField = ({ model, property, label, values, i18n, firebase }) => {
 							{createShapedAsComponent(
 								model,
 								property,
-								new field.type.Type(),
+								field.type.Type, //new field.type.Type(),
 								values[property],
 								i18n
 							)}

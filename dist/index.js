@@ -910,16 +910,9 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
   var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
-  var config = model.$fieldConfig[property];
+  var config = model.$fieldConfig[property]; //Validating prior to using
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log('createIdOfComponent:property', property);
-    console.log('createIdOfComponent:model', model);
-    console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
-  } //Validating prior to using
-
-
-  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+  if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(!!Type ? Type.name : 'undefined', ">"), "}", React.createElement("p", null, "MODEL: ", JSON.stringify(model)));
 
   var oService = new Type().getService(firebase),
       _useState = useState([]),
@@ -952,13 +945,12 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       }, 200);
     }
   } else if (!!selected && selected instanceof Array && selected.length > 0 && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
-    setSelected(currentDialogValue); //TODO: remove from here
-    //debugging
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('createIdOfComponent:selected', selected);
-      console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
-    }
+    setSelected(currentDialogValue); // //TODO: remove from here
+    // //debugging
+    // if (process.env.NODE_ENV === 'development') {
+    // 	console.log('createIdOfComponent:selected', selected);
+    // 	console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
+    // }
   }
 
   var select = function select(item) {
@@ -1161,7 +1153,6 @@ var createTextComponent = function createTextComponent(_ref6) {
   };
 
   var component = null;
-  console.log('createTextComponent:field', field);
   component = !!view ? !!field.protected ? protectedFieldValue : !!values[property] && values[property] !== '' ? React.createElement(TextStyleByType, {
     text: values[property],
     i18n: i18n
@@ -1212,25 +1203,27 @@ var createBooleanComponent = function createBooleanComponent(_ref7) {
       view = _ref7$view === void 0 ? false : _ref7$view;
   var classes = textFieldStyles(),
       usableLabel = i18n(label),
-      propValue = values[property];
-  return !!view ? i18n("boolean.view.".concat(undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined')) : React.createElement(FormControlLabel, {
+      propValue = values[property],
+      onChange = useCallback(function (e) {
+    handleChange(property, e.target.checked);
+  }, [property]);
+  return !!view ? i18n("boolean.view.".concat(undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined')) : React.createElement(FormControlLabel, _extends({
     className: classes.spacer,
     label: usableLabel,
     labelPlacement: "start",
     style: !!field.style.field ? field.style.field : {},
+    onChange: onChange,
     control: React.createElement(Checkbox, {
       value: property,
       color: "primary",
       checked: values[property],
-      onChange: function onChange(e) {
-        return handleChange(property, e.target.checked);
-      },
+      onChange: onChange,
       inputProps: {
         'aria-label': usableLabel
       },
       disabled: !!field.disabled || !!view
     })
-  });
+  }, field.props));
 };
 
 var fieldTypeByName = function fieldTypeByName(fieldType) {
@@ -1286,7 +1279,7 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
 var TextStyleByType = function TextStyleByType(_ref8) {
   var text = _ref8.text,
       i18n = _ref8.i18n;
-  console.log('TextStyleByType(text)', text);
+  if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
   if (validateEmail(text)) return React.createElement(EmailInfo, {
     text: text,
     i18n: i18n
@@ -1799,10 +1792,10 @@ var validateTimeout;
  * @param {object} Type the field type for usage on construction
  * @param {array} values values set for the field for rendering
  * @param {function} i18n Translation base function. Has to receive an ID
- * @param {function} handleChange Firebase instance for service purposes
+ * @param {function} handleChg Firebase instance for service purposes
  */
 
-var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, i18n, _handleChange) {
+var createShapedAsComponent = function createShapedAsComponent(model, property, Type, values, i18n, handleChg) {
   var newModel = {};
   Object.keys(Type).forEach(function (key, index) {
     if (key == '$fieldConfig') return;
@@ -1810,7 +1803,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
   });
 
   if (!Object.keys(values).length) {
-    _handleChange(property, Object.assign({}, newModel));
+    handleChg(property, Object.assign({}, newModel));
   }
 
   var _useState = useState([]),
@@ -1838,8 +1831,7 @@ var createShapedAsComponent = function createShapedAsComponent(model, property, 
       var v = _objectSpread2({}, values, _defineProperty({}, prop, value));
 
       validate(prop, value);
-
-      _handleChange(property, v);
+      handleChg(property, v);
     }
   });
   return React.createElement("div", {
@@ -2573,29 +2565,30 @@ var searchIdOfTimeout$1;
 var createIdOfComponent$1 = function createIdOfComponent(model, property, values, Type, i18n, firebase) {
   var config = model.$fieldConfig[property];
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log('createIdOfComponent:property', property);
-    console.log('createIdOfComponent:model', model);
-    console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
-  }
-
   if (!config.listItemProperties) {
     return React.createElement("div", {
       style: {
         fontWeight: 'bold',
         color: 'red'
       }
-    }, "NEED_TO_CONFIGURE_FIELD: ", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
+    }, "NEED_TO_CONFIGURE_FIELD: ", property, " | FieldType:IdOf", "<".concat(!!Type ? Type.name : 'undefined', ">"), React.createElement("p", null, "MODEL: ", JSON.stringify(model)));
   }
 
-  var oService = new Type().getService(firebase);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('===========================');
+    console.log('==> createIdOfComponent:model', model);
+    console.log('==> createIdOfComponent:property', property);
+    console.log('==> createIdOfComponent:Type', Type);
+    console.log('==> createIdOfComponent:values[property]', values[property]);
+  }
 
   var _useState = useState(null),
       _useState2 = _slicedToArray(_useState, 2),
       selected = _useState2[0],
       setSelected = _useState2[1];
 
-  if (!selected && values[property]) {
+  if (!selected && undefined !== values[property] && values[property] !== '') {
+    var oService = new Type().getService(firebase);
     clearTimeout(searchIdOfTimeout$1);
     searchIdOfTimeout$1 = setTimeout(function () {
       oService.get(values[property]).then(function (r) {
@@ -2633,7 +2626,7 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
 
 var createShapedAsComponent$1 = function createShapedAsComponent(model, property, Type, values, i18n) {
   var fields = createFields$1({
-    model: Type,
+    model: model.hasOwnProperty(property) || model[property] instanceof Type ? model[property] : new Type(model[property]),
     baseIntl: "".concat(model.getModelName(), ".form.").concat(property),
     values: values,
     i18n: i18n
@@ -2764,6 +2757,17 @@ var createField$1 = function createField(_ref2) {
     switch (field.type.complexType) {
       case ComplexTypes.IdOf:
         breakField = true;
+
+        if (!model[property]) {
+          //debugger;
+          // if (process.env.NODE_ENV === 'development') {
+          // 	console.log('createField:model', model);
+          // 	console.log('createField:property', property);
+          // 	console.log('createField:field', field);
+          // }
+          model[property] = new field.type.Type(); // model[property] = new field.type.Type();
+        }
+
         component = React.createElement(Card, {
           className: "mb-15",
           style: {
@@ -2786,7 +2790,8 @@ var createField$1 = function createField(_ref2) {
 
         component = React.createElement(Card, {
           className: "mb-15"
-        }, React.createElement(CardContent, null, createShapedAsComponent$1(model, property, new field.type.Type(), values[property], i18n)));
+        }, React.createElement(CardContent, null, createShapedAsComponent$1(model, property, field.type.Type, //new field.type.Type(),
+        values[property], i18n)));
         break;
     }
   } else {

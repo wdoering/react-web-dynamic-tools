@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
 	FormControlLabel,
 	Typography,
@@ -232,17 +232,12 @@ const createIdOfComponent = (
 ) => {
 	const config = model.$fieldConfig[property];
 
-	if (process.env.NODE_ENV === 'development') {
-		console.log('createIdOfComponent:property', property);
-		console.log('createIdOfComponent:model', model);
-		console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
-	}
-
 	//Validating prior to using
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
 			<div>
-				NEED_TO_CONFIGURE_FIELD:{property} | FieldType:IdOf{`<${Type.name}>`}
+				NEED_TO_CONFIGURE_FIELD:{property} | FieldType:IdOf
+				{`<${!!Type ? Type.name : 'undefined'}>`}}<p>MODEL: {JSON.stringify(model)}</p>
 			</div>
 		);
 
@@ -278,12 +273,12 @@ const createIdOfComponent = (
 	) {
 		setSelected(currentDialogValue);
 
-		//TODO: remove from here
-		//debugging
-		if (process.env.NODE_ENV === 'development') {
-			console.log('createIdOfComponent:selected', selected);
-			console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
-		}
+		// //TODO: remove from here
+		// //debugging
+		// if (process.env.NODE_ENV === 'development') {
+		// 	console.log('createIdOfComponent:selected', selected);
+		// 	console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
+		// }
 	}
 
 	const select = (item) => () => {
@@ -497,8 +492,6 @@ const createTextComponent = ({
 		};
 	let component = null;
 
-	console.log('createTextComponent:field', field);
-
 	component = !!view ? (
 		!!field.protected ? (
 			protectedFieldValue
@@ -574,7 +567,13 @@ const createBooleanComponent = ({
 }) => {
 	const classes = textFieldStyles(),
 		usableLabel = i18n(label),
-		propValue = values[property];
+		propValue = values[property],
+		onChange = useCallback(
+			(e) => {
+				handleChange(property, e.target.checked);
+			},
+			[property]
+		);
 
 	return !!view ? (
 		i18n(
@@ -588,16 +587,18 @@ const createBooleanComponent = ({
 			label={usableLabel}
 			labelPlacement="start"
 			style={!!field.style.field ? field.style.field : {}}
+			onChange={onChange}
 			control={
 				<Checkbox
 					value={property}
 					color="primary"
 					checked={values[property]}
-					onChange={(e) => handleChange(property, e.target.checked)}
+					onChange={onChange}
 					inputProps={{ 'aria-label': usableLabel }}
 					disabled={!!field.disabled || !!view}
 				/>
 			}
+			{...field.props}
 		/>
 	);
 };
@@ -642,7 +643,7 @@ const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible =
 };
 
 const TextStyleByType = ({ text, i18n }) => {
-	console.log('TextStyleByType(text)', text);
+	if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
 
 	if (validateEmail(text)) return <EmailInfo text={text} i18n={i18n} />;
 	if (validateWebsite(text)) return <WebSiteInfo text={text} i18n={i18n} />;
