@@ -910,7 +910,14 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
   var currentDialogValue = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
   var singleItem = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : true;
   var useOwnTitle = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : true;
-  var config = model.$fieldConfig[property]; //Validating prior to using
+  var config = model.$fieldConfig[property];
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log('createIdOfComponent:property', property);
+    console.log('createIdOfComponent:model', model);
+    console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
+  } //Validating prior to using
+
 
   if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties) return React.createElement("div", null, "NEED_TO_CONFIGURE_FIELD:", property, " | FieldType:IdOf", "<".concat(Type.name, ">"));
 

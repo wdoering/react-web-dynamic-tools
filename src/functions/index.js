@@ -232,6 +232,12 @@ const createIdOfComponent = (
 ) => {
 	const config = model.$fieldConfig[property];
 
+	if (process.env.NODE_ENV === 'development') {
+		console.log('createIdOfComponent:property', property);
+		console.log('createIdOfComponent:model', model);
+		console.log('createIdOfComponent:model.$fieldConfig', model.$fieldConfig);
+	}
+
 	//Validating prior to using
 	if (!config.searchField || !config.searchListItemProperties || !config.listItemProperties)
 		return (
