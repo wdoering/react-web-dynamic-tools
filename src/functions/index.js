@@ -25,6 +25,9 @@ import { EmailInfo, WebSiteInfo } from '../components/view/text';
 import { FormInput } from '../components/form';
 import { validateEmail, validateWebsite } from '../util/validations';
 
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
 
@@ -445,7 +448,7 @@ const createByType = ({
 	let component = null;
 
 	switch (field.type) {
-		case FieldTypes.Boolean:
+		case FieldTypes.Boolean: {
 			component = createBooleanComponent({
 				property,
 				values,
@@ -456,7 +459,19 @@ const createByType = ({
 				view
 			});
 			break;
-
+		}
+		case FieldTypes.Datetime: {
+			component = createDatePickerComponent({
+				property,
+				values,
+				label,
+				i18n,
+				field,
+				handleChange,
+				view
+			});
+			break;
+		}
 		default:
 			component = createTextComponent({
 				property,
@@ -472,6 +487,52 @@ const createByType = ({
 	}
 
 	return component;
+};
+
+const createDatePickerComponent = ({
+	property,
+	values,
+	field,
+	label,
+	i18n,
+	error,
+	handleChange,
+	view = false
+}) => {
+	const classes = textFieldStyles(),
+		[selectedDate, setSelectedDate] = useState(
+			!!values && values.hasOwnProperty(property) ? values[property] : new Date()
+		),
+		handleChg = async (date) => {
+			setSelectedDate(date);
+			return handleChange(property, date);
+		};
+	let component = null;
+
+	//TODO: implement view differences
+
+	return (
+		<MuiPickersUtilsProvider utils={DateFnsUtils}>
+			<Tooltip arrow label={i18n(`form.datepicker.${property}`)}>
+				<KeyboardDatePicker
+					disabled={view}
+					disableToolbar
+					variant="inline"
+					format="MM/dd/yyyy"
+					margin="normal"
+					id={`date-picker-${property}`}
+					label={label}
+					value={selectedDate}
+					onChange={handleChg}
+					KeyboardButtonProps={{
+						'aria-label': label
+					}}
+					className={classes.spacer}
+					{...field.props}
+				/>
+			</Tooltip>
+		</MuiPickersUtilsProvider>
+	);
 };
 
 const createTextComponent = ({
