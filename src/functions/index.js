@@ -500,11 +500,11 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		[selectedDate, setSelectedDate] = useState(values[property] || '');
-	handleChg = (date) => {
-		// selectedDate
-		handleChange(property, date);
-	};
+		[selectedDate, setSelectedDate] = useState(values[property] || ''),
+		handleChg = (date) => {
+			// selectedDate
+			handleChange(property, date);
+		};
 
 	useEffect(() => {
 		let value;

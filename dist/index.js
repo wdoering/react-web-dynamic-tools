@@ -1165,9 +1165,8 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       _useState7 = useState(values[property] || ''),
       _useState8 = _slicedToArray(_useState7, 2),
       selectedDate = _useState8[0],
-      setSelectedDate = _useState8[1];
-
-  handleChg = function handleChg(date) {
+      setSelectedDate = _useState8[1],
+      handleChg = function handleChg(date) {
     // selectedDate
     handleChange(property, date);
   };
