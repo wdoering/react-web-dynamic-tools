@@ -543,8 +543,12 @@ const createDatePickerComponent = ({
 			debugger;
 		}
 
-		if (typeof value === 'object' && typeof value.toDate === 'function') {
-			value = value.toDate();
+		if (typeof value === 'object') {
+			if (typeof value.toDate === 'function') {
+				value = value.toDate();
+			} else {
+				value = new Date(value._seconds * 1000);
+			}
 		} else if (typeof value === 'string' && value !== '') {
 			value = new Date(Date.parse(value));
 		}

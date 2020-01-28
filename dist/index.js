@@ -1221,8 +1221,12 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       debugger;
     }
 
-    if (_typeof(value) === 'object' && typeof value.toDate === 'function') {
-      value = value.toDate();
+    if (_typeof(value) === 'object') {
+      if (typeof value.toDate === 'function') {
+        value = value.toDate();
+      } else {
+        value = new Date(value._seconds * 1000);
+      }
     } else if (typeof value === 'string' && value !== '') {
       value = new Date(Date.parse(value));
     }
