@@ -1193,7 +1193,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }(); //TODO: implement view differences
 
 
-  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleDateString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleDateString() : typeof selectedDate.toLocaleDateString === 'function' ? selectedDate.toLocaleDateString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
