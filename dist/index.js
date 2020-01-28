@@ -1177,7 +1177,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              newDate = Date.parse(date);
+              newDate = new Date(Date.parse(date));
 
               if (process.env.NODE_ENV === 'development') {
                 console.log('createDatePickerComponent:handleChg:date', date);
@@ -1226,7 +1226,8 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       value = Date.parse(value);
     }
 
-    handleChange(property, value);
+    if (typeof handleChange === 'function') handleChange(property, value);
+    setSelectedDate(value);
   }, [values, property]);
   return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils

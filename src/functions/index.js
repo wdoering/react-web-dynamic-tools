@@ -502,7 +502,7 @@ const createDatePickerComponent = ({
 	const classes = textFieldStyles(),
 		[selectedDate, setSelectedDate] = useState(''),
 		handleChg = async (date) => {
-			let newDate = Date.parse(date);
+			let newDate = new Date(Date.parse(date));
 
 			if (process.env.NODE_ENV === 'development') {
 				console.log('createDatePickerComponent:handleChg:date', date);
@@ -542,7 +542,9 @@ const createDatePickerComponent = ({
 			value = Date.parse(value);
 		}
 
-		handleChange(property, value);
+		if (typeof handleChange === 'function') handleChange(property, value);
+
+		setSelectedDate(value);
 	}, [values, property]);
 
 	return !!view ? (
