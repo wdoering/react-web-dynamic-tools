@@ -1,4 +1,4 @@
-// import 'date-fns';
+import 'date-fns';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
 	FormControlLabel,
