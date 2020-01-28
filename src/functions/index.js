@@ -1,4 +1,4 @@
-import 'date-fns';
+import { format } from 'date-fns';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
 	FormControlLabel,
@@ -511,7 +511,13 @@ const createDatePickerComponent = ({
 
 	//TODO: implement view differences
 
-	return (
+	return !!view ? (
+		selectedDate !== '' ? (
+			format(selectedDate)
+		) : (
+			blankFieldPlaceholder
+		)
+	) : (
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
 			<Tooltip arrow title={i18n(`form.datepicker.${property}`)}>
 				<React.Fragment>
