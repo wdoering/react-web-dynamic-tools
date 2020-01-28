@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
 	FormControlLabel,
 	Typography,
@@ -500,19 +500,37 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		[selectedDate, setSelectedDate] = useState(
-			!!values && values.hasOwnProperty(property) && values[property] !== ''
-				? values[property]
-				: ''
-		),
+		[selectedDate, setSelectedDate] = useState(''),
 		handleChg = async (date) => {
+			if (process.env.NODE_ENV === 'development')
+				console.log('createDatePickerComponent:handleChg:date', date);
 			let newDate = new Date(date);
 			setSelectedDate(date);
 			return handleChange(property, date);
 		},
-		parsedDate = (date) => typeof date.toDate === 'function' && date.toDate();
+		parsedDate = (date) => (typeof date.toDate === 'function' ? date.toDate() : date);
 
-	//TODO: implement view differences
+	useEffect(() => {
+		if (process.env.NODE_ENV === 'development') {
+			console.log('createDatePickerComponent:values[property]', values[property]);
+		}
+
+		if (!!view) {
+			if (values.hasOwnProperty(property)) {
+				setSelectedDate(
+					!!values && values.hasOwnProperty(property) ? values[property] : ''
+				);
+			}
+		} else {
+			setSelectedDate(
+				values[property] !== ''
+					? values[property]
+					: !!field.defaultValue
+					? field.defaultValue
+					: ''
+			);
+		}
+	}, [property]);
 
 	return !!view ? (
 		selectedDate !== '' ? (

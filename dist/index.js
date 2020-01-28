@@ -1162,7 +1162,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      _useState7 = useState(!!values && values.hasOwnProperty(property) && values[property] !== '' ? values[property] : ''),
+      _useState7 = useState(''),
       _useState8 = _slicedToArray(_useState7, 2),
       selectedDate = _useState8[0],
       setSelectedDate = _useState8[1],
@@ -1176,10 +1176,11 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (process.env.NODE_ENV === 'development') console.log('createDatePickerComponent:handleChg:date', date);
               setSelectedDate(date);
               return _context.abrupt("return", handleChange(property, date));
 
-            case 3:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -1192,10 +1193,22 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     };
   }(),
       parsedDate = function parsedDate(date) {
-    return typeof date.toDate === 'function' && date.toDate();
-  }; //TODO: implement view differences
+    return typeof date.toDate === 'function' ? date.toDate() : date;
+  };
 
+  useEffect(function () {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('createDatePickerComponent:values[property]', values[property]);
+    }
 
+    if (!!view) {
+      if (values.hasOwnProperty(property)) {
+        setSelectedDate(!!values && values.hasOwnProperty(property) ? values[property] : '');
+      }
+    } else {
+      setSelectedDate(values[property] !== '' ? values[property] : !!field.defaultValue ? field.defaultValue : '');
+    }
+  }, [property]);
   return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
