@@ -1206,7 +1206,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     format: "MM/dd/yyyy HH:mm",
     margin: "normal",
     id: "date-picker-".concat(property),
-    label: label,
+    label: i18n(label),
     value: selectedDate,
     onChange: handleChg,
     KeyboardButtonProps: {
