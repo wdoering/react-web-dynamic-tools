@@ -1197,10 +1197,11 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
-    label: i18n("form.datepicker.".concat(property))
-  }, React.createElement(KeyboardDatePicker, _extends({
+    title: i18n("form.datepicker.".concat(property))
+  }, React.createElement(React.Fragment, null, React.createElement(KeyboardDatePicker, _extends({
     disabled: view,
     disableToolbar: true,
+    inputVariant: "outlined",
     variant: "inline",
     format: "MM/dd/yyyy HH:mm",
     margin: "normal",
@@ -1214,7 +1215,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     error: !!error && !view,
     helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
     className: classes.spacer
-  }, field.props))));
+  }, field.props)))));
 };
 
 var createTextComponent = function createTextComponent(_ref8) {

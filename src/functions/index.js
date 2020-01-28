@@ -513,25 +513,28 @@ const createDatePickerComponent = ({
 
 	return (
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
-			<Tooltip arrow label={i18n(`form.datepicker.${property}`)}>
-				<KeyboardDatePicker
-					disabled={view}
-					disableToolbar
-					variant="inline"
-					format="MM/dd/yyyy HH:mm"
-					margin="normal"
-					id={`date-picker-${property}`}
-					label={label}
-					value={selectedDate}
-					onChange={handleChg}
-					KeyboardButtonProps={{
-						'aria-label': label
-					}}
-					error={!!error && !view}
-					helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
-					className={classes.spacer}
-					{...field.props}
-				/>
+			<Tooltip arrow title={i18n(`form.datepicker.${property}`)}>
+				<React.Fragment>
+					<KeyboardDatePicker
+						disabled={view}
+						disableToolbar
+						inputVariant="outlined"
+						variant="inline"
+						format="MM/dd/yyyy HH:mm"
+						margin="normal"
+						id={`date-picker-${property}`}
+						label={label}
+						value={selectedDate}
+						onChange={handleChg}
+						KeyboardButtonProps={{
+							'aria-label': label
+						}}
+						error={!!error && !view}
+						helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
+						className={classes.spacer}
+						{...field.props}
+					/>
+				</React.Fragment>
 			</Tooltip>
 		</MuiPickersUtilsProvider>
 	);
