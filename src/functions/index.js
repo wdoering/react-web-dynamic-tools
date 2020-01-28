@@ -509,8 +509,9 @@ const createDatePickerComponent = ({
 				console.log('createDatePickerComponent:handleChg:newDate', newDate);
 			}
 
-			setSelectedDate(newDate);
 			return handleChange(property, newDate);
+
+			// return setSelectedDate(newDate);
 		},
 		parsedDate = (date) => (typeof date.toDate === 'function' ? date.toDate() : date);
 
@@ -541,7 +542,7 @@ const createDatePickerComponent = ({
 			value = Date.parse(value);
 		}
 
-		setSelectedDate(value);
+		handleChange(property, value);
 	}, [values, property]);
 
 	return !!view ? (
@@ -569,7 +570,8 @@ const createDatePickerComponent = ({
 						margin="normal"
 						id={`date-picker-${property}`}
 						label={i18n(label)}
-						value={parsedDate(selectedDate)}
+						// value={selectedDate}
+						value={values[property]}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label
