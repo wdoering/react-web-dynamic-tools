@@ -544,17 +544,19 @@ const createDatePickerComponent = ({
 
 		if (typeof handleChange === 'function') handleChange(property, value);
 
-		setSelectedDate(value);
+		// setSelectedDate(value);
 	}, [values, property]);
 
+	let value = values[property];
+
 	return !!view ? (
-		selectedDate !== '' ? (
-			typeof selectedDate.toDate === 'function' ? (
-				selectedDate.toDate().toLocaleString()
-			) : typeof selectedDate.toLocaleString === 'function' ? (
-				selectedDate.toLocaleString()
+		value !== '' ? (
+			typeof value.toDate === 'function' ? (
+				value.toDate().toLocaleString()
+			) : typeof value.toLocaleString === 'function' ? (
+				value.toLocaleString()
 			) : (
-				selectedDate
+				value
 			)
 		) : (
 			blankFieldPlaceholder
@@ -573,7 +575,7 @@ const createDatePickerComponent = ({
 						id={`date-picker-${property}`}
 						label={i18n(label)}
 						// value={selectedDate}
-						value={values[property]}
+						value={value}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label

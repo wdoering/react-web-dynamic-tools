@@ -1226,10 +1226,10 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       value = Date.parse(value);
     }
 
-    if (typeof handleChange === 'function') handleChange(property, value);
-    setSelectedDate(value);
+    if (typeof handleChange === 'function') handleChange(property, value); // setSelectedDate(value);
   }, [values, property]);
-  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  var value = values[property];
+  return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
@@ -1244,7 +1244,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     id: "date-picker-".concat(property),
     label: i18n(label) // value={selectedDate}
     ,
-    value: values[property],
+    value: value,
     onChange: handleChg,
     KeyboardButtonProps: {
       'aria-label': label
