@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
-import 'date-fns';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
@@ -15,8 +14,7 @@ import EmailRounded from '@material-ui/icons/EmailRounded';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import classNames from 'classnames';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import EditRounded from '@material-ui/icons/EditRounded';
@@ -1193,27 +1191,29 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }(); //TODO: implement view differences
 
 
-  return React.createElement(MuiPickersUtilsProvider, {
-    utils: DateFnsUtils
-  }, React.createElement(Tooltip, {
-    arrow: true,
-    label: i18n("form.datepicker.".concat(property))
-  }, React.createElement(KeyboardDatePicker, _extends({
-    disabled: view,
-    disableToolbar: true,
-    variant: "inline",
-    format: "MM/dd/yyyy",
-    margin: "normal",
-    id: "date-picker-".concat(property),
-    label: label,
-    value: selectedDate,
-    onChange: handleChg,
-    KeyboardButtonProps: {
-      'aria-label': label
-    },
-    helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
-    className: classes.spacer
-  }, field.props))));
+  return (// <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    React.createElement(Tooltip, {
+      arrow: true,
+      label: i18n("form.datepicker.".concat(property))
+    }, React.createElement(KeyboardDatePicker, _extends({
+      disabled: view,
+      disableToolbar: true,
+      variant: "inline",
+      format: "MM/dd/yyyy HH:mm",
+      margin: "normal",
+      id: "date-picker-".concat(property),
+      label: label,
+      value: selectedDate,
+      onChange: handleChg,
+      KeyboardButtonProps: {
+        'aria-label': label
+      },
+      error: !!error && !view,
+      helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
+      className: classes.spacer
+    }, field.props))) // </MuiPickersUtilsProvider>
+
+  );
 };
 
 var createTextComponent = function createTextComponent(_ref8) {
