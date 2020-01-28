@@ -500,7 +500,11 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		handleChg = (date) => handleChange(property, date);
+		[selectedDate, setSelectedDate] = useState(values[property] || '');
+	handleChg = (date) => {
+		// selectedDate
+		handleChange(property, date);
+	};
 
 	useEffect(() => {
 		let value;
@@ -526,9 +530,9 @@ const createDatePickerComponent = ({
 			}
 		}
 
-		if (process.env.NODE_ENV === 'development') {
-			debugger;
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		// 	debugger;
+		// }
 
 		if (typeof value === 'object' && !(value instanceof Date)) {
 			if (typeof value.toDate === 'function') {
@@ -544,21 +548,23 @@ const createDatePickerComponent = ({
 			console.log('==> OUT createDatePickerComponent:useEffect:value', value);
 		}
 
-		if (typeof handleChange === 'function') handleChange(property, value);
+		setSelectedDate(value);
+
+		//if (typeof handleChange === 'function') handleChange(property, value);
 
 		// setSelectedDate(value);
 	}, [property]);
 
-	let value = values[property];
+	// let value = values[property];
 
 	return !!view ? (
-		value !== '' ? (
-			typeof value.toDate === 'function' ? (
-				value.toDate().toLocaleString()
-			) : typeof value.toLocaleString === 'function' ? (
-				value.toLocaleString()
+		selectedDate !== '' ? (
+			typeof selectedDate.toDate === 'function' ? (
+				selectedDate.toDate().toLocaleString()
+			) : typeof selectedDate.toLocaleString === 'function' ? (
+				selectedDate.toLocaleString()
 			) : (
-				value
+				selectedDate
 			)
 		) : (
 			blankFieldPlaceholder
@@ -577,7 +583,7 @@ const createDatePickerComponent = ({
 						id={`date-picker-${property}`}
 						label={i18n(label)}
 						// value={selectedDate}
-						value={value}
+						value={selectedDate}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label

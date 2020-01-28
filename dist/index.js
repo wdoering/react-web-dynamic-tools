@@ -1162,8 +1162,14 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      handleChg = function handleChg(date) {
-    return handleChange(property, date);
+      _useState7 = useState(values[property] || ''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      selectedDate = _useState8[0],
+      setSelectedDate = _useState8[1];
+
+  handleChg = function handleChg(date) {
+    // selectedDate
+    handleChange(property, date);
   };
 
   useEffect(function () {
@@ -1185,11 +1191,10 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       } else {
         value = !!field.defaultValue ? field.defaultValue : '';
       }
-    }
+    } // if (process.env.NODE_ENV === 'development') {
+    // 	debugger;
+    // }
 
-    if (process.env.NODE_ENV === 'development') {
-      debugger;
-    }
 
     if (_typeof(value) === 'object' && !(value instanceof Date)) {
       if (typeof value.toDate === 'function') {
@@ -1205,10 +1210,11 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       console.log('==> OUT createDatePickerComponent:useEffect:value', value);
     }
 
-    if (typeof handleChange === 'function') handleChange(property, value); // setSelectedDate(value);
-  }, [property]);
-  var value = values[property];
-  return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+    setSelectedDate(value); //if (typeof handleChange === 'function') handleChange(property, value);
+    // setSelectedDate(value);
+  }, [property]); // let value = values[property];
+
+  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
@@ -1223,7 +1229,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     id: "date-picker-".concat(property),
     label: i18n(label) // value={selectedDate}
     ,
-    value: value,
+    value: selectedDate,
     onChange: handleChg,
     KeyboardButtonProps: {
       'aria-label': label
@@ -1246,10 +1252,10 @@ var createTextComponent = function createTextComponent(_ref7) {
       view = _ref7$view === void 0 ? false : _ref7$view;
 
   var classes = textFieldStyles(),
-      _useState7 = useState(false),
-      _useState8 = _slicedToArray(_useState7, 2),
-      inputVisible = _useState8[0],
-      setInputVisible = _useState8[1],
+      _useState9 = useState(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      inputVisible = _useState10[0],
+      setInputVisible = _useState10[1],
       handleVisibilityClick = function handleVisibilityClick(e) {
     //Toggling visibility
     return setInputVisible(!inputVisible);
