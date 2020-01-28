@@ -543,7 +543,7 @@ const createDatePickerComponent = ({
 			debugger;
 		}
 
-		if (typeof value === 'object') {
+		if (typeof value === 'object' && !(value instanceof Date)) {
 			if (typeof value.toDate === 'function') {
 				value = value.toDate();
 			} else {

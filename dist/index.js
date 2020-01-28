@@ -1221,7 +1221,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       debugger;
     }
 
-    if (_typeof(value) === 'object') {
+    if (_typeof(value) === 'object' && !(value instanceof Date)) {
       if (typeof value.toDate === 'function') {
         value = value.toDate();
       } else {
