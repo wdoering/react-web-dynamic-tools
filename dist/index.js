@@ -1193,7 +1193,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }(); //TODO: implement view differences
 
 
-  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleDateString() : typeof selectedDate.toLocaleDateString === 'function' ? selectedDate.toLocaleDateString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
@@ -1203,7 +1203,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     disableToolbar: true,
     inputVariant: "outlined",
     variant: "inline",
-    format: "MM/dd/yyyy HH:mm",
+    format: "dd/MM/yyyy HH:mm",
     margin: "normal",
     id: "date-picker-".concat(property),
     label: i18n(label),

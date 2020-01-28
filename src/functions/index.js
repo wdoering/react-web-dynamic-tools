@@ -513,9 +513,9 @@ const createDatePickerComponent = ({
 	return !!view ? (
 		selectedDate !== '' ? (
 			typeof selectedDate.toDate === 'function' ? (
-				selectedDate.toDate().toLocaleDateString()
-			) : typeof selectedDate.toLocaleDateString === 'function' ? (
-				selectedDate.toLocaleDateString()
+				selectedDate.toDate().toLocaleString()
+			) : typeof selectedDate.toLocaleString === 'function' ? (
+				selectedDate.toLocaleString()
 			) : (
 				selectedDate
 			)
@@ -531,7 +531,7 @@ const createDatePickerComponent = ({
 						disableToolbar
 						inputVariant="outlined"
 						variant="inline"
-						format="MM/dd/yyyy HH:mm"
+						format="dd/MM/yyyy HH:mm"
 						margin="normal"
 						id={`date-picker-${property}`}
 						label={i18n(label)}
