@@ -1162,7 +1162,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      _useState7 = useState(!!values && values.hasOwnProperty(property) ? values[property] : new Date()),
+      _useState7 = useState(!!values && values.hasOwnProperty(property) && values[property] !== '' ? values[property] : !!view ? '' : new Date()),
       _useState8 = _slicedToArray(_useState7, 2),
       selectedDate = _useState8[0],
       setSelectedDate = _useState8[1],

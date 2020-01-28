@@ -501,7 +501,11 @@ const createDatePickerComponent = ({
 }) => {
 	const classes = textFieldStyles(),
 		[selectedDate, setSelectedDate] = useState(
-			!!values && values.hasOwnProperty(property) ? values[property] : new Date()
+			!!values && values.hasOwnProperty(property) && values[property] !== ''
+				? values[property]
+				: !!view
+				? ''
+				: new Date()
 		),
 		handleChg = async (date) => {
 			setSelectedDate(date);
