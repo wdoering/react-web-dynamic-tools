@@ -503,7 +503,11 @@ const createDatePickerComponent = ({
 		// [selectedDate, setSelectedDate] = useState(values[property] || ''),
 		handleChg = (date) => {
 			// selectedDate
-			return handleChange(property, date);
+			handleChange(property, date);
+
+			//Field has specific onChange function, runs after manipulation
+			if (!!field.onChange && typeof field.onChange === 'function')
+				field.onChange(null, values, property, date, handleChange);
 		};
 
 	// useEffect(() => {
@@ -534,7 +538,7 @@ const createDatePickerComponent = ({
 		if (typeof value.toDate === 'function') {
 			value = value.toDate();
 		} else {
-			value = new Date(value._seconds * 1000);
+			value = new Date((!!value._seconds ? value._seconds : value.seconds) * 1000);
 		}
 	} else if (typeof value === 'string' && value !== '') {
 		value = new Date(Date.parse(value));
@@ -579,7 +583,7 @@ const createDatePickerComponent = ({
 						id={`date-picker-${property}`}
 						label={i18n(label)}
 						// value={selectedDate}
-						value={value}
+						value={values[property]}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label
