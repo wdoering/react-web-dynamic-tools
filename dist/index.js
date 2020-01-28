@@ -1162,7 +1162,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      _useState7 = useState(!!values && values.hasOwnProperty(property) && values[property] !== '' ? values[property] : !!view ? '' : new Date()),
+      _useState7 = useState(!!values && values.hasOwnProperty(property) && values[property] !== '' ? values[property] : ''),
       _useState8 = _slicedToArray(_useState7, 2),
       selectedDate = _useState8[0],
       setSelectedDate = _useState8[1],
@@ -1172,14 +1172,12 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     var _ref7 = _asyncToGenerator(
     /*#__PURE__*/
     _regeneratorRuntime.mark(function _callee(date) {
-      var newDate;
       return _regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              newDate = new Date(date);
-              setSelectedDate(newDate);
-              return _context.abrupt("return", handleChange(property, newDate));
+              setSelectedDate(date);
+              return _context.abrupt("return", handleChange(property, date));
 
             case 3:
             case "end":

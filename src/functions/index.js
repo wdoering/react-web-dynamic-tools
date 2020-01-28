@@ -503,14 +503,12 @@ const createDatePickerComponent = ({
 		[selectedDate, setSelectedDate] = useState(
 			!!values && values.hasOwnProperty(property) && values[property] !== ''
 				? values[property]
-				: !!view
-				? ''
-				: new Date()
+				: ''
 		),
 		handleChg = async (date) => {
 			let newDate = new Date(date);
-			setSelectedDate(newDate);
-			return handleChange(property, newDate);
+			setSelectedDate(date);
+			return handleChange(property, date);
 		},
 		parsedDate = (date) => typeof date.toDate === 'function' && date.toDate();
 
