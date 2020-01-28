@@ -500,71 +500,67 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		[selectedDate, setSelectedDate] = useState(values[property] || ''),
+		// [selectedDate, setSelectedDate] = useState(values[property] || ''),
 		handleChg = (date) => {
 			// selectedDate
-			handleChange(property, date);
+			return handleChange(property, date);
 		};
 
-	useEffect(() => {
-		let value;
+	// useEffect(() => {
+	let value;
 
-		if (process.env.NODE_ENV === 'development') {
-			console.log(
-				'==> IN createDatePickerComponent:useEffect:values[property]',
-				values[property]
-			);
-		}
+	if (process.env.NODE_ENV === 'development') {
+		console.log(
+			'==> IN createDatePickerComponent:useEffect:values[property]',
+			values[property]
+		);
+	}
 
-		if (!!view) {
-			if (values.hasOwnProperty(property)) {
-				value = values[property];
-			} else {
-				value = '';
-			}
+	if (!!view) {
+		if (values.hasOwnProperty(property)) {
+			value = values[property];
 		} else {
-			if (values.hasOwnProperty(property) && values[property] !== '') {
-				value = values[property];
-			} else {
-				value = !!field.defaultValue ? field.defaultValue : '';
-			}
+			value = '';
 		}
-
-		// if (process.env.NODE_ENV === 'development') {
-		// 	debugger;
-		// }
-
-		if (typeof value === 'object' && !(value instanceof Date)) {
-			if (typeof value.toDate === 'function') {
-				value = value.toDate();
-			} else {
-				value = new Date(value._seconds * 1000);
-			}
-		} else if (typeof value === 'string' && value !== '') {
-			value = new Date(Date.parse(value));
+	} else {
+		if (values.hasOwnProperty(property) && values[property] !== '') {
+			value = values[property];
+		} else {
+			value = !!field.defaultValue ? field.defaultValue : '';
 		}
+	}
 
-		if (process.env.NODE_ENV === 'development') {
-			console.log('==> OUT createDatePickerComponent:useEffect:value', value);
+	if (typeof value === 'object' && !(value instanceof Date)) {
+		if (typeof value.toDate === 'function') {
+			value = value.toDate();
+		} else {
+			value = new Date(value._seconds * 1000);
 		}
+	} else if (typeof value === 'string' && value !== '') {
+		value = new Date(Date.parse(value));
+	}
 
-		setSelectedDate(value);
+	if (process.env.NODE_ENV === 'development') {
+		console.log('==> OUT createDatePickerComponent:useEffect:value', value);
+	}
 
-		//if (typeof handleChange === 'function') handleChange(property, value);
+	// 	setSelectedDate(value);
 
-		// setSelectedDate(value);
-	}, [property]);
+	// 	//if (typeof handleChange === 'function') handleChange(property, value);
+
+	// 	// setSelectedDate(value);
+	// }, [property]);
 
 	// let value = values[property];
 
 	return !!view ? (
-		selectedDate !== '' ? (
-			typeof selectedDate.toDate === 'function' ? (
-				selectedDate.toDate().toLocaleString()
+		value !== '' ? (
+			typeof value.toDate === 'function' ? (
+				value.toDate().toLocaleString()
 			) : typeof selectedDate.toLocaleString === 'function' ? (
-				selectedDate.toLocaleString()
+				value.toLocaleString()
 			) : (
-				selectedDate
+				value
 			)
 		) : (
 			blankFieldPlaceholder
@@ -583,7 +579,7 @@ const createDatePickerComponent = ({
 						id={`date-picker-${property}`}
 						label={i18n(label)}
 						// value={selectedDate}
-						value={selectedDate}
+						value={value}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label
