@@ -1200,7 +1200,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     var value;
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('createDatePickerComponent:values[property]', values[property]);
+      console.log('==> IN createDatePickerComponent:useEffect:values[property]', values[property]);
     }
 
     if (!!view) {
@@ -1221,6 +1221,10 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       value = value.toDate();
     } else if (typeof value === 'string' && value !== '') {
       value = new Date(Date.parse(value));
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('==> OUT createDatePickerComponent:useEffect:value', value);
     }
 
     if (typeof handleChange === 'function') handleChange(property, value); // setSelectedDate(value);
