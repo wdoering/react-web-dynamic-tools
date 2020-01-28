@@ -500,7 +500,7 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		[selectedDate, setSelectedDate] = useState(''),
+		//[selectedDate, setSelectedDate] = useState(''),
 		handleChg = async (date) => {
 			let newDate = new Date(Date.parse(date));
 
@@ -539,13 +539,13 @@ const createDatePickerComponent = ({
 		if (typeof value === 'object' && typeof value.toDate === 'function') {
 			value = value.toDate();
 		} else if (typeof value === 'string' && value !== '') {
-			value = Date.parse(value);
+			value = new Date(Date.parse(value));
 		}
 
 		if (typeof handleChange === 'function') handleChange(property, value);
 
 		// setSelectedDate(value);
-	}, [values, property]);
+	}, [property]);
 
 	let value = values[property];
 

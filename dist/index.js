@@ -1162,11 +1162,8 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      _useState7 = useState(''),
-      _useState8 = _slicedToArray(_useState7, 2),
-      selectedDate = _useState8[0],
-      setSelectedDate = _useState8[1],
-      handleChg =
+      //[selectedDate, setSelectedDate] = useState(''),
+  handleChg =
   /*#__PURE__*/
   function () {
     var _ref7 = _asyncToGenerator(
@@ -1223,11 +1220,11 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     if (_typeof(value) === 'object' && typeof value.toDate === 'function') {
       value = value.toDate();
     } else if (typeof value === 'string' && value !== '') {
-      value = Date.parse(value);
+      value = new Date(Date.parse(value));
     }
 
     if (typeof handleChange === 'function') handleChange(property, value); // setSelectedDate(value);
-  }, [values, property]);
+  }, [property]);
   var value = values[property];
   return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
@@ -1267,10 +1264,10 @@ var createTextComponent = function createTextComponent(_ref8) {
       view = _ref8$view === void 0 ? false : _ref8$view;
 
   var classes = textFieldStyles(),
-      _useState9 = useState(false),
-      _useState10 = _slicedToArray(_useState9, 2),
-      inputVisible = _useState10[0],
-      setInputVisible = _useState10[1],
+      _useState7 = useState(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      inputVisible = _useState8[0],
+      setInputVisible = _useState8[1],
       handleVisibilityClick = function handleVisibilityClick(e) {
     //Toggling visibility
     return setInputVisible(!inputVisible);
