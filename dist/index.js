@@ -14,7 +14,8 @@ import EmailRounded from '@material-ui/icons/EmailRounded';
 import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import classNames from 'classnames';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import EditRounded from '@material-ui/icons/EditRounded';
@@ -1191,29 +1192,28 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }(); //TODO: implement view differences
 
 
-  return (// <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    React.createElement(Tooltip, {
-      arrow: true,
-      label: i18n("form.datepicker.".concat(property))
-    }, React.createElement(KeyboardDatePicker, _extends({
-      disabled: view,
-      disableToolbar: true,
-      variant: "inline",
-      format: "MM/dd/yyyy HH:mm",
-      margin: "normal",
-      id: "date-picker-".concat(property),
-      label: label,
-      value: selectedDate,
-      onChange: handleChg,
-      KeyboardButtonProps: {
-        'aria-label': label
-      },
-      error: !!error && !view,
-      helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
-      className: classes.spacer
-    }, field.props))) // </MuiPickersUtilsProvider>
-
-  );
+  return React.createElement(MuiPickersUtilsProvider, {
+    utils: DateFnsUtils
+  }, React.createElement(Tooltip, {
+    arrow: true,
+    label: i18n("form.datepicker.".concat(property))
+  }, React.createElement(KeyboardDatePicker, _extends({
+    disabled: view,
+    disableToolbar: true,
+    variant: "inline",
+    format: "MM/dd/yyyy HH:mm",
+    margin: "normal",
+    id: "date-picker-".concat(property),
+    label: label,
+    value: selectedDate,
+    onChange: handleChg,
+    KeyboardButtonProps: {
+      'aria-label': label
+    },
+    error: !!error && !view,
+    helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
+    className: classes.spacer
+  }, field.props))));
 };
 
 var createTextComponent = function createTextComponent(_ref8) {

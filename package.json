@@ -1,6 +1,6 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.3.62",
+	"version": "0.3.63",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [
@@ -35,7 +35,7 @@
 	"homepage": "https://github.com/zerobytes/react-web-dynamic-tools#readme",
 	"dependencies": {
 		"@date-io/core": "^2.0.0",
-		"@date-io/date-fns": "^2.0.1",
+		"@date-io/date-fns": "^1.3.13",
 		"@material-ui/core": "^4.9.0",
 		"@material-ui/icons": "^4.5.1",
 		"@material-ui/pickers": "^3.2.10",

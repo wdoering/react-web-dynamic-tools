@@ -26,8 +26,8 @@ import { EmailInfo, WebSiteInfo } from '../components/view/text';
 import { FormInput } from '../components/form';
 import { validateEmail, validateWebsite } from '../util/validations';
 
-// import DateFnsUtils from '@date-io/date-fns';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -512,28 +512,28 @@ const createDatePickerComponent = ({
 	//TODO: implement view differences
 
 	return (
-		// <MuiPickersUtilsProvider utils={DateFnsUtils}>
-		<Tooltip arrow label={i18n(`form.datepicker.${property}`)}>
-			<KeyboardDatePicker
-				disabled={view}
-				disableToolbar
-				variant="inline"
-				format="MM/dd/yyyy HH:mm"
-				margin="normal"
-				id={`date-picker-${property}`}
-				label={label}
-				value={selectedDate}
-				onChange={handleChg}
-				KeyboardButtonProps={{
-					'aria-label': label
-				}}
-				error={!!error && !view}
-				helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
-				className={classes.spacer}
-				{...field.props}
-			/>
-		</Tooltip>
-		// </MuiPickersUtilsProvider>
+		<MuiPickersUtilsProvider utils={DateFnsUtils}>
+			<Tooltip arrow label={i18n(`form.datepicker.${property}`)}>
+				<KeyboardDatePicker
+					disabled={view}
+					disableToolbar
+					variant="inline"
+					format="MM/dd/yyyy HH:mm"
+					margin="normal"
+					id={`date-picker-${property}`}
+					label={label}
+					value={selectedDate}
+					onChange={handleChg}
+					KeyboardButtonProps={{
+						'aria-label': label
+					}}
+					error={!!error && !view}
+					helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
+					className={classes.spacer}
+					{...field.props}
+				/>
+			</Tooltip>
+		</MuiPickersUtilsProvider>
 	);
 };
 
