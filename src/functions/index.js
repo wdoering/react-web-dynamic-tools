@@ -539,6 +539,10 @@ const createDatePickerComponent = ({
 			}
 		}
 
+		if (process.env.NODE_ENV === 'development') {
+			debugger;
+		}
+
 		if (typeof value === 'object' && typeof value.toDate === 'function') {
 			value = value.toDate();
 		} else if (typeof value === 'string' && value !== '') {
