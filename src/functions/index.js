@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
 	FormControlLabel,
 	Typography,
@@ -508,9 +508,11 @@ const createDatePickerComponent = ({
 				: new Date()
 		),
 		handleChg = async (date) => {
-			setSelectedDate(date);
-			return handleChange(property, date);
-		};
+			let newDate = new Date(date);
+			setSelectedDate(newDate);
+			return handleChange(property, newDate);
+		},
+		parsedDate = (date) => typeof date.toDate === 'function' && date.toDate();
 
 	//TODO: implement view differences
 
@@ -539,7 +541,7 @@ const createDatePickerComponent = ({
 						margin="normal"
 						id={`date-picker-${property}`}
 						label={i18n(label)}
-						value={selectedDate}
+						value={parsedDate(selectedDate)}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label

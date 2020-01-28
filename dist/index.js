@@ -1172,14 +1172,16 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     var _ref7 = _asyncToGenerator(
     /*#__PURE__*/
     _regeneratorRuntime.mark(function _callee(date) {
+      var newDate;
       return _regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setSelectedDate(date);
-              return _context.abrupt("return", handleChange(property, date));
+              newDate = new Date(date);
+              setSelectedDate(newDate);
+              return _context.abrupt("return", handleChange(property, newDate));
 
-            case 2:
+            case 3:
             case "end":
               return _context.stop();
           }
@@ -1190,7 +1192,10 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     return function handleChg(_x) {
       return _ref7.apply(this, arguments);
     };
-  }(); //TODO: implement view differences
+  }(),
+      parsedDate = function parsedDate(date) {
+    return typeof date.toDate === 'function' && date.toDate();
+  }; //TODO: implement view differences
 
 
   return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
@@ -1207,7 +1212,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     margin: "normal",
     id: "date-picker-".concat(property),
     label: i18n(label),
-    value: selectedDate,
+    value: parsedDate(selectedDate),
     onChange: handleChg,
     KeyboardButtonProps: {
       'aria-label': label
