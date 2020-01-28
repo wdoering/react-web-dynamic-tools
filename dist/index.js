@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
-import { format } from 'date-fns';
+import 'date-fns';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
@@ -1193,7 +1193,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }(); //TODO: implement view differences
 
 
-  return !!view ? selectedDate !== '' ? format(selectedDate) : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleDateString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,

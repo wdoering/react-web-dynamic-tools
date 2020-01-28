@@ -1,5 +1,4 @@
 import 'date-fns';
-import { format } from 'date-fns';
 import React, { useState, useCallback } from 'react';
 import {
 	FormControlLabel,
@@ -513,7 +512,11 @@ const createDatePickerComponent = ({
 
 	return !!view ? (
 		selectedDate !== '' ? (
-			format(selectedDate)
+			typeof selectedDate.toDate === 'function' ? (
+				selectedDate.toDate().toLocaleDateString()
+			) : (
+				selectedDate
+			)
 		) : (
 			blankFieldPlaceholder
 		)
