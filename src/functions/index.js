@@ -500,20 +500,7 @@ const createDatePickerComponent = ({
 	view = false
 }) => {
 	const classes = textFieldStyles(),
-		//[selectedDate, setSelectedDate] = useState(''),
-		handleChg = async (date) => {
-			let newDate = new Date(Date.parse(date));
-
-			if (process.env.NODE_ENV === 'development') {
-				console.log('createDatePickerComponent:handleChg:date', date);
-				console.log('createDatePickerComponent:handleChg:newDate', newDate);
-			}
-
-			return handleChange(property, newDate);
-
-			// return setSelectedDate(newDate);
-		},
-		parsedDate = (date) => (typeof date.toDate === 'function' ? date.toDate() : date);
+		handleChg = (date) => handleChange(property, date);
 
 	useEffect(() => {
 		let value;

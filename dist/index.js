@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { makeStyles, Tooltip, IconButton, Typography, TextField, ListItem, ListItemSecondaryAction, FormLabel, InputAdornment, Paper, List, FormControlLabel, Checkbox, useTheme, useMediaQuery, Button, Card, CardContent, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, ExpansionPanelDetails, Dialog as Dialog$1, DialogTitle as DialogTitle$1, DialogContent as DialogContent$1, DialogActions as DialogActions$1, Chip } from '@material-ui/core';
 import AddRounded from '@material-ui/icons/AddRounded';
-import _regeneratorRuntime from '@babel/runtime/regenerator';
 import 'date-fns';
 import { FieldTypes, FieldType, ComplexTypes, ModelBase } from '@zerobytes/object-model-js';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
@@ -28,6 +27,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button$1 from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
 import InfoIcon from '@material-ui/icons/InfoRounded';
 
 var validateName = function validateName(name) {
@@ -1162,39 +1162,9 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       view = _ref6$view === void 0 ? false : _ref6$view;
 
   var classes = textFieldStyles(),
-      //[selectedDate, setSelectedDate] = useState(''),
-  handleChg =
-  /*#__PURE__*/
-  function () {
-    var _ref7 = _asyncToGenerator(
-    /*#__PURE__*/
-    _regeneratorRuntime.mark(function _callee(date) {
-      var newDate;
-      return _regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              newDate = new Date(Date.parse(date));
-
-              if (process.env.NODE_ENV === 'development') {
-                console.log('createDatePickerComponent:handleChg:date', date);
-                console.log('createDatePickerComponent:handleChg:newDate', newDate);
-              }
-
-              return _context.abrupt("return", handleChange(property, newDate));
-
-            case 3:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function handleChg(_x) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+      handleChg = function handleChg(date) {
+    return handleChange(property, date);
+  };
 
   useEffect(function () {
     var value;
@@ -1264,16 +1234,16 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }, field.props)))));
 };
 
-var createTextComponent = function createTextComponent(_ref8) {
-  var property = _ref8.property,
-      values = _ref8.values,
-      field = _ref8.field,
-      label = _ref8.label,
-      i18n = _ref8.i18n,
-      error = _ref8.error,
-      handleChange = _ref8.handleChange,
-      _ref8$view = _ref8.view,
-      view = _ref8$view === void 0 ? false : _ref8$view;
+var createTextComponent = function createTextComponent(_ref7) {
+  var property = _ref7.property,
+      values = _ref7.values,
+      field = _ref7.field,
+      label = _ref7.label,
+      i18n = _ref7.i18n,
+      error = _ref7.error,
+      handleChange = _ref7.handleChange,
+      _ref7$view = _ref7.view,
+      view = _ref7$view === void 0 ? false : _ref7$view;
 
   var classes = textFieldStyles(),
       _useState7 = useState(false),
@@ -1325,15 +1295,15 @@ var createTextComponent = function createTextComponent(_ref8) {
   return component;
 };
 
-var createBooleanComponent = function createBooleanComponent(_ref9) {
-  var property = _ref9.property,
-      values = _ref9.values,
-      label = _ref9.label,
-      i18n = _ref9.i18n,
-      field = _ref9.field,
-      handleChange = _ref9.handleChange,
-      _ref9$view = _ref9.view,
-      view = _ref9$view === void 0 ? false : _ref9$view;
+var createBooleanComponent = function createBooleanComponent(_ref8) {
+  var property = _ref8.property,
+      values = _ref8.values,
+      label = _ref8.label,
+      i18n = _ref8.i18n,
+      field = _ref8.field,
+      handleChange = _ref8.handleChange,
+      _ref8$view = _ref8.view,
+      view = _ref8$view === void 0 ? false : _ref8$view;
   var classes = textFieldStyles(),
       usableLabel = i18n(label),
       propValue = values[property],
@@ -1409,9 +1379,9 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
   return fieldTypeName;
 };
 
-var TextStyleByType = function TextStyleByType(_ref10) {
-  var text = _ref10.text,
-      i18n = _ref10.i18n;
+var TextStyleByType = function TextStyleByType(_ref9) {
+  var text = _ref9.text,
+      i18n = _ref9.i18n;
   if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
   if (validateEmail(text)) return React.createElement(EmailInfo, {
     text: text,
