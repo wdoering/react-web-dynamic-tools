@@ -1,5 +1,6 @@
 import 'date-fns';
-import React, { useState, useEffect, useCallback } from 'react';
+import { format } from 'date-fns';
+import React, { useState, useCallback } from 'react';
 import {
 	FormControlLabel,
 	Typography,
@@ -10,7 +11,6 @@ import {
 	Paper,
 	Checkbox,
 	FormLabel,
-	FormControl,
 	Tooltip
 } from '@material-ui/core';
 import { ComplexTypes, FieldTypes, ModelBase, FieldType } from '@zerobytes/object-model-js';
