@@ -1220,7 +1220,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
       if (values.hasOwnProperty(property) && values[property] !== '') {
         value = values[property];
       } else {
-        value = !!field.defaultValue ? field.defaultValue : new Date();
+        value = !!field.defaultValue ? field.defaultValue : '';
       }
     }
 
@@ -2698,15 +2698,14 @@ var createIdOfComponent$1 = function createIdOfComponent(model, property, values
         color: 'red'
       }
     }, "NEED_TO_CONFIGURE_FIELD: ", property, " | FieldType:IdOf", "<".concat(!!Type ? Type.name : 'undefined', ">"), React.createElement("p", null, "MODEL: ", JSON.stringify(model)));
-  }
+  } // if (process.env.NODE_ENV === 'development') {
+  // 	console.log('===========================');
+  // 	console.log('==> createIdOfComponent:model', model);
+  // 	console.log('==> createIdOfComponent:property', property);
+  // 	console.log('==> createIdOfComponent:Type', Type);
+  // 	console.log('==> createIdOfComponent:values[property]', values[property]);
+  // }
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log('===========================');
-    console.log('==> createIdOfComponent:model', model);
-    console.log('==> createIdOfComponent:property', property);
-    console.log('==> createIdOfComponent:Type', Type);
-    console.log('==> createIdOfComponent:values[property]', values[property]);
-  }
 
   var _useState = useState(null),
       _useState2 = _slicedToArray(_useState, 2),

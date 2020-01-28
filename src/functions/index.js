@@ -531,7 +531,7 @@ const createDatePickerComponent = ({
 			if (values.hasOwnProperty(property) && values[property] !== '') {
 				value = values[property];
 			} else {
-				value = !!field.defaultValue ? field.defaultValue : new Date();
+				value = !!field.defaultValue ? field.defaultValue : '';
 			}
 		}
 

@@ -52,13 +52,13 @@ const createIdOfComponent = (model, property, values, Type, i18n, firebase) => {
 		);
 	}
 
-	if (process.env.NODE_ENV === 'development') {
-		console.log('===========================');
-		console.log('==> createIdOfComponent:model', model);
-		console.log('==> createIdOfComponent:property', property);
-		console.log('==> createIdOfComponent:Type', Type);
-		console.log('==> createIdOfComponent:values[property]', values[property]);
-	}
+	// if (process.env.NODE_ENV === 'development') {
+	// 	console.log('===========================');
+	// 	console.log('==> createIdOfComponent:model', model);
+	// 	console.log('==> createIdOfComponent:property', property);
+	// 	console.log('==> createIdOfComponent:Type', Type);
+	// 	console.log('==> createIdOfComponent:values[property]', values[property]);
+	// }
 
 	const [selected, setSelected] = useState(null);
 
