@@ -502,34 +502,46 @@ const createDatePickerComponent = ({
 	const classes = textFieldStyles(),
 		[selectedDate, setSelectedDate] = useState(''),
 		handleChg = async (date) => {
-			if (process.env.NODE_ENV === 'development')
+			let newDate = Date.parse(date);
+
+			if (process.env.NODE_ENV === 'development') {
 				console.log('createDatePickerComponent:handleChg:date', date);
-			let newDate = new Date(date);
-			setSelectedDate(date);
-			return handleChange(property, date);
+				console.log('createDatePickerComponent:handleChg:newDate', newDate);
+			}
+
+			setSelectedDate(newDate);
+			return handleChange(property, newDate);
 		},
 		parsedDate = (date) => (typeof date.toDate === 'function' ? date.toDate() : date);
 
 	useEffect(() => {
+		let value;
+
 		if (process.env.NODE_ENV === 'development') {
 			console.log('createDatePickerComponent:values[property]', values[property]);
 		}
 
 		if (!!view) {
 			if (values.hasOwnProperty(property)) {
-				setSelectedDate(
-					!!values && values.hasOwnProperty(property) ? values[property] : ''
-				);
+				value = values[property];
+			} else {
+				value = '';
 			}
 		} else {
-			setSelectedDate(
-				values[property] !== ''
-					? values[property]
-					: !!field.defaultValue
-					? field.defaultValue
-					: ''
-			);
+			if (values.hasOwnProperty(property) && values[property] !== '') {
+				value = values[property];
+			} else {
+				value = !!field.defaultValue ? field.defaultValue : new Date();
+			}
 		}
+
+		if (typeof value === 'object' && typeof value.toDate === 'function') {
+			value = value.toDate();
+		} else if (typeof value === 'string' && value !== '') {
+			value = Date.parse(value);
+		}
+
+		setSelectedDate(value);
 	}, [property]);
 
 	return !!view ? (

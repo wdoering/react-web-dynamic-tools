@@ -1172,13 +1172,20 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     var _ref7 = _asyncToGenerator(
     /*#__PURE__*/
     _regeneratorRuntime.mark(function _callee(date) {
+      var newDate;
       return _regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (process.env.NODE_ENV === 'development') console.log('createDatePickerComponent:handleChg:date', date);
-              setSelectedDate(date);
-              return _context.abrupt("return", handleChange(property, date));
+              newDate = Date.parse(date);
+
+              if (process.env.NODE_ENV === 'development') {
+                console.log('createDatePickerComponent:handleChg:date', date);
+                console.log('createDatePickerComponent:handleChg:newDate', newDate);
+              }
+
+              setSelectedDate(newDate);
+              return _context.abrupt("return", handleChange(property, newDate));
 
             case 4:
             case "end":
@@ -1197,17 +1204,33 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   };
 
   useEffect(function () {
+    var value;
+
     if (process.env.NODE_ENV === 'development') {
       console.log('createDatePickerComponent:values[property]', values[property]);
     }
 
     if (!!view) {
       if (values.hasOwnProperty(property)) {
-        setSelectedDate(!!values && values.hasOwnProperty(property) ? values[property] : '');
+        value = values[property];
+      } else {
+        value = '';
       }
     } else {
-      setSelectedDate(values[property] !== '' ? values[property] : !!field.defaultValue ? field.defaultValue : '');
+      if (values.hasOwnProperty(property) && values[property] !== '') {
+        value = values[property];
+      } else {
+        value = !!field.defaultValue ? field.defaultValue : new Date();
+      }
     }
+
+    if (_typeof(value) === 'object' && typeof value.toDate === 'function') {
+      value = value.toDate();
+    } else if (typeof value === 'string' && value !== '') {
+      value = Date.parse(value);
+    }
+
+    setSelectedDate(value);
   }, [property]);
   return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
