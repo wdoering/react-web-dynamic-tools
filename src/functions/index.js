@@ -542,7 +542,7 @@ const createDatePickerComponent = ({
 		}
 
 		setSelectedDate(value);
-	}, [property]);
+	}, [values, property]);
 
 	return !!view ? (
 		selectedDate !== '' ? (
@@ -564,7 +564,7 @@ const createDatePickerComponent = ({
 						disabled={view}
 						disableToolbar
 						inputVariant="outlined"
-						variant="inline"
+						variant="dialog"
 						format="dd/MM/yyyy HH:mm"
 						margin="normal"
 						id={`date-picker-${property}`}

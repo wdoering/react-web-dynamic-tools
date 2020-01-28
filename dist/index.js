@@ -1231,7 +1231,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     }
 
     setSelectedDate(value);
-  }, [property]);
+  }, [values, property]);
   return !!view ? selectedDate !== '' ? typeof selectedDate.toDate === 'function' ? selectedDate.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? selectedDate.toLocaleString() : selectedDate : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
@@ -1241,7 +1241,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     disabled: view,
     disableToolbar: true,
     inputVariant: "outlined",
-    variant: "inline",
+    variant: "dialog",
     format: "dd/MM/yyyy HH:mm",
     margin: "normal",
     id: "date-picker-".concat(property),
