@@ -508,7 +508,6 @@ const createDatePickerComponent = ({
 			setSelectedDate(date);
 			return handleChange(property, date);
 		};
-	let component = null;
 
 	//TODO: implement view differences
 
@@ -528,6 +527,7 @@ const createDatePickerComponent = ({
 					KeyboardButtonProps={{
 						'aria-label': label
 					}}
+					helperText={!view && !!error ? i18n(`form.error.${error}`) : ' '}
 					className={classes.spacer}
 					{...field.props}
 				/>

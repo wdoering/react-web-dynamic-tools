@@ -1190,7 +1190,8 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     return function handleChg(_x) {
       return _ref7.apply(this, arguments);
     };
-  }();
+  }(); //TODO: implement view differences
+
 
   return React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
@@ -1210,6 +1211,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     KeyboardButtonProps: {
       'aria-label': label
     },
+    helperText: !view && !!error ? i18n("form.error.".concat(error)) : ' ',
     className: classes.spacer
   }, field.props))));
 };
