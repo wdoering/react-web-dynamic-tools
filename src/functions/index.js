@@ -131,12 +131,7 @@ const getServiceList = (property, Type, objectWithProps, firebase) => {
 	return typeService
 		.filter(inArray('uid', objectWithProps[property]))
 		.list()
-		.then((result) => {
-			//TODO: remove from here
-			console.log('getServiceList:serviceList:result', result);
-
-			return Promise.resolve(result);
-		})
+		.then((result) => Promise.resolve(result))
 		.catch((e) => {
 			throw e;
 		});

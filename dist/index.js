@@ -826,8 +826,6 @@ var getServiceList = function getServiceList(property, Type, objectWithProps, fi
   typeService = getTypeService(Type, firebase);
   if (!typeService) throw Error('getServiceList-requires-valid-typeService-instance');
   return typeService.filter(inArray('uid', objectWithProps[property])).list().then(function (result) {
-    //TODO: remove from here
-    console.log('getServiceList:serviceList:result', result);
     return Promise.resolve(result);
   }).catch(function (e) {
     throw e;
@@ -2943,11 +2941,6 @@ var DynamicView = function DynamicView(_ref3) {
   useEffect(function () {
     // if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
     if (!!id || model.uid !== id) {
-      //TODO: remove from here
-      if (process.env.NODE_ENV === 'development') {
-        console.log('DynamicView:useEffect:serviceWillRun');
-      }
-
       if (typeof oService.get !== 'function') {
         throw Error('dynamic-list-service-requires-a-get(id)-method');
       } //runs the service

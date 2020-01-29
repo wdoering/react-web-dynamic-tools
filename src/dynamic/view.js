@@ -314,11 +314,6 @@ const DynamicView = ({ model, id, baseRoute, i18n, firebase, serviceInstance }) 
 	useEffect(() => {
 		// if (!!id && !serviceRunning && (!model.uid || model.uid !== id)) {
 		if (!!id || model.uid !== id) {
-			//TODO: remove from here
-			if (process.env.NODE_ENV === 'development') {
-				console.log('DynamicView:useEffect:serviceWillRun');
-			}
-
 			if (typeof oService.get !== 'function') {
 				throw Error('dynamic-list-service-requires-a-get(id)-method');
 			}
