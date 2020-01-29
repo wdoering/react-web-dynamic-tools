@@ -26,7 +26,7 @@ import { FormInput } from '../components/form';
 import { validateEmail, validateWebsite } from '../util/validations';
 
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from '@material-ui/pickers';
 
 const protectedFieldValue = '******',
 	blankFieldPlaceholder = '-';
@@ -497,6 +497,7 @@ const createDatePickerComponent = ({
 	const classes = textFieldStyles(),
 		// [selectedDate, setSelectedDate] = useState(values[property] || ''),
 		handleChg = (date) => {
+			console.log('createDatePickerComponent:handleChg:date', date);
 			// selectedDate
 			handleChange(property, date);
 
@@ -549,7 +550,7 @@ const createDatePickerComponent = ({
 		<MuiPickersUtilsProvider utils={DateFnsUtils}>
 			<Tooltip arrow title={i18n(`form.datepicker.${property}`)}>
 				<React.Fragment>
-					<KeyboardDatePicker
+					<KeyboardDateTimePicker
 						disabled={view}
 						disableToolbar
 						inputVariant="outlined"

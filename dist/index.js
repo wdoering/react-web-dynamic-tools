@@ -15,7 +15,7 @@ import LaunchRounded from '@material-ui/icons/LaunchRounded';
 import { makeStyles as makeStyles$1 } from '@material-ui/styles';
 import classNames from 'classnames';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from '@material-ui/pickers';
 import CancelRounded from '@material-ui/icons/CancelRounded';
 import KeyboardReturnRounded from '@material-ui/icons/KeyboardReturnRounded';
 import EditRounded from '@material-ui/icons/EditRounded';
@@ -1162,7 +1162,8 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   var classes = textFieldStyles(),
       // [selectedDate, setSelectedDate] = useState(values[property] || ''),
   handleChg = function handleChg(date) {
-    // selectedDate
+    console.log('createDatePickerComponent:handleChg:date', date); // selectedDate
+
     handleChange(property, date); //Field has specific onChange function, runs after manipulation
 
     if (!!field.onChange && typeof field.onChange === 'function') field.onChange(null, values, property, date, handleChange);
@@ -1201,7 +1202,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   }, React.createElement(Tooltip, {
     arrow: true,
     title: i18n("form.datepicker.".concat(property))
-  }, React.createElement(React.Fragment, null, React.createElement(KeyboardDatePicker, _extends({
+  }, React.createElement(React.Fragment, null, React.createElement(KeyboardDateTimePicker, _extends({
     disabled: view,
     disableToolbar: true,
     inputVariant: "outlined",
