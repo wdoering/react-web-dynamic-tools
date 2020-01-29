@@ -574,7 +574,7 @@ const createDatePickerComponent = ({
 						id={`date-picker-${property}`}
 						label={i18n(label)}
 						// value={selectedDate}
-						value={values[property]}
+						value={value}
 						onChange={handleChg}
 						KeyboardButtonProps={{
 							'aria-label': label
@@ -684,16 +684,13 @@ const createBooleanComponent = ({
 	const classes = textFieldStyles(),
 		usableLabel = i18n(label),
 		propValue = values[property],
-		onChange = useCallback(
-			(e) => {
-				handleChange(property, e.target.checked);
+		onChange = (e) => {
+			handleChange(property, e.target.checked);
 
-				//Field has specific onChange function, runs after manipulation
-				if (!!field.onChange && typeof field.onChange === 'function')
-					field.onChange(e, values, property, e.target.checked, handleChange);
-			},
-			[property]
-		);
+			//Field has specific onChange function, runs after manipulation
+			if (!!field.onChange && typeof field.onChange === 'function')
+				field.onChange(e, values, property, e.target.checked, handleChange);
+		};
 
 	return !!view ? (
 		i18n(

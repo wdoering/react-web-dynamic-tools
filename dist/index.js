@@ -1220,7 +1220,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     id: "date-picker-".concat(property),
     label: i18n(label) // value={selectedDate}
     ,
-    value: values[property],
+    value: value,
     onChange: handleChg,
     KeyboardButtonProps: {
       'aria-label': label
@@ -1301,14 +1301,16 @@ var createBooleanComponent = function createBooleanComponent(_ref8) {
       handleChange = _ref8.handleChange,
       _ref8$view = _ref8.view,
       view = _ref8$view === void 0 ? false : _ref8$view;
+
   var classes = textFieldStyles(),
       usableLabel = i18n(label),
       propValue = values[property],
-      onChange = useCallback(function (e) {
+      onChange = function onChange(e) {
     handleChange(property, e.target.checked); //Field has specific onChange function, runs after manipulation
 
     if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.checked, handleChange);
-  }, [property]);
+  };
+
   return !!view ? i18n("boolean.view.".concat(undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined')) : React.createElement(FormControlLabel, _extends({
     className: classes.spacer,
     label: usableLabel,
