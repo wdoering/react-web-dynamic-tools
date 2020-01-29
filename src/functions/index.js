@@ -510,15 +510,7 @@ const createDatePickerComponent = ({
 				field.onChange(null, values, property, date, handleChange);
 		};
 
-	// useEffect(() => {
-	let value;
-
-	if (process.env.NODE_ENV === 'development') {
-		console.log(
-			'==> IN createDatePickerComponent:useEffect:values[property]',
-			values[property]
-		);
-	}
+	let value = '';
 
 	if (!!view) {
 		if (values.hasOwnProperty(property)) {
@@ -534,22 +526,20 @@ const createDatePickerComponent = ({
 		}
 	}
 
-	if (typeof value === 'object' && !(value instanceof Date)) {
-		if (typeof value.toDate === 'function') {
-			value = value.toDate();
-		} else {
-			value = new Date((!!value._seconds ? value._seconds : value.seconds) * 1000);
+	if (null !== value && '' !== value) {
+		if (typeof value === 'object' && !(value instanceof Date)) {
+			if (typeof value.toDate === 'function') {
+				value = value.toDate();
+			} else {
+				value = new Date((!!value._seconds ? value._seconds : value.seconds) * 1000);
+			}
+		} else if (typeof value === 'string') {
+			value = new Date(Date.parse(value));
 		}
-	} else if (typeof value === 'string' && value !== '') {
-		value = new Date(Date.parse(value));
-	}
-
-	if (process.env.NODE_ENV === 'development') {
-		console.log('==> OUT createDatePickerComponent:useEffect:value', value);
 	}
 
 	return !!view ? (
-		value !== '' ? (
+		null !== value && '' !== value ? (
 			typeof value.toDate === 'function' ? (
 				value.toDate().toLocaleString()
 			) : typeof value.toLocaleString === 'function' ? (

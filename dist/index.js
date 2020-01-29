@@ -1168,14 +1168,9 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     handleChange(property, date); //Field has specific onChange function, runs after manipulation
 
     if (!!field.onChange && typeof field.onChange === 'function') field.onChange(null, values, property, date, handleChange);
-  }; // useEffect(() => {
+  };
 
-
-  var value;
-
-  if (process.env.NODE_ENV === 'development') {
-    console.log('==> IN createDatePickerComponent:useEffect:values[property]', values[property]);
-  }
+  var value = '';
 
   if (!!view) {
     if (values.hasOwnProperty(property)) {
@@ -1191,21 +1186,19 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
     }
   }
 
-  if (_typeof(value) === 'object' && !(value instanceof Date)) {
-    if (typeof value.toDate === 'function') {
-      value = value.toDate();
-    } else {
-      value = new Date((!!value._seconds ? value._seconds : value.seconds) * 1000);
+  if (null !== value && '' !== value) {
+    if (_typeof(value) === 'object' && !(value instanceof Date)) {
+      if (typeof value.toDate === 'function') {
+        value = value.toDate();
+      } else {
+        value = new Date((!!value._seconds ? value._seconds : value.seconds) * 1000);
+      }
+    } else if (typeof value === 'string') {
+      value = new Date(Date.parse(value));
     }
-  } else if (typeof value === 'string' && value !== '') {
-    value = new Date(Date.parse(value));
   }
 
-  if (process.env.NODE_ENV === 'development') {
-    console.log('==> OUT createDatePickerComponent:useEffect:value', value);
-  }
-
-  return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  return !!view ? null !== value && '' !== value ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,
