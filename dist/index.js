@@ -1210,7 +1210,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
   // let value = values[property];
 
 
-  return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof selectedDate.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
+  return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
   }, React.createElement(Tooltip, {
     arrow: true,

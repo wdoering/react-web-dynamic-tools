@@ -561,7 +561,7 @@ const createDatePickerComponent = ({
 		value !== '' ? (
 			typeof value.toDate === 'function' ? (
 				value.toDate().toLocaleString()
-			) : typeof selectedDate.toLocaleString === 'function' ? (
+			) : typeof value.toLocaleString === 'function' ? (
 				value.toLocaleString()
 			) : (
 				value
