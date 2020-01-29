@@ -1203,12 +1203,7 @@ var createDatePickerComponent = function createDatePickerComponent(_ref6) {
 
   if (process.env.NODE_ENV === 'development') {
     console.log('==> OUT createDatePickerComponent:useEffect:value', value);
-  } // 	setSelectedDate(value);
-  // 	//if (typeof handleChange === 'function') handleChange(property, value);
-  // 	// setSelectedDate(value);
-  // }, [property]);
-  // let value = values[property];
-
+  }
 
   return !!view ? value !== '' ? typeof value.toDate === 'function' ? value.toDate().toLocaleString() : typeof value.toLocaleString === 'function' ? value.toLocaleString() : value : blankFieldPlaceholder : React.createElement(MuiPickersUtilsProvider, {
     utils: DateFnsUtils
@@ -1310,7 +1305,9 @@ var createBooleanComponent = function createBooleanComponent(_ref8) {
       usableLabel = i18n(label),
       propValue = values[property],
       onChange = useCallback(function (e) {
-    handleChange(property, e.target.checked);
+    handleChange(property, e.target.checked); //Field has specific onChange function, runs after manipulation
+
+    if (!!field.onChange && typeof field.onChange === 'function') field.onChange(e, values, property, e.target.checked, handleChange);
   }, [property]);
   return !!view ? i18n("boolean.view.".concat(undefined !== propValue && propValue !== null ? propValue.toString() : 'undefined')) : React.createElement(FormControlLabel, _extends({
     className: classes.spacer,
@@ -1384,7 +1381,7 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
 var TextStyleByType = function TextStyleByType(_ref9) {
   var text = _ref9.text,
       i18n = _ref9.i18n;
-  if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
+  //TODO: remove from here // if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
   if (validateEmail(text)) return React.createElement(EmailInfo, {
     text: text,
     i18n: i18n

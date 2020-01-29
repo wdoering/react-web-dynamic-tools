@@ -548,15 +548,6 @@ const createDatePickerComponent = ({
 		console.log('==> OUT createDatePickerComponent:useEffect:value', value);
 	}
 
-	// 	setSelectedDate(value);
-
-	// 	//if (typeof handleChange === 'function') handleChange(property, value);
-
-	// 	// setSelectedDate(value);
-	// }, [property]);
-
-	// let value = values[property];
-
 	return !!view ? (
 		value !== '' ? (
 			typeof value.toDate === 'function' ? (
@@ -696,6 +687,10 @@ const createBooleanComponent = ({
 		onChange = useCallback(
 			(e) => {
 				handleChange(property, e.target.checked);
+
+				//Field has specific onChange function, runs after manipulation
+				if (!!field.onChange && typeof field.onChange === 'function')
+					field.onChange(e, values, property, e.target.checked, handleChange);
 			},
 			[property]
 		);
@@ -768,7 +763,7 @@ const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible =
 };
 
 const TextStyleByType = ({ text, i18n }) => {
-	if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
+	//TODO: remove from here // if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
 
 	if (validateEmail(text)) return <EmailInfo text={text} i18n={i18n} />;
 	if (validateWebsite(text)) return <WebSiteInfo text={text} i18n={i18n} />;
