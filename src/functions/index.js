@@ -315,8 +315,8 @@ const createIdOfComponent = (
 								.filter([
 									[
 										[config.searchField, '>=', text],
-										[config.searchField, '<', tend]
-										// TODO: check whether results are affected ['deleted', '==', false]
+										[config.searchField, '<', tend],
+										['deleted', '==', false]
 									]
 								])
 								.limit(5)

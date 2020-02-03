@@ -994,8 +994,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
 
       var tend = text.substr(0, text.length - 1) + String.fromCharCode(text.substr(text.length - 1, 1).charCodeAt(0) + 1);
       searchIdOfTimeout = setTimeout(function () {
-        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend] // TODO: check whether results are affected ['deleted', '==', false]
-        ]]).limit(5).list().then(function (r) {
+        oService.filter([[[config.searchField, '>=', text], [config.searchField, '<', tend], ['deleted', '==', false]]]).limit(5).list().then(function (r) {
           setList(r);
         });
       }, 300);
@@ -2499,23 +2498,22 @@ var SingleFilter = function SingleFilter(_ref) {
               if (!!value && typeof value === 'string' && value.trim() !== '') {
                 currentIndex = "$$index.".concat(value);
                 mainFilter.push([currentIndex, '==', true]);
-              } //TODO: check whether lists were affected
-              //Adding deleted flag filter
-              //mainFilter.push(['deleted', '==', false]);
-              //Invalid type of updater?
+              } //Adding deleted flag filter
 
+
+              mainFilter.push(['deleted', '==', false]); //Invalid type of updater?
 
               if (!(typeof updateFilters !== 'function')) {
-                _context.next = 4;
+                _context.next = 5;
                 break;
               }
 
               throw Error('dynamic-list-SingleFilter-requires-updateFilters(array)-function');
 
-            case 4:
+            case 5:
               return _context.abrupt("return", updateFilters([mainFilter]));
 
-            case 5:
+            case 6:
             case "end":
               return _context.stop();
           }
