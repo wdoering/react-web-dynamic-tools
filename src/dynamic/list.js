@@ -119,14 +119,14 @@ const createFilters = (model, i18n, updateFilters) => {
 					String.fromCharCode(value.substr(value.length - 1, 1).charCodeAt(0) + 1);
 				f.push([key, '>=', value]);
 				f.push([key, '<', tEnd]);
-				f.push(['deleted', '==', false]);
+				// TODO: check whether results are affected f.push(['deleted', '==', false]);
 				mainF.push(f);
 			} else if (value instanceof Array && value.length) {
 				value.map((s) => {
 					if (!s) return;
 					let f = [];
 					f.push([key, 'array-contains', s]);
-					f.push(['deleted', '==', false]);
+					// TODO: check whether results are affected f.push(['deleted', '==', false]);
 					mainF.push(f);
 				});
 			}
@@ -226,8 +226,9 @@ const SingleFilter = ({ model, i18n, updateFilters }) => {
 				mainFilter.push([currentIndex, '==', true]);
 			}
 
+			//TODO: check whether lists were affected
 			//Adding deleted flag filter
-			mainFilter.push(['deleted', '==', false]);
+			//mainFilter.push(['deleted', '==', false]);
 
 			//Invalid type of updater?
 			if (typeof updateFilters !== 'function')
@@ -285,7 +286,7 @@ const search = (oService, filters) => {
 	if (!oService.filter || typeof oService.filter !== 'function')
 		throw Error('dynamic-list-search-needs-filter()-method-implemented-at-service');
 
-	if (filters && filters.length) {
+	if (filters && filters.length > 0) {
 		//will filter, then
 		oService.filter(filters);
 	}

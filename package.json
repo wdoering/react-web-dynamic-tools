@@ -1,6 +1,6 @@
 {
 	"name": "@zerobytes/react-web-dynamic-tools",
-	"version": "0.3.99",
+	"version": "0.4.0",
 	"description": "Package-module for fast-tracking common features to CRUD operations at ReactJS (web)",
 	"main": "dist/index.js",
 	"files": [
@@ -34,12 +34,12 @@
 	},
 	"homepage": "https://github.com/zerobytes/react-web-dynamic-tools#readme",
 	"dependencies": {
-		"@date-io/core": "^2.0.0",
+		"@date-io/core": "^2.2.0",
 		"@date-io/date-fns": "^1.3.13",
-		"@material-ui/core": "^4.9.0",
-		"@material-ui/icons": "^4.5.1",
+		"@material-ui/core": "^4.9.1",
+		"@material-ui/icons": "^4.9.1",
 		"@material-ui/pickers": "^3.2.10",
-		"@zerobytes/object-model-js": "^0.3.16",
+		"@zerobytes/object-model-js": "^0.3.19",
 		"classnames": "^2.2.6",
 		"date-fns": "^2.9.0",
 		"prop-types": "^15.7.2",
@@ -48,13 +48,13 @@
 		"react-router-dom": "^5.1.2"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.8.3",
-		"@babel/core": "^7.8.3",
+		"@babel/cli": "^7.8.4",
+		"@babel/core": "^7.8.4",
 		"@babel/plugin-proposal-class-properties": "^7.8.3",
 		"@babel/plugin-transform-runtime": "^7.8.3",
-		"@babel/preset-env": "^7.8.3",
+		"@babel/preset-env": "^7.8.4",
 		"@babel/preset-react": "^7.8.3",
-		"rollup": "^1.29.1",
+		"rollup": "^1.31.0",
 		"rollup-plugin-babel": "^4.3.3",
 		"rollup-plugin-commonjs": "^10.1.0",
 		"rollup-plugin-node-resolve": "^5.2.0",
