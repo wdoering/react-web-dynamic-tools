@@ -46,7 +46,7 @@ const DateDetail = ({ item, locale = 'pt-br' }) => {
 					fontWeight: '700'
 				}}
 			>
-				{dateString + (!timeString || ` ${timeString}`)}
+				{dateString + (!!timeString ? ` ${timeString}` : '')}
 			</Typography>
 		</div>
 	);
@@ -152,7 +152,7 @@ const createConfiguredListItem = ({ item, listItemProperties, key, onClick, remo
 					<Typography
 						style={{
 							color: i > 0 ? '#666' : '#111',
-							fontWeight: 1 > 0 ? '200' : '700'
+							fontWeight: i > 0 ? '200' : '700'
 						}}
 					>
 						{typeof prop === 'function' ? prop(item) : item[prop]}
@@ -270,13 +270,6 @@ const createIdOfComponent = (
 			(currentDialogValue instanceof Array && currentDialogValue.length === 0))
 	) {
 		setSelected(currentDialogValue);
-
-		// //TODO: remove from here
-		// //debugging
-		// if (process.env.NODE_ENV === 'development') {
-		// 	console.log('createIdOfComponent:selected', selected);
-		// 	console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
-		// }
 	}
 
 	const select = (item) => () => {
@@ -746,8 +739,6 @@ const fieldTypeByName = (fieldType, fieldIsProtected = false, inputDataVisible =
 };
 
 const TextStyleByType = ({ text, i18n }) => {
-	//TODO: remove from here // if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
-
 	if (validateEmail(text)) return <EmailInfo text={text} i18n={i18n} />;
 	if (validateWebsite(text)) return <WebSiteInfo text={text} i18n={i18n} />;
 	if (typeof text.toDate === 'function') return `${text.toDate().toLocaleDateString()}`;

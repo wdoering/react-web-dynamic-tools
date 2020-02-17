@@ -756,7 +756,7 @@ var DateDetail = function DateDetail(_ref) {
       color: '#111',
       fontWeight: '700'
     }
-  }, dateString + (!timeString || " ".concat(timeString))));
+  }, dateString + (!!timeString ? " ".concat(timeString) : '')));
 };
 
 var mergeSets = function mergeSets(set0, setOrObject1) {
@@ -858,7 +858,7 @@ var createConfiguredListItem = function createConfiguredListItem(_ref2) {
       }, React.createElement(Typography, {
         style: {
           color: i > 0 ? '#666' : '#111',
-          fontWeight:  '200' 
+          fontWeight: i > 0 ? '200' : '700'
         }
       }, typeof prop === 'function' ? prop(item) : item[prop])));
     });
@@ -948,12 +948,7 @@ var createIdOfComponent = function createIdOfComponent(model, property, values, 
       }, 200);
     }
   } else if (!!selected && selected instanceof Array && selected.length > 0 && (!currentDialogValue || currentDialogValue instanceof Array && currentDialogValue.length === 0)) {
-    setSelected(currentDialogValue); // //TODO: remove from here
-    // //debugging
-    // if (process.env.NODE_ENV === 'development') {
-    // 	console.log('createIdOfComponent:selected', selected);
-    // 	console.log('createIdOfComponent:currentDialogValue', currentDialogValue);
-    // }
+    setSelected(currentDialogValue);
   }
 
   var select = function select(item) {
@@ -1377,7 +1372,6 @@ var fieldTypeByName = function fieldTypeByName(fieldType) {
 var TextStyleByType = function TextStyleByType(_ref9) {
   var text = _ref9.text,
       i18n = _ref9.i18n;
-  //TODO: remove from here // if (process.env.NODE_ENV === 'development') console.log('==> TextStyleByType(text)', text);
   if (validateEmail(text)) return React.createElement(EmailInfo, {
     text: text,
     i18n: i18n
